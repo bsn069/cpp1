@@ -1,0 +1,8 @@
+#docker build -t bsn/cppdev:latest -f dev.Dockfile . 
+FROM centos
+MAINTAINER BSN 513026809@qq.com
+ENV workdir /media/sf_/github/cpp1
+
+RUN yum -y install gcc;  yum clean all
+RUN yum -y install cmake; yum clean all
+ 

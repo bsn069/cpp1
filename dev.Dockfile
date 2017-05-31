@@ -11,4 +11,4 @@ RUN yum -y install gcc-c++; yum clean all
 RUN yum -y install gdb; yum clean all
 WORKDIR $workdir
 ADD ./CentOS-Debuginfo.repo /etc/yum.repos.d/
-RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64
+RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64 libgcc-4.8.5-11.el7.x86_64 libstdc++-4.8.5-11.el7.x86_64

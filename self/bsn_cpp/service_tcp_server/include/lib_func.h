@@ -1,0 +1,10 @@
+#pragma once
+
+#include <bsn/other/service.h>
+
+//////////////////////////////////////////////////////////////////////
+D_FunDef D_BSN_service_tcp_server_DLL D_N1(Other)::I_Service*	Create();
+D_FunDef D_BSN_service_tcp_server_DLL	T_void		Release(D_N1(Other)::I_Service* pService);
+////////////////////////////////////////////////////////////////////////
+
+

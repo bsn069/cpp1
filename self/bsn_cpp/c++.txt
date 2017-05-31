@@ -1,0 +1,37 @@
+#pragma once
+
+#pragma warning(push)
+#pragma warning(disable: 4244)
+#pragma warning(pop)
+
+设置流显示精度
+cout << std::setprecision(10);
+设置16进制输出
+cout << std::hex;
+std::uppercase 
+cout << std::hex << std::setiosflags(std::ios::uppercase) << std::setfill('0');
+要使用下面的控制符，你需要在相应的源文件中包含头文件“iomanip”。也就是添加如下代码：
+　　#include <iomanip>
+控制符---描 述
+　　dec --- 置基数为10，后由十进制输出（系统默认形式）
+　　hex --- 置基数为16，后由十六进制输出
+　　oct --- 置基数为8，后由八进制输出
+　　setfill(c) --- 设填充字符为c
+　　setprecision(n) --- 设置实数的精度为n位
+　　setw(n) --- 设域宽为n个字符
+　　setiosflags(ios::fixed) --- 固定的浮点显示
+　　setiosflags(ios::scientific) --- 指数表示
+　　setiosflags(ios::left) --- 左对齐 
+　　setiosflags(ios::right) --- 右对齐 
+　　setiosflags(ios::skipws) --- 忽略前导空白
+　　setiosflags(ios::uppercase) --- 16进制数大写输出
+　　setiosflags(ios::lowercase) ---16进制数小写输出
+其中：setw设置域宽，使用一次就得设置一次，其他的函数，设置一次永久有效。
+
+copy(v.begin(), v.end(), std::ostream_iterator<int>(cout, " "));
+
+	
+__FILE__
+__FUNCTION__
+
+构造函数不要为虚(virtual),vc++6.0反正不支持，报错为“error C2633: 'A' : 'inline' is the only legal storage class for constructors” ，据说CB支持，不过，构造函数本来就没必要为虚，对象初始化时肯定是要调用的;不过，有派生类时析构函数最好还是来虚的....

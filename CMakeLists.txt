@@ -1,22 +1,39 @@
 cmake_minimum_required(VERSION 2.8)
-project(server)
-#set(PRODUCTS_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/../../../../swordm3d-products/trunk/server)
+project(cpp1)
 
-message(${PROJECT_SOURCE_DIR})
-message(${EXECUTABLE_OUTPUT_PATH})
-message(${LIBRARY_OUTPUT_PATH})
-message(${RELEASEFLAG})
-message(${PLATFLAG})
-message(${CMAKE_BUILD_TYPE})
-message(${OUTPUT_SUFFIX})
-message(${CMAKE_CXX_FLAGS})
-message(${CMAKE_C_FLAGS})
- 
 # get CWD
 execute_process(
   COMMAND pwd
   OUTPUT_VARIABLE _PWD
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-message(${CWD})
-cmake_print_variables(_PWD BASE_SOURCE_DIR)
+message(_PWD= ${_PWD})
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out)
+
+message(PROJECT_SOURCE_DIR= ${PROJECT_SOURCE_DIR})
+message(EXECUTABLE_OUTPUT_PATH= ${EXECUTABLE_OUTPUT_PATH})
+message(LIBRARY_OUTPUT_PATH= ${LIBRARY_OUTPUT_PATH})
+message(CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE})
+
+set(MY_COMMON_FLAG    "-g3 -fexceptions -Wall -fPIC -DOS_LINUX -D__STDC_FORMAT_MACROS")
+set(MY_C_DEBUG_FLAG   "${MY_COMMON_FLAG} -O0 -D_DEBUG -DCHECK_MEM_LEAK")
+set(MY_C_RELEASE_FLAG "${MY_COMMON_FLAG} -O2 -DNDEBUG")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(MY_C_FLAGS   "${MY_C_DEBUG_FLAG}")
+  set(OUTPUT_SUFFIX "d")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+  set(MY_C_FLAGS   "${MY_C_RELEASE_FLAG}")
+  set(OUTPUT_SUFFIX "")
+endif()
+
+set(CMAKE_CXX_FLAGS "${MY_C_FLAGS} -std=gnu++11" CACHE INTERNAL "global cxx flags")
+set(CMAKE_C_FLAGS   "${MY_C_FLAGS}"              CACHE INTERNAL "global c flags")
+message(CMAKE_CXX_FLAGS= ${CMAKE_CXX_FLAGS})
+message(CMAKE_C_FLAGS= ${CMAKE_C_FLAGS})
+message(OUTPUT_SUFFIX= ${OUTPUT_SUFFIX})
+
+add_subdirectory(test)
+

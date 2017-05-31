@@ -45,7 +45,7 @@ C_Interface::Push(T_Buffers D_const * D_const pBuffers)
 	D_Assert(!pBuffers->empty());
 
 	if (m_u32Len > 0)
-	{// ÉÏ´ÎÎ´´¦ÀíµÄ ÒÆ¶¯µ½¿ªÊ¼Î»ÖÃ
+	{// ä¸Šæ¬¡æœªå¤„ç†çš„ ç§»åŠ¨åˆ°å¼€å§‹ä½ç½®
 		CopyMemory(m_pBuffer, m_pBuffer + m_u32Offset, m_u32Len);
 	}
 	m_u32Offset = m_u32Len;
@@ -56,13 +56,13 @@ C_Interface::Push(T_Buffers D_const * D_const pBuffers)
 	}
 
 	if (m_u32Len > m_u32BufferSize)
-	{// À©Èİ msc_incSize ±¶Êı
+	{// æ‰©å®¹ msc_incSize å€æ•°
 		m_u32BufferSize = ((m_u32Len / m_u32IncSize) + 1) * m_u32IncSize;
 		realloc((T_void*)m_pBuffer, m_u32BufferSize);
 	}
 
 	for (auto i : *pBuffers)
-	{// ½«ËùÓĞÊı¾İ·Åµ½´¦Àí»º³åÇø
+	{// å°†æ‰€æœ‰æ•°æ®æ”¾åˆ°å¤„ç†ç¼“å†²åŒº
 		CopyMemory(m_pBuffer + m_u32Offset, i->Data(), i->Len());
 		m_u32Offset += i->Len();
 	}
@@ -70,10 +70,10 @@ C_Interface::Push(T_Buffers D_const * D_const pBuffers)
 	m_u32Offset = 0;
 	T_MsgHeader* pMsg = T_nullptr;
 	while (m_u32Len >= sizeof(T_MsgHeader))
-	{// ¹»ÏûÏ¢Í·
+	{// å¤Ÿæ¶ˆæ¯å¤´
 		pMsg = reinterpret_cast<T_MsgHeader*>(m_pBuffer);
 		if (m_u32Len < pMsg->m_Len)
-		{// »º³åÇø²»¹»Ò»¸öÏûÏ¢
+		{// ç¼“å†²åŒºä¸å¤Ÿä¸€ä¸ªæ¶ˆæ¯
 			break;
 		}
 

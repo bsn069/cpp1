@@ -1,40 +1,40 @@
 FILE(GLOB V_SelfPath "CMakeLists.txt")
-MESSAGE(STATUS "¹¤³ÌÃûÉèÖÃÎÄ¼þ " ${V_SelfPath})
+MESSAGE(STATUS "å·¥ç¨‹åè®¾ç½®æ–‡ä»¶ " ${V_SelfPath})
 STRING( REGEX REPLACE ".*/(.*)/CMakeLists.txt$" "\\1" V_prjName ${V_SelfPath} )
  
 
-# ¹¤³ÌÃû 
+# å·¥ç¨‹å 
 PROJECT( ${V_prjName} ) 
 MESSAGE(STATUS "------------------------------------------------------------- ")
-MESSAGE(STATUS "¹¤³ÌÃû " ${PROJECT_NAME})
-MESSAGE(STATUS "¹¤³ÌPROJECT_BINARY_DIR " ${PROJECT_BINARY_DIR})
-MESSAGE(STATUS "¹¤³ÌPROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
-# ×îµÍÐèÇócmake°æ±¾
+MESSAGE(STATUS "å·¥ç¨‹å " ${PROJECT_NAME})
+MESSAGE(STATUS "å·¥ç¨‹PROJECT_BINARY_DIR " ${PROJECT_BINARY_DIR})
+MESSAGE(STATUS "å·¥ç¨‹PROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
+# æœ€ä½Žéœ€æ±‚cmakeç‰ˆæœ¬
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 
-# ¶þ½øÖÆÎÄ¼þ´æ·ÅÎ»ÖÃ
+# äºŒè¿›åˆ¶æ–‡ä»¶å­˜æ”¾ä½ç½®
 SET(EXECUTABLE_OUTPUT_PATH $ENV{bsn_out})
-MESSAGE(STATUS "¶þ½øÖÆÎÄ¼þ´æ·ÅÎ»ÖÃ " ${EXECUTABLE_OUTPUT_PATH})
-# LIBÎÄ¼þ´æ·ÅÎ»ÖÃ
+MESSAGE(STATUS "äºŒè¿›åˆ¶æ–‡ä»¶å­˜æ”¾ä½ç½® " ${EXECUTABLE_OUTPUT_PATH})
+# LIBæ–‡ä»¶å­˜æ”¾ä½ç½®
 SET(LIBRARY_OUTPUT_PATH $ENV{bsn_out})
-MESSAGE(STATUS "LIBÎÄ¼þ´æ·ÅÎ»ÖÃ " ${LIBRARY_OUTPUT_PATH})
+MESSAGE(STATUS "LIBæ–‡ä»¶å­˜æ”¾ä½ç½® " ${LIBRARY_OUTPUT_PATH})
 
-# ÉèÖÃ±äÁ¿ ±íÊ¾±¾Ä¿Â¼
+# è®¾ç½®å˜é‡ è¡¨ç¤ºæœ¬ç›®å½•
 SET(ROOT_DIR ${PROJECT_SOURCE_DIR})
-# ÉèÖÃ±äÁ¿ debug ºó×º
+# è®¾ç½®å˜é‡ debug åŽç¼€
 SET( CMAKE_DEBUG_POSTFIX "_d" CACHE STRING "add a postfix, usually d on windows" )
 
-# ËÑË÷Â·¾¶
+# æœç´¢è·¯å¾„
 INCLUDE_DIRECTORIES( $ENV{bsn_dir} )
 INCLUDE_DIRECTORIES( $ENV{bsn_lib3_include} )
 LINK_DIRECTORIES( ${LIBRARY_OUTPUT_PATH} )
 LINK_DIRECTORIES( $ENV{bsn_lib3_lib} )
-# Ìí¼Ó¶¨Òå
+# æ·»åŠ å®šä¹‰
 add_definitions(-DUNICODE -D_UNICODE)
 #-------------------------------------------------------------------------------
  
-# Ìí¼Ó×Ó¹¤³ÌÄ¿Â¼
+# æ·»åŠ å­å·¥ç¨‹ç›®å½•
 ADD_SUBDIRECTORY( template_console )
 ADD_SUBDIRECTORY( template_share_lib )
 
@@ -76,7 +76,7 @@ ADD_SUBDIRECTORY( msg_parser )
 MESSAGE(STATUS "------------------------------------------------------------- ")
 
 
-# ÒÀÀµ×ÓÏîÄ¿
+# ä¾èµ–å­é¡¹ç›®
 # ADD_DEPENDENCIES( BSN )
-# ÒÀÀµµÚÈý·½¿â
+# ä¾èµ–ç¬¬ä¸‰æ–¹åº“
 # TARGET_LINK_LIBRARIES(mysqlcppconn )

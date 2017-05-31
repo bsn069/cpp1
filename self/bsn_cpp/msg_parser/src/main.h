@@ -6,5 +6,5 @@
 #include <bsn/msg_parser/include/port.h>
 
 
-//#error ด๓ะกะดฬๆปป msg_parser ฮชนคณฬร๛
-//#error ศซืึด๓ะกะดฦฅลไ MsgParser ฮชนคณฬร๛สืืึฤธด๓ะด
+//#error ๅคงๅฐๅๆฟๆข msg_parser ไธบๅทฅ็จๅ
+//#error ๅ…จๅญ—ๅคงๅฐๅๅน้… MsgParser ไธบๅทฅ็จๅ้ฆ–ๅญ—ๆฏๅคงๅ

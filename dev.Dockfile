@@ -8,4 +8,5 @@ RUN yum -y install cmake; yum clean all
 RUN yum -y install wget; yum clean all
 RUN yum -y install make; yum clean all
 RUN yum -y install gcc-c++; yum clean all
+RUN yum -y install gdb; yum clean all
 

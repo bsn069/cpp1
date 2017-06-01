@@ -2,7 +2,7 @@
 D_BsnNamespace1(NameSpace)
 //////////////////////////////////////////////////////////////////////
 
-T_wchar D_const * D_const C_Interface::Error(T_int32 D_const i32ErrorCode) D_const
+wchar_t const* const C_Interface::Error(int32_t const i32ErrorCode) const
 {
 	switch (i32ErrorCode)
 	{
@@ -12,7 +12,7 @@ T_wchar D_const * D_const C_Interface::Error(T_int32 D_const i32ErrorCode) D_con
 }
 
 
-T_wchar D_const * D_const  C_Interface::Name() D_const
+wchar_t const* const C_Interface::Name() const
 {
 	return L"C_Imp";
 }

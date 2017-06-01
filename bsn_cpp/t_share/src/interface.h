@@ -6,8 +6,8 @@ D_BsnNamespace1(NameSpace)
 class C_Interface : public I_Interface
 {
 public:
-	virtual T_wchar D_const * D_const Name() D_const override;
-	virtual T_wchar D_const * D_const Error(T_int32 D_const i32ErrorCode) D_const override;
+	virtual wchar_t const* const Name() const override;
+	virtual wchar_t const* const Error(int32_t const i32ErrorCode) const override;
 
 public:
 	C_Interface();

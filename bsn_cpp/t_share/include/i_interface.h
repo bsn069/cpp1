@@ -1,4 +1,6 @@
 #pragma once
+#include <stdint.h>
+#include <bsn_cpp/include/name_space.h>
 D_BsnNamespace1(NameSpace)
 //////////////////////////////////////////////////////////////////////
 
@@ -12,9 +14,8 @@ protected:
 
 
 public:
-	virtual T_wchar D_const* D_const Name() D_const = 0;
-	virtual T_wchar D_const* D_const Error(T_int32 D_const i32ErrorCode) D_const = 0;
-
+	virtual wchar_t const* const Name() const = 0;
+	virtual wchar_t const* const Error(int32_t const i32ErrorCode) const = 0;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

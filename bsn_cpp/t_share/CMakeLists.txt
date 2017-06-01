@@ -15,7 +15,7 @@ set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
 #INCLUDE_DIRECTORIES( Include )
   
 # 添加定义
-add_definitions( -DD_BSN_${PROJECT_NAME}_IS_DLL )
+add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
 
 # 生成lib
 SET( OUT_NAME ${LIB_PREFIX_D}${PROJECT_NAME} )

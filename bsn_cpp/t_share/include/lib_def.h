@@ -1,13 +1,13 @@
 #pragma once
 
-#ifdef D_BSN_template_share_lib_IS_DLL
-	#define D_BSN_template_share_lib_DLL D_DllExport
+#ifdef D_BSN_IS_DLL_t_share
+	#define D_BSN_t_share_DLL D_DllExport
 #else
-	#define D_BSN_template_share_lib_DLL D_DllImport
+	#define D_BSN_t_share_DLL D_DllImport
 	#ifdef _DEBUG
-		#pragma comment(lib, "lib_bsn_template_share_lib_d.lib")
+		#pragma comment(lib, "bsn_dlib_t_share_d.lib")
 	#else
-		#pragma comment(lib, "lib_bsn_template_share_lib.lib")
+		#pragma comment(lib, "bsn_dlib_t_share.lib")
 	#endif
 #endif
 

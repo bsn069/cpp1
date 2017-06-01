@@ -74,5 +74,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-build
-out
+bsn_cpp/build
+bsn_cpp/out

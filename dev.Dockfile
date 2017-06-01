@@ -8,4 +8,5 @@ RUN yum -y install gcc;yum -y install cmake;yum -y install wget;yum -y install m
 
 ADD ./CentOS-Debuginfo.repo /etc/yum.repos.d/
 RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64 
-#libgcc-4.8.5-11.el7.x86_64 libstdc++-4.8.5-11.el7.x86_64
+#RUN debuginfo-install -y libgcc-4.8.5-11.el7.x86_64 
+#RUN debuginfo-install -y  libstdc++-4.8.5-11.el7.x86_64

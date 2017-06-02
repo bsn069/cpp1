@@ -106,7 +106,7 @@ C_Global::Wmain(T_int32 argc, T_wchar* argv[])
 
 		if (m_pConsoleInput->IsQuit())
 		{
-			D_Log(m_pLog, L"ÒÑÊäÈëÍË³öÖ¸Áî,ÕýÔÚÍË³öÖÐ...");
+			D_Log(m_pLog, L"å·²è¾“å…¥é€€å‡ºæŒ‡ä»¤,æ­£åœ¨é€€å‡ºä¸­...");
 			m_bQuit = true;
 		}
 	}
@@ -516,7 +516,7 @@ C_Global::UninitConsoleInput()
 	D_Log(m_pLog, L"C_Global::UninitConsoleInput");
 	if (!m_pConsoleInput->IsQuit())
 	{
-		D_Log(m_pLog, L"±»¶¯¹Ø±Õ,°´Enter¼ü¼ÌÐø...");
+		D_Log(m_pLog, L"è¢«åŠ¨å…³é—­,æŒ‰Enteré”®ç»§ç»­...");
 	}
 	D_N1(ConsoleInput)::Release(m_pConsoleInput);
 	return true;

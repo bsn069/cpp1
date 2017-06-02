@@ -12,7 +12,7 @@ wmain(T_int32 argc, T_wchar* argv[])
 		Delete(g);
 	}
 
-	wcout << L"ÒªÍË³öÁË" << endl;
+	wcout << L"è¦é€€å‡ºäº†" << endl;
 	system("pause");
 	return 0;
 }

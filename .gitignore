@@ -76,3 +76,4 @@ $RECYCLE.BIN/
 
 bsn_cpp/build
 bsn_cpp/out
+bsn_cpp/third_part/boost

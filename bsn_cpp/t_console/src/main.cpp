@@ -1,19 +1,23 @@
-#include <bsn/template_console/include/global.h>
+#include <boost/program_options.hpp>
+#include <stdint.h>
+#include <locale.h>
+#include <iostream>
 
-
-T_int32 
-wmain(T_int32 argc, T_wchar* argv[])
+int 
+main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "chs"); 
 
-	{
-		g = New<C_Global>();
-		g->Run(argc, argv);
-		Delete(g);
-	}
+	// {
+	// 	g = New<C_Global>();
+	// 	g->Run(argc, argv);
+	// 	Delete(g);
+	// }
 
-	wcout << L"ÒªÍË³öÁË" << endl;
-	system("pause");
+	std::cout << "è¦é€€å‡ºäº†" << std::endl;
+	// system("pause");
+	int t;
+	std::cin >> t;
 	return 0;
 }
 

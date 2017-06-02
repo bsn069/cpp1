@@ -4,10 +4,13 @@
 	#define D_BSN_t_share_DLL D_DllExport
 #else
 	#define D_BSN_t_share_DLL D_DllImport
-	#ifdef _DEBUG
-		#pragma comment(lib, "bsn_dlib_t_share_d.lib")
-	#else
-		#pragma comment(lib, "bsn_dlib_t_share.lib")
+
+	#if (defined _MSC_VER)
+		#ifdef _DEBUG
+			#pragma comment(lib, "bsn_dlib_t_share_d.lib")
+		#else
+			#pragma comment(lib, "bsn_dlib_t_share.lib")
+		#endif
 	#endif
 #endif
 

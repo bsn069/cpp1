@@ -145,7 +145,7 @@ T_void
 C_Global::Run(T_int32 argc, T_wchar* argv[])
 {
 	Init(argc, argv);
-	{// Ìí¼Ó´úÂë
+	{// æ·»åŠ ä»£ç 
 	
 	}
 	Release();

@@ -39,11 +39,14 @@ SET(ROOT_DIR ${PROJECT_SOURCE_DIR})
 SET(LIB_PREFIX_D bsn_dlib_)
 # 静态库前缀
 SET(LIB_PREFIX_S bsn_slib_)
+# 可执行文件前缀
+SET(BIN_PREFIX bsn_2_)
 # 库定义前缀
 SET(LIB_DEFINE_PREFIX D_BSN_IS_DLL_)
 
 # 头文件路径
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/../ )
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/third_part/ )
 
 # 链接库查找目录
 LINK_DIRECTORIES( ${LIBRARY_OUTPUT_PATH} )
@@ -67,7 +70,7 @@ set(MY_C_RELEASE_FLAG "${MY_COMMON_FLAG} -O2 -DNDEBUG")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(MY_C_FLAGS   "${MY_C_DEBUG_FLAG}")
-  set(OUTPUT_SUFFIX "d")
+  set(OUTPUT_SUFFIX "_d")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
   set(MY_C_FLAGS   "${MY_C_RELEASE_FLAG}")
   set(OUTPUT_SUFFIX "")
@@ -83,7 +86,7 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
  
 # 添加子工程目录
 #-------------------------------------------------------------------------------
-#ADD_SUBDIRECTORY( bsn_net )
+ADD_SUBDIRECTORY( t_console )
 ADD_SUBDIRECTORY( t_share )
 #-------------------------------------------------------------------------------
 

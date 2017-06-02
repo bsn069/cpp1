@@ -1,12 +1,9 @@
 FILE(GLOB V_SelfPath "CMakeLists.txt")
-MESSAGE(STATUS "¹¤³ÌÃûÉèÖÃÎÄ¼þ " ${V_SelfPath})
 STRING( REGEX REPLACE ".*/(.*)/CMakeLists.txt$" "\\1" V_prjName ${V_SelfPath} )
-# ¹¤³ÌÃû 
+# å·¥ç¨‹å 
 PROJECT( ${V_prjName} ) 
-   
-       
 
-# ¼ÓÌísrcÄ¿Â¼µ½µÄÔ´Âëµ½±äÁ¿SRC_LIST
+# åŠ æ·»srcç›®å½•åˆ°çš„æºç åˆ°å˜é‡SRC_LIST
 # aux_source_directory(src  SRC_LIST)
 FILE(GLOB_RECURSE SRC_LIST_CPP "*.cpp")
 FILE(GLOB_RECURSE SRC_LIST_HPP "*.hpp")
@@ -14,26 +11,29 @@ FILE(GLOB_RECURSE SRC_LIST_C "*.c")
 FILE(GLOB_RECURSE SRC_LIST_H "*.h")
 set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
-# Í·ÎÄ¼þËÑË÷Â·¾¶ 
+# å¤´æ–‡ä»¶æœç´¢è·¯å¾„ 
 #INCLUDE_DIRECTORIES( Include )
   
-# Ìí¼Ó¶¨Òå
-#add_definitions( -DD_BSN_${PROJECT_NAME}_IS_DLL )
+# æ·»åŠ å®šä¹‰
+#add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
 
-# Éú³É¶þ½øÖÆÎÄ¼þ ${SubProjectName}
-SET( OUT_NAME bsn_2_${PROJECT_NAME} )
+# ç”ŸæˆäºŒè¿›åˆ¶æ–‡ä»¶ ${SubProjectName}
+SET( OUT_NAME ${BIN_PREFIX}${PROJECT_NAME}${OUTPUT_SUFFIX} )
 ADD_EXECUTABLE(${OUT_NAME} ${SRC_LIST})
-SET_TARGET_PROPERTIES(${OUT_NAME} PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
-# ÒÀÀµÏîÄ¿
-target_link_libraries(${OUT_NAME} lib_bsn_common)
-# Á´½Ó¿â
+#SET_TARGET_PROPERTIES(${OUT_NAME} PROPERTIES DEBUG_POSTFIX "${OUTPUT_SUFFIX}")
+# ä¾èµ–é¡¹ç›®
+target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}t_share${OUTPUT_SUFFIX})
+# é“¾æŽ¥åº“
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
 
-
-MESSAGE(STATUS "¹¤³ÌÃû " ${PROJECT_NAME})
-MESSAGE(STATUS "¹¤³ÌPROJECT_BINARY_DIR " ${PROJECT_BINARY_DIR})
-MESSAGE(STATUS "¹¤³ÌPROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
-MESSAGE(STATUS "Ô´ÂëÁÐ±í ")
+MESSAGE(STATUS "")
+MESSAGE(STATUS "------------------------------------------------------------- ")
+MESSAGE(STATUS "å·¥ç¨‹å " ${PROJECT_NAME})
+MESSAGE(STATUS "å·¥ç¨‹cmakeæ–‡ä»¶ " ${V_SelfPath})
+MESSAGE(STATUS "å·¥ç¨‹PROJECT_BINARY_DIR " ${PROJECT_BINARY_DIR})
+MESSAGE(STATUS "å·¥ç¨‹PROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
+MESSAGE(STATUS "OUT_NAME " ${OUT_NAME})
+MESSAGE(STATUS "æºç åˆ—è¡¨ ")
 FOREACH(src ${SRC_LIST})
 MESSAGE( ${src} )
 ENDFOREACH()

@@ -1,5 +1,5 @@
 #include "./interface.h"
-D_BsnNamespace1(NameSpace)
+D_BsnNamespace1(t_share)
 //////////////////////////////////////////////////////////////////////
 
 wchar_t const* const C_Interface::Error(int32_t const i32ErrorCode) const
@@ -14,7 +14,7 @@ wchar_t const* const C_Interface::Error(int32_t const i32ErrorCode) const
 
 wchar_t const* const C_Interface::Name() const
 {
-	return L"C_Imp";
+	return L"t_share";
 }
 
 

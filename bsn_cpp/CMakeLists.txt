@@ -88,6 +88,7 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
 #-------------------------------------------------------------------------------
 ADD_SUBDIRECTORY( t_console )
 ADD_SUBDIRECTORY( t_share )
+ADD_SUBDIRECTORY( lib_loader )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

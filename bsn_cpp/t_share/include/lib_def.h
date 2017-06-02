@@ -5,7 +5,7 @@
 #else
 	#define D_BSN_t_share_DLL D_DllImport
 
-	#if (defined _MSC_VER)
+	#if (defined WIN32)
 		#ifdef _DEBUG
 			#pragma comment(lib, "bsn_dlib_t_share_d.lib")
 		#else

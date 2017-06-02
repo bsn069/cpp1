@@ -31,7 +31,7 @@ uint8_t (*ArraySize(T (&)[N] ))[N];
 #define D_Deprecate __declspec(deprecated)
 
 
-#if (defined _MSC_VER)
+#if (defined WIN32)
 	#define D_DllImport __declspec(dllimport)
 	#define D_DllExport __declspec(dllexport)
 #else

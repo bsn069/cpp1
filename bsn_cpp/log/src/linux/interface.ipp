@@ -1,6 +1,7 @@
 #include "./../interface.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include <iostream>
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
 
@@ -10,31 +11,32 @@ const char SetBackgroundColor_Yellow[] = "\033[43m\033[30m";
 const char SetFontColor_Green[] = "\033[32m\033[40m";
 const char ResetConsolasStyle[] = "\033[0m";
 
-wchar_t const* const C_Interface::Error(int32_t const i32ErrorCode) const
+char const* const C_Interface::Error(int32_t const i32ErrorCode) const
 {
 	switch (i32ErrorCode)
 	{
-		case 1: return L"1";
-		default: return L"Unknown";
+		case 1: return "1";
+		default: return "Unknown";
 	}
 }
 
 
-wchar_t const* const C_Interface::Name() const
+char const* const C_Interface::Name() const
 {
-	return L"log";
+	return "log";
 }
 
 
 C_Interface::C_Interface()
 {
- 
+  	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
+
 }
 
 
 C_Interface::~C_Interface()
 {
- 
+	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
 }
 
 void C_Interface::Info(const char * strInfo)

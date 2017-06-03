@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 namespace N_Bsn
 {
@@ -29,7 +30,6 @@ uint8_t (*ArraySize(T (&)[N] ))[N];
 
 // 声明函数已被遗弃 不建议使用
 #define D_Deprecate __declspec(deprecated)
-
 
 #if (defined WIN32)
 	#define D_DllImport __declspec(dllimport)

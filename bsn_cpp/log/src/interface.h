@@ -6,8 +6,8 @@ D_BsnNamespace1(log)
 class C_Interface : public I_Interface
 {
 public:
-	virtual wchar_t const* const Name() const override;
-	virtual wchar_t const* const Error(int32_t const i32ErrorCode) const override;
+	virtual char const* const Name() const override;
+	virtual char const* const Error(int32_t const i32ErrorCode) const override;
 
 	virtual void InfoFmt(const char * strFormat, ...) override;
 	virtual void WarnFmt(const char * strFormat, ...) override;

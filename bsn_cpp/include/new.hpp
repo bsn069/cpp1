@@ -1,4 +1,5 @@
 #pragma once
+#include "define.h"
 
 namespace N_Bsn
 {

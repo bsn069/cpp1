@@ -15,8 +15,8 @@ protected:
 
 
 public:
-	virtual wchar_t const* const Name() const = 0;
-	virtual wchar_t const* const Error(int32_t const i32ErrorCode) const = 0;
+	virtual char const* const Name() const = 0;
+	virtual char const* const Error(int32_t const i32ErrorCode) const = 0;
 };
 //////////////////////////////////////////////////////////////////////
 }

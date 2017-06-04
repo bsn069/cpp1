@@ -19,9 +19,11 @@ D_FunImp void ReleaseInterface(I_Interface* pInterface)
 }
 
 
-D_FunImp D_DllCExport I_Interface::T_SharePtr Create()
+D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLibLoader libLoader)
 {
-	return I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
+	auto p = I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
+	p->SetLibLoader(libLoader);
+	return p;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -1,6 +1,6 @@
 #include "./../interface.h"
 
-D_BsnNamespace1(t_share)
+D_BsnNamespace1(console_input)
 //////////////////////////////////////////////////////////////////////
 
 char const* const C_Interface::Error(int32_t const i32ErrorCode) const
@@ -15,12 +15,11 @@ char const* const C_Interface::Error(int32_t const i32ErrorCode) const
 
 char const* const C_Interface::Name() const
 {
-	return "t_share";
+	return "console_input";
 }
 
 
 C_Interface::C_Interface()
-: m_libLoader(nullptr)
 {
  	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
 }
@@ -29,8 +28,6 @@ C_Interface::C_Interface()
 C_Interface::~C_Interface()
 {
  	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
-	SetLibLoader(nullptr);
-
 }
 
 //////////////////////////////////////////////////////////////////////

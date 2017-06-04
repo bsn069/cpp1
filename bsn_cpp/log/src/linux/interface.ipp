@@ -28,6 +28,7 @@ char const* const C_Interface::Name() const
 
 
 C_Interface::C_Interface()
+: m_libLoader(nullptr)
 {
   	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
 
@@ -37,6 +38,7 @@ C_Interface::C_Interface()
 C_Interface::~C_Interface()
 {
 	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
+	SetLibLoader(nullptr);
 }
 
 void C_Interface::Info(const char * strInfo)

@@ -3,7 +3,7 @@
 #include "./interface.h"
 
 
-D_BsnNamespace1(t_share)
+D_BsnNamespace1(console_input)
 //////////////////////////////////////////////////////////////////////
 
 D_FunImp I_Interface* CreateInterface()
@@ -20,11 +20,9 @@ D_FunImp void ReleaseInterface(I_Interface* pInterface)
 }
 
 
-D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLibLoader libLoader)
+D_FunImp D_DllCExport I_Interface::T_SharePtr Create()
 {
-	auto p = I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
-	p->SetLibLoader(libLoader);
-	return p;
+	return I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

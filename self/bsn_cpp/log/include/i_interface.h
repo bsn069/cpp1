@@ -5,9 +5,9 @@ D_BsnNamespace1(Log)
 class I_Interface
 {
 public:
-	// ÈÕÖ¾¼¶±ğ °´Î»
+	// æ—¥å¿—çº§åˆ« æŒ‰ä½
 	typedef T_uint32 T_Level;
-	// ÈÕÖ¾´¦Àíº¯Êı
+	// æ—¥å¿—å¤„ç†å‡½æ•°
 	typedef function<T_void(T_Level D_const Level, wstring D_const& wstrLog)> T_CallBack;
 
 
@@ -19,22 +19,22 @@ public:
 	virtual T_wchar D_const * D_const Name() D_const = 0;
 	virtual T_wchar D_const * D_const Error(T_int32 D_const i32ErrorCode) D_const = 0;
 
-	// Êä³öÈÕÖ¾¼¶±ğ
+	// è¾“å‡ºæ—¥å¿—çº§åˆ«
 	virtual T_int32 D_const	SetLevelOutput(T_Level D_const Level) = 0;
 	virtual T_int32 D_const GetLevelOutput(T_Level& Level) D_const = 0;
 	
-	// ±£´æÈÕÖ¾¼¶±ğ
+	// ä¿å­˜æ—¥å¿—çº§åˆ«
 	virtual T_int32 D_const	SetLevelLog(T_Level D_const Level) = 0;
 	virtual T_int32 D_const GetLevelLog(T_Level& Level) D_const = 0;
 
-	// ÉèÖÃÈÕÖ¾´¦Àí»Øµ÷º¯Êı
+	// è®¾ç½®æ—¥å¿—å¤„ç†å›è°ƒå‡½æ•°
 	virtual T_int32 D_const	SetCallBackOutput(T_CallBack CallBack) = 0;
 	virtual T_int32 D_const	SetCallBackLog(T_CallBack CallBack) = 0;
 
-	// Æô¶¯ÈÕÖ¾´¦Àí
+	// å¯åŠ¨æ—¥å¿—å¤„ç†
 	virtual T_int32 D_const	Start() = 0;
 
-	// Ğ´ÈÕÖ¾
+	// å†™æ—¥å¿—
 	virtual T_int32 D_const	Write(T_Level D_const Level, T_wchar D_const * D_const pwcLog) = 0;
 	virtual T_int32 D_const	Write(
 		T_wchar D_const * D_const pwcModule

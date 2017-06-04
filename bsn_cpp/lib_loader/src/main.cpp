@@ -21,8 +21,9 @@ D_FunImp void ReleaseInterface(I_Interface* pInterface)
 
 D_FunImp D_DllExport I_Interface::T_SharePtr Create()
 {
-	return I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
+	auto p = I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

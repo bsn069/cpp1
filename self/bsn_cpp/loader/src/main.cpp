@@ -13,7 +13,7 @@ wmain(T_int32 argc, T_wchar* argv[])
 		Release(pGlobal);
 	}
 
-	wcout << L"ÒÑÍË³ö" << endl;
+	wcout << L"å·²é€€å‡º" << endl;
 	system("pause");
 	return 0;
 }

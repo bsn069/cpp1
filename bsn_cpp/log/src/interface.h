@@ -1,5 +1,7 @@
 #pragma once
-#include "./main.h"
+#include "main.h"
+
+
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
 
@@ -17,9 +19,16 @@ public:
 	virtual void Warn(const char * strInfo) override;
 	virtual void Error(const char * strInfo) override;
 
+	virtual void SetLibLoader(T_SharePtrLibLoader libLoader) override {
+		m_libLoader = libLoader;
+	}
+
 public:
 	C_Interface();
 	virtual ~C_Interface();
+
+private:
+	T_SharePtrLibLoader m_libLoader;
 
 private:
 	void FmtPrint(const char * strFormat, ...);

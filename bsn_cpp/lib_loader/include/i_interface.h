@@ -15,6 +15,7 @@ public:
 
 public:
 	virtual void* 	Func(const char* strFuncName) = 0;
+	virtual const char* Name( ) = 0;
 };
 
 
@@ -24,12 +25,11 @@ public:
 	typedef std::shared_ptr<I_Interface> T_SharePtr;
 
 public:
-	// /media/sf_/github/cpp1/bsn_cpp/out/libbsn_dlib_log_d.so
-	// export LD_LIBRARY_PATH="/media/sf_/github/cpp1/bsn_cpp/out"
-	// p->Open("bsn_dlib_log", "_d", "", 0);
 	virtual I_Lib::T_SharePtr	Load(
-		const char* strLibPath
-		, const char* strLibName
+		const char* strLibName
+		, const char* strLibPath
+		, const char* strDebugSuffix
+		, const char* strReleaseSuffix
 	) = 0;
 	virtual I_Lib::T_SharePtr	Get(const char* strLibName) = 0;
 };

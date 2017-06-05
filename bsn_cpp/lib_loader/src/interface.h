@@ -1,24 +1,24 @@
 #pragma once
-#include "./main.h"
+#include "./../include/i_interface.h"
+#include "./lib.h"
+#include <map>
+#include <list>
 D_BsnNamespace1(lib_loader)
 //////////////////////////////////////////////////////////////////////
-#if defined(WIN32)
-typedef HMODULE T_DLL_HANDLE;
-#else
-typedef void* T_DLL_HANDLE;
-#endif  // OS
-
 class C_Interface : public I_Interface
 {
 public:
-	virtual bool   	Open(
-		const char* strLib
+	typedef std::map<std::string, C_Lib::T_SharePtr> T_Libs;
+	typedef std::list<C_Lib::T_SharePtr> T_WaitDelLibs;
+public:
+	virtual I_Lib::T_SharePtr	Load(
+		const char* strLibName
+		, const char* strLibPath
 		, const char* strDebugSuffix
 		, const char* strReleaseSuffix
-		, uint retryCount
 	) override;
-	virtual void	Close() override;
-	virtual void* 	Func(const char* strFuncName) override;
+	virtual I_Lib::T_SharePtr	Get(const char* strLibName) override;
+	void	WaitQuit();
 
 
 public:
@@ -30,7 +30,8 @@ public:
 	virtual ~C_Interface();
 
 private:
-	T_DLL_HANDLE m_dllHandle;
+	T_Libs m_Libs;
+	T_WaitDelLibs m_WaitDelLibs;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -1,7 +1,9 @@
+#include <bsn_cpp/include/new.hpp>
+#include <bsn_cpp/include/delete.hpp>
 #include "./../interface.h"
-#include <dlfcn.h>
 #include <iostream>
-
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 D_BsnNamespace1(lib_loader)
 //////////////////////////////////////////////////////////////////////
 
@@ -25,106 +27,69 @@ C_Interface::C_Interface()
 {
 	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
 
-	m_dllHandle = nullptr;
 }
 
 
 C_Interface::~C_Interface()
 {
 	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
-	this->Close();
+	this->WaitQuit();
 }
 
-void C_Interface::Close()
-{
-	if (m_dllHandle) {
-		dlclose(m_dllHandle);
-		m_dllHandle = nullptr;
-	}
-}
-
-bool C_Interface::Open(
-	const char* strLib
+I_Lib::T_SharePtr	C_Interface::Load(
+	const char* strLibName
+	, const char* strLibPath
 	, const char* strDebugSuffix
 	, const char* strReleaseSuffix
-	, uint retryCount
 )
 {
-	std::cout << " strLib=" << strLib;
-	std::cout << " strDebugSuffix=" << strDebugSuffix;
-	std::cout << " strReleaseSuffix=" << strReleaseSuffix;
-	std::cout << " retryCount=" << retryCount << std::endl;
-
-	if (retryCount == 0)
+	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), [](C_Lib* pLib){Delete(pLib);});
+	auto bLoadSuccess = pLib->Open(strLibPath, strDebugSuffix, strReleaseSuffix, 0);
+	if (!bLoadSuccess)
 	{
-		this->Close();
+		return nullptr;
 	}
 
-	const char* strFormat = nullptr;
-	switch (retryCount) 	
+	auto pOldLib = this->Get(strLibName);
+	if (pOldLib && pOldLib.use_count() > 1)
 	{
-		case 0: // 当前目录
-			{
-				strFormat = "./lib%s%s.so";
-			}
-			break;
-		case 1: // export LD_LIBRARY_PATH="/media/sf_/github/cpp1/bsn_cpp/out"
-			{
-				strFormat = "lib%s%s.so";
-			}
-			break;
-		default:
-			{
-				char* error = dlerror();
-				if (error != nullptr) 
-				{
-					std::cout << error << std::endl;
-				}
-				std::cout << strLib << " not found" << std::endl;
-				return false;
-			}
+		auto pTemp = std::dynamic_pointer_cast<I_Lib>(pOldLib);
+		m_WaitDelLibs.push_back(pTemp);
 	}
 
-	const char* strSuffix = "";
-	#ifdef _DEBUG
-		strSuffix= strDebugSuffix;
-	#else
-		strSuffix= strReleaseSuffix;
-	#endif
-    char szFullName[128] = {0};
-	snprintf(szFullName, sizeof(szFullName), strFormat, strLib, strSuffix);
-	std::cout << " szFullName=" << szFullName << std::endl;
-
-	m_dllHandle = dlopen(szFullName, RTLD_LAZY | RTLD_GLOBAL);
-	if (m_dllHandle != nullptr) 
-	{
-		return true;
-	}
-
-	// OutputFmtToConsole("file:%s,dlopen: %s\n", strLib, dlerror());
-	return this->Open(strLib, strDebugSuffix, strReleaseSuffix, retryCount+1);
+	m_Libs[strLibName] = pLib;
+	return pLib;
 }
 
-void* C_Interface::Func(const char* strFuncName)
+I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 {
-	void* ret = nullptr;
+	auto itor = m_Libs.find(strLibName);
+	if (itor == m_Libs.end())
+	{
+		return nullptr;
+	}
+	return std::dynamic_pointer_cast<I_Lib>(itor->second);
+}
 
-	if (m_dllHandle == nullptr) 
+
+void	C_Interface::WaitQuit() 
+{
+	for (auto pair : m_Libs)
 	{
-		// OutputFmtToConsole("get func %s but handle is nullptr\n", strFuncName);
-		return nullptr;
+		m_WaitDelLibs.push_back(pair.second);
 	}
-	dlerror();  /* Clear any existing error */
-	
-	ret   = dlsym(m_dllHandle, strFuncName);
-	char* error = dlerror();
-	if (error != nullptr) 
+	m_Libs.clear();
+
+	auto itor = m_WaitDelLibs.begin();
+	for (; itor != m_WaitDelLibs.end(); )
 	{
-		std::cout << strFuncName << " error= " <<  error << std::endl;
-		// OutputFmtToConsole("get_func[%s], error:%s\n", strFuncName, error);
-		return nullptr;
+		while ((*itor).use_count() > 1)
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+		}
+		++itor;
+		m_WaitDelLibs.pop_front();
 	}
-	return ret;
 }
 
 //////////////////////////////////////////////////////////////////////

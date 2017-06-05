@@ -13,19 +13,18 @@ main(int argc, char* argv[])
 {
 	// setlocale(LC_ALL, "chs"); 
 
-		std::vector<D_N1(lib_loader)::I_Interface::T_SharePtr> allLibLoader;
 	{
+		auto pLibLoader = D_N1(lib_loader)::Create();
+		std::cout << pLibLoader << std::endl;
 
 		D_N1(log)::I_Interface::T_SharePtr pLog = nullptr;
 		{
-			auto pLibLoader = D_N1(lib_loader)::Create();
-			allLibLoader.push_back(pLibLoader);
-			std::cout << pLibLoader << std::endl;
-			pLibLoader->Open("bsn_dlib_log", "_d", "", 0);
-			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLibLoader->Func("Create"));
+			pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
+			auto pLib = pLibLoader->Get("log");
+			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLib->Func("Create"));
 			std::cout << "pFuncCreate=" << pFuncCreate << std::endl;
 			if (pFuncCreate) {
-				pLog = pFuncCreate(pLibLoader);
+				pLog = pFuncCreate(pLib);
 				std::cout << "pLog=" << pLog << std::endl;
 				pLog->Info("info");
 			}
@@ -44,8 +43,6 @@ main(int argc, char* argv[])
 		// 	}
 		// }
 	}
-		std::cout << "allLibLoader.clear()"  << std::endl;
-		allLibLoader.clear();
 
 	std::cout << "要退出了" << std::endl;
 	int t;

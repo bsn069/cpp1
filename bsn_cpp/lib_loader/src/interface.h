@@ -10,6 +10,8 @@ class C_Interface : public I_Interface
 public:
 	typedef std::map<std::string, C_Lib::T_SharePtr> T_Libs;
 	typedef std::list<C_Lib::T_SharePtr> T_WaitDelLibs;
+
+	
 public:
 	virtual I_Lib::T_SharePtr	Load(
 		const char* strLibName
@@ -18,7 +20,10 @@ public:
 		, const char* strReleaseSuffix
 	) override;
 	virtual I_Lib::T_SharePtr	Get(const char* strLibName) override;
-	void	WaitQuit();
+	virtual void	WaitQuit() override;
+	virtual void 	SetLog(T_SharePtrLog pLog) {
+		m_pLog = pLog;
+	};
 
 
 public:
@@ -32,6 +37,7 @@ public:
 private:
 	T_Libs m_Libs;
 	T_WaitDelLibs m_WaitDelLibs;
+	T_SharePtrLog m_pLog;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

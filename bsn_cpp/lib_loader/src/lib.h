@@ -1,5 +1,5 @@
 #pragma once
-#include "./../include/i_interface.h"
+#include "./../include/i_lib.h"
 D_BsnNamespace1(lib_loader)
 //////////////////////////////////////////////////////////////////////
 #if defined(WIN32)

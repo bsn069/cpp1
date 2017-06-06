@@ -19,10 +19,10 @@ D_FunImp void ReleaseInterface(I_Interface* pInterface)
 }
 
 
-D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLibLoader libLoader)
+D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLib lib)
 {
 	auto p = I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
-	p->SetLibLoader(libLoader);
+	p->SetLib(lib);
 	return p;
 }
 //////////////////////////////////////////////////////////////////////

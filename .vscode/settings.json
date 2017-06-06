@@ -67,6 +67,9 @@
 		"ratio": "cpp",
 		"typeindex": "cpp",
 		"cstdarg": "cpp",
-		"cwctype": "cpp"
+		"cwctype": "cpp",
+		"functional": "cpp",
+		"thread": "cpp",
+		"xfunctional": "cpp"
 	}
 }

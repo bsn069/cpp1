@@ -15,6 +15,7 @@ C_Lib::~C_Lib()
 {
 	std::cout << this->Name() << " C_Lib::~C_Lib()" << std::endl;
 	this->Close();
+	std::cout << this->Name() << " C_Lib::~C_Lib()1" << std::endl;
 }
 
 void C_Lib::Close()

@@ -33,7 +33,11 @@ C_Interface::C_Interface()
 C_Interface::~C_Interface()
 {
 	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
-	this->WaitQuit();
+}
+
+void DeleteLib(C_Lib* pLib) {
+	std::cout << "DeleteLib" << pLib << std::endl;
+	Delete(pLib);
 }
 
 I_Lib::T_SharePtr	C_Interface::Load(
@@ -43,7 +47,7 @@ I_Lib::T_SharePtr	C_Interface::Load(
 	, const char* strReleaseSuffix
 )
 {
-	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), [](C_Lib* pLib){Delete(pLib);});
+	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), DeleteLib);
 	auto bLoadSuccess = pLib->Open(strLibPath, strDebugSuffix, strReleaseSuffix, 0);
 	if (!bLoadSuccess)
 	{
@@ -74,11 +78,18 @@ I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 
 void	C_Interface::WaitQuit() 
 {
+	if (m_pLog) 
+	{
+		m_pLog->Info("info C_Interface::WaitQuit");
+	}
+	std::cout << "C_Interface::WaitQuit" << std::endl;
 	for (auto pair : m_Libs)
 	{
 		m_WaitDelLibs.push_back(pair.second);
 	}
 	m_Libs.clear();
+
+	SetLog(nullptr);
 
 	auto itor = m_WaitDelLibs.begin();
 	for (; itor != m_WaitDelLibs.end(); )

@@ -19,8 +19,8 @@ public:
 	virtual void Warn(const char * strInfo) override;
 	virtual void Error(const char * strInfo) override;
 
-	virtual void SetLibLoader(T_SharePtrLibLoader libLoader) override {
-		m_libLoader = libLoader;
+	virtual void SetLib(T_SharePtrLib lib) override {
+		m_lib = lib;
 	}
 
 public:
@@ -28,7 +28,7 @@ public:
 	virtual ~C_Interface();
 
 private:
-	T_SharePtrLibLoader m_libLoader;
+	T_SharePtrLib m_lib;
 
 private:
 	void FmtPrint(const char * strFormat, ...);

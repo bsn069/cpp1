@@ -24,9 +24,8 @@ char const* const C_Interface::Name() const
 
 
 C_Interface::C_Interface()
-{
+{	
 	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
-
 }
 
 
@@ -35,10 +34,6 @@ C_Interface::~C_Interface()
 	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
 }
 
-void DeleteLib(C_Lib* pLib) {
-	std::cout << "DeleteLib" << pLib << std::endl;
-	Delete(pLib);
-}
 
 I_Lib::T_SharePtr	C_Interface::Load(
 	const char* strLibName
@@ -47,18 +42,36 @@ I_Lib::T_SharePtr	C_Interface::Load(
 	, const char* strReleaseSuffix
 )
 {
-	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), DeleteLib);
+	if (m_pLog) 
+	{
+		m_pLog->InfoFmt("C_Interface::Load(%s,%s,%s,%s)"
+			, strLibName
+			, strLibPath
+			, strDebugSuffix
+			, strReleaseSuffix
+		);
+	}
+
+	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), [](C_Lib* pLib){Delete(pLib);});
+	pLib->SetLog(m_pLog);
 	auto bLoadSuccess = pLib->Open(strLibPath, strDebugSuffix, strReleaseSuffix, 0);
 	if (!bLoadSuccess)
 	{
+		if (m_pLog) 
+		{
+			m_pLog->Error("!bLoadSuccess");
+		}
 		return nullptr;
 	}
 
 	auto pOldLib = this->Get(strLibName);
 	if (pOldLib && pOldLib.use_count() > 1)
 	{
-		auto pTemp = std::dynamic_pointer_cast<I_Lib>(pOldLib);
-		m_WaitDelLibs.push_back(pTemp);
+		if (m_pLog) 
+		{
+			m_pLog->Info("pOldLib using, wait del");
+		}
+		m_WaitDelLibs.push_back(pOldLib);
 	}
 
 	m_Libs[strLibName] = pLib;
@@ -67,9 +80,20 @@ I_Lib::T_SharePtr	C_Interface::Load(
 
 I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 {
+	if (m_pLog) 
+	{
+		m_pLog->InfoFmt("C_Interface::Get(%s)"
+			, strLibName
+		);
+	}
+
 	auto itor = m_Libs.find(strLibName);
 	if (itor == m_Libs.end())
 	{
+		if (m_pLog) 
+		{
+			m_pLog->Error("not found");
+		}
 		return nullptr;
 	}
 	return std::dynamic_pointer_cast<I_Lib>(itor->second);
@@ -80,15 +104,24 @@ void	C_Interface::WaitQuit()
 {
 	if (m_pLog) 
 	{
-		m_pLog->Info("info C_Interface::WaitQuit");
+		m_pLog->InfoFmt("C_Interface::WaitQuit() m_Libs.size()=%u"
+			, m_Libs.size()
+		);
 	}
-	std::cout << "C_Interface::WaitQuit" << std::endl;
+
 	for (auto pair : m_Libs)
 	{
+		auto pCLib = std::dynamic_pointer_cast<C_Lib>(pair.second);
+		pCLib->SetLog(nullptr);
+
 		m_WaitDelLibs.push_back(pair.second);
 	}
 	m_Libs.clear();
 
+	if (m_pLog) 
+	{
+		m_pLog->Info("SetLog(nullptr)");
+	}
 	SetLog(nullptr);
 
 	auto itor = m_WaitDelLibs.begin();

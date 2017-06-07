@@ -6,16 +6,13 @@ D_BsnNamespace1(lib_loader)
 //////////////////////////////////////////////////////////////////////
 C_Lib::C_Lib()
 {
-	std::cout << this->Name() << " C_Lib::C_Lib()" << std::endl;
 	m_dllHandle = nullptr;
 }
 
 
 C_Lib::~C_Lib()
 {
-	std::cout << this->Name() << " C_Lib::~C_Lib()" << std::endl;
 	this->Close();
-	std::cout << this->Name() << " C_Lib::~C_Lib()1" << std::endl;
 }
 
 void C_Lib::Close()
@@ -33,14 +30,22 @@ bool C_Lib::Open(
 	, uint retryCount
 )
 {
-	std::cout << " strLibPath=" << strLibPath;
-	std::cout << " strDebugSuffix=" << strDebugSuffix;
-	std::cout << " strReleaseSuffix=" << strReleaseSuffix;
-	std::cout << " retryCount=" << retryCount << std::endl;
+	if (m_pLog)
+	{
+		m_pLog->InfoFmt("C_Lib::Open(%s,%s,%s,%u)"
+			, strLibPath
+			, strDebugSuffix
+			, strReleaseSuffix
+			, retryCount
+		);
+	}
 
 	if (m_dllHandle != nullptr)
 	{
-		std::cout << strLibPath << " had open" << std::endl;
+		if (m_pLog)
+		{
+			m_pLog->Error("had open");
+		}
 		return false;
 	}
 
@@ -92,9 +97,15 @@ bool C_Lib::Open(
 				char* error = dlerror();
 				if (error != nullptr) 
 				{
-					std::cout << error << std::endl;
+					if (m_pLog)
+					{
+						m_pLog->Error(error);
+					}
 				}
-				std::cout << strLibPath << " not found" << std::endl;
+				if (m_pLog)
+				{
+					m_pLog->Error("not found");
+				}
 				return false;
 			}
 	}
@@ -107,7 +118,10 @@ bool C_Lib::Open(
 	#endif
     char szFullName[128] = {0};
 	snprintf(szFullName, sizeof(szFullName), strFormat, strLibPath, strSuffix);
-	std::cout << " szFullName=" << szFullName << std::endl;
+	if (m_pLog)
+	{
+		m_pLog->InfoFmt("szFullName=%s", szFullName);
+	}
 
 	m_dllHandle = dlopen(szFullName, RTLD_LAZY | RTLD_GLOBAL);
 	if (m_dllHandle != nullptr) 
@@ -115,18 +129,26 @@ bool C_Lib::Open(
 		return true;
 	}
 
-	// OutputFmtToConsole("file:%s,dlopen: %s\n", strLib, dlerror());
 	return this->Open(strLibPath, strDebugSuffix, strReleaseSuffix, retryCount+1);
 }
 
 void* C_Lib::Func(const char* strFuncName)
 {
+	if (m_pLog)
+	{
+		m_pLog->InfoFmt("C_Lib::Func(%s)"
+			, strFuncName
+		);
+	}
+
 	void* ret = nullptr;
 
 	if (m_dllHandle == nullptr) 
 	{
-		// OutputFmtToConsole("get func %s but handle is nullptr\n", strFuncName);
-		std::cout << " lib not open" << std::endl;
+		if (m_pLog)
+		{
+			m_pLog->Error("not found)");
+		}
 		return nullptr;
 	}
 	dlerror();  /* Clear any existing error */
@@ -135,8 +157,10 @@ void* C_Lib::Func(const char* strFuncName)
 	char* error = dlerror();
 	if (error != nullptr) 
 	{
-		std::cout << strFuncName << " error= " <<  error << std::endl;
-		// OutputFmtToConsole("get_func[%s], error:%s\n", strFuncName, error);
+		if (m_pLog)
+		{
+			m_pLog->Error(error);
+		}
 		return nullptr;
 	}
 	return ret;

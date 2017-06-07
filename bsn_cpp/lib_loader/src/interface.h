@@ -8,8 +8,8 @@ D_BsnNamespace1(lib_loader)
 class C_Interface : public I_Interface
 {
 public:
-	typedef std::map<std::string, C_Lib::T_SharePtr> T_Libs;
-	typedef std::list<C_Lib::T_SharePtr> T_WaitDelLibs;
+	typedef std::map<std::string, I_Lib::T_SharePtr> T_Libs;
+	typedef std::list<I_Lib::T_SharePtr> T_WaitDelLibs;
 
 	
 public:

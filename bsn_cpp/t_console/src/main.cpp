@@ -17,19 +17,25 @@ main(int argc, char* argv[])
 		auto pLibLoader = D_N1(lib_loader)::Create();
 		std::cout << pLibLoader << std::endl;
 
-		D_N1(log)::I_Interface::T_SharePtr pLog = nullptr;
+		D_N1(log)::I_Interface::T_SharePtr pLogInterface = nullptr;
 		{
 			pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
 			auto pLib = pLibLoader->Get("log");
 			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLib->Func("Create"));
 			std::cout << "pFuncCreate=" << pFuncCreate << std::endl;
 			if (pFuncCreate) {
-				pLog = pFuncCreate(pLib);
-				std::cout << "pLog=" << pLog << std::endl;
-				pLog->Info("info");
+				pLogInterface = pFuncCreate(pLib);
+				std::cout << "pLogInterface=" << pLogInterface << std::endl;
 			}
 		}
-		pLibLoader->SetLog(pLog);
+
+		{
+			auto pLog = pLogInterface->CreateLog();
+			pLog->Info("info1");
+			pLibLoader->SetLog(pLog);
+			pLogInterface = nullptr;
+			pLog->Info("info2");
+		}
 
 		{
 			pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
@@ -37,13 +43,12 @@ main(int argc, char* argv[])
 			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLib->Func("Create"));
 			std::cout << "pFuncCreate=" << pFuncCreate << std::endl;
 			if (pFuncCreate) {
-				pLog = pFuncCreate(pLib);
-				std::cout << "pLog=" << pLog << std::endl;
-				pLog->Info("info");
+				pLogInterface = pFuncCreate(pLib);
+				std::cout << "pLogInterface=" << pLogInterface << std::endl;
 			}
 		}
-
-		pLog = nullptr;
+		
+		pLogInterface = nullptr;
 		pLibLoader->WaitQuit();
 	}
 

@@ -41,38 +41,52 @@ void C_Log::Error(const char * strInfo)
 
 void C_Log::InfoFmt(const char * strFormat, ...)
 {
-	char buffer[2048];
-
 	va_list args;
 	va_start(args, strFormat);
-	vsnprintf(buffer, sizeof(buffer), strFormat, args);
+	FmtPrint(2, strFormat, args);
 	va_end(args);
-
-	Info(buffer);
 }
 
 void C_Log::WarnFmt(const char * strFormat, ...)
 {
-	char buffer[2048];
-	
 	va_list args;
 	va_start(args, strFormat);
-	vsnprintf(buffer, sizeof(buffer), strFormat, args);
+	FmtPrint(1, strFormat, args);
 	va_end(args);
-
-	Warn(buffer);
 }
 
 void C_Log::ErrorFmt(const char * strFormat, ...)
 {
-	char buffer[2048];
-	
 	va_list args;
 	va_start(args, strFormat);
-	vsnprintf(buffer, sizeof(buffer), strFormat, args);
+	FmtPrint(0, strFormat, args);
 	va_end(args);
+}
 
-	Error(buffer);
+void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
+{
+	char buffer[4096];
+    int length = 0;
+    int writeSize = 0;
+    int freeSize = 0;
+
+    length = snprintf(
+        buffer
+		, D_ArrayCount(buffer)
+		, "C_Log::FmtPrint[%u]: "
+		, uLogLevel
+    );
+
+    freeSize = (int)D_ArrayCount(buffer) - length - sizeof("\n");
+    writeSize = vsnprintf(buffer + length, freeSize, strFormat, args);
+    if (writeSize <= 0 || writeSize >= freeSize) {
+        writeSize = freeSize - 1;  
+    }
+    length += writeSize;
+    buffer[length++] = '\n';
+    buffer[length]   = '\0';
+
+	m_pInterface->Print(uLogLevel, buffer);	
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

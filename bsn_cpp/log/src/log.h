@@ -2,6 +2,8 @@
 #include "./../include/i_log.h"
 #include "./../include/i_interface.h"
 #include "interface.h"
+#include <stdarg.h>
+
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
 class C_Log : public I_Log 
@@ -20,6 +22,7 @@ public:
 
 public:
 	char const* Name() const;
+	void FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args);
 
 public:
 	C_Log(T_SharePtrCInterface pInterface);

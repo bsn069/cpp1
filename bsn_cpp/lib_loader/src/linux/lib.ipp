@@ -30,22 +30,16 @@ bool C_Lib::Open(
 	, uint retryCount
 )
 {
-	if (m_pLog)
-	{
-		m_pLog->InfoFmt("C_Lib::Open(%s,%s,%s,%u)"
-			, strLibPath
-			, strDebugSuffix
-			, strReleaseSuffix
-			, retryCount
-		);
-	}
+	D_LogInfoFmt("C_Lib::Open(%s,%s,%s,%u)"
+		, strLibPath
+		, strDebugSuffix
+		, strReleaseSuffix
+		, retryCount
+	);
 
 	if (m_dllHandle != nullptr)
 	{
-		if (m_pLog)
-		{
-			m_pLog->Error("had open");
-		}
+		D_LogError("had open");
 		return false;
 	}
 
@@ -97,15 +91,9 @@ bool C_Lib::Open(
 				char* error = dlerror();
 				if (error != nullptr) 
 				{
-					if (m_pLog)
-					{
-						m_pLog->Error(error);
-					}
+					D_LogErrorFmt("%s", error);
 				}
-				if (m_pLog)
-				{
-					m_pLog->Error("not found");
-				}
+				D_LogError("not found");
 				return false;
 			}
 	}
@@ -118,10 +106,7 @@ bool C_Lib::Open(
 	#endif
     char szFullName[128] = {0};
 	snprintf(szFullName, sizeof(szFullName), strFormat, strLibPath, strSuffix);
-	if (m_pLog)
-	{
-		m_pLog->InfoFmt("szFullName=%s", szFullName);
-	}
+	D_LogInfoFmt("szFullName=%s", szFullName);
 
 	m_dllHandle = dlopen(szFullName, RTLD_LAZY | RTLD_GLOBAL);
 	if (m_dllHandle != nullptr) 
@@ -134,21 +119,15 @@ bool C_Lib::Open(
 
 void* C_Lib::Func(const char* strFuncName)
 {
-	if (m_pLog)
-	{
-		m_pLog->InfoFmt("C_Lib::Func(%s)"
-			, strFuncName
-		);
-	}
+	D_LogInfoFmt("C_Lib::Func(%s)"
+		, strFuncName
+	);
 
 	void* ret = nullptr;
 
 	if (m_dllHandle == nullptr) 
 	{
-		if (m_pLog)
-		{
-			m_pLog->Error("not found)");
-		}
+		D_LogError("not found)");
 		return nullptr;
 	}
 	dlerror();  /* Clear any existing error */
@@ -157,10 +136,7 @@ void* C_Lib::Func(const char* strFuncName)
 	char* error = dlerror();
 	if (error != nullptr) 
 	{
-		if (m_pLog)
-		{
-			m_pLog->Error(error);
-		}
+		D_LogErrorFmt("%s", error);
 		return nullptr;
 	}
 	return ret;

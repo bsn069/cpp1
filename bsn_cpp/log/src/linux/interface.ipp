@@ -49,18 +49,6 @@ C_Interface::~C_Interface()
 }
 
 
-void C_Interface::FmtPrint(uint32_t uLogLevel, const char * strFormat, ...)
-{
-	char logInfo[2048];
-	va_list args;
-	va_start(args, strFormat);
-	vsnprintf(logInfo, sizeof(logInfo), strFormat, args);
-	va_end(args);
-	
-	Print(uLogLevel, logInfo);
-}
-
-
 void C_Interface::Print(uint32_t uLogLevel, const char * strInfo)
 {
 	auto color = SetBackgroundColor_Red;
@@ -74,7 +62,7 @@ void C_Interface::Print(uint32_t uLogLevel, const char * strInfo)
 	}
 
 	fprintf(stdout, color);
-	fprintf(stdout, "%s\n", strInfo);
+	fprintf(stdout, "%s", strInfo);
 	fprintf(stdout, "%s", ResetConsolasStyle);
 }
 

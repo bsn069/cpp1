@@ -18,7 +18,6 @@ public:
 
 public:
 	void SetLib(T_SharePtrLib lib);
-	void FmtPrint(uint32_t uLogLevel, const char * strFormat, ...);
 	void Print(uint32_t uLogLevel, const char * strInfo);
 
 public:

@@ -17,7 +17,8 @@ public:
 	typedef D_N1(lib_loader)::I_Lib::T_SharePtr T_SharePtrLib;
 	
 public:
-	virtual I_Log::T_SharePtr CreateLog() = 0;
+	virtual I_Log::T_SharePtr CreateLog(char const * const strName, void* pOwner) = 0;
+	virtual void WaitQuit() = 0;
 };
 typedef D_FunDef I_Interface::T_SharePtr	(*T_FuncCreate)(I_Interface::T_SharePtrLib);
 //////////////////////////////////////////////////////////////////////

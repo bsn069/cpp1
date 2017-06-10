@@ -23,6 +23,7 @@ D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLib 
 {
 	auto p = C_Interface::T_CSharePtr(CreateInterface(), ReleaseInterface);
 	p->SetLib(lib);
+	p->InitLog();
 	
 	auto pSelfC = std::dynamic_pointer_cast<I_Interface>(p);
 	return pSelfC;

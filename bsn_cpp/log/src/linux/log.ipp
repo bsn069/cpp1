@@ -2,25 +2,34 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <iostream>
+#include <chrono>
+#include <ctime>
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
+static char const * const sc_logLevel2Name[] = {
+	"Error",
+	"Warn",
+	"Info"
+};
 
-char const* C_Log::Name() const 
+char const * const C_Log::Name() const 
 {
-	return "C_Log";
+	return m_pstrName.c_str();
 }
 
 
-C_Log::C_Log(T_SharePtrCInterface pInterface)
+C_Log::C_Log(T_SharePtrCInterface pInterface, char const * const pstrName)
 : m_pInterface(pInterface)
+, m_logId(0)
+, m_pstrName(pstrName)
 {
-  	std::cout << this->Name() << " C_Log::C_Log()" << std::endl;
+	InfoFmt("C_Log::C_Log() name=%s", this->Name());
 }
 
 
 C_Log::~C_Log()
 {
-	std::cout << this->Name() << " C_Log::~C_Log()" << std::endl;
+	InfoFmt("C_Log::~C_Log() name=%s", this->Name());
 	m_pInterface = nullptr;
 }
 
@@ -67,21 +76,50 @@ void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
 {
 	char buffer[4096];
     int length = 0;
-    int writeSize = 0;
     int freeSize = 0;
 
-    length = snprintf(
-        buffer
-		, D_ArrayCount(buffer)
-		, "C_Log::FmtPrint[%u]: "
-		, uLogLevel
+	using std::chrono::system_clock;
+	auto nowTime = system_clock::now();
+	std::time_t tt = system_clock::to_time_t( nowTime );
+	struct tm* ptm = localtime(&tt);
+	
+	
+	freeSize = (int)D_ArrayCount(buffer) - length;
+	length += strftime(
+        buffer + length
+		, freeSize
+		, "[%Y-%m-%d %H:%M:%S]"
+		, ptm
+	);
+
+	m_logId++;
+    freeSize = (int)D_ArrayCount(buffer) - length;
+    length += snprintf(
+        buffer + length
+		, freeSize
+		, "[%s][%u][%s]"
+		, Name()
+		, m_logId
+		, sc_logLevel2Name[uLogLevel]
     );
 
-    freeSize = (int)D_ArrayCount(buffer) - length - sizeof("\n");
-    writeSize = vsnprintf(buffer + length, freeSize, strFormat, args);
-    if (writeSize <= 0 || writeSize >= freeSize) {
-        writeSize = freeSize - 1;  
+    freeSize = (int)D_ArrayCount(buffer) - length - 2;
+    int writeSize = vsnprintf(
+		buffer + length
+		, freeSize
+		, strFormat
+		, args
+	);
+
+    if (writeSize > freeSize) 
+	{
+    	writeSize = freeSize;
     }
+    else if (writeSize < 0) 
+	{
+        writeSize = 0;  
+    }
+
     length += writeSize;
     buffer[length++] = '\n';
     buffer[length]   = '\0';

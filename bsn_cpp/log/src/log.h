@@ -21,15 +21,17 @@ public:
 	virtual void Error(const char * strInfo) override;
 
 public:
-	char const* Name() const;
+	char const* const Name() const;
 	void FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args);
 
 public:
-	C_Log(T_SharePtrCInterface pInterface);
+	C_Log(T_SharePtrCInterface pInterface, char const * const pstrName);
 	virtual ~C_Log();
 
 private:
 	T_SharePtrCInterface m_pInterface;
+	uint32_t m_logId;
+	std::string m_pstrName;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

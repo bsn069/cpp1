@@ -42,7 +42,7 @@ I_Lib::T_SharePtr	C_Interface::Load(
 	, const char* strReleaseSuffix
 )
 {
-	D_LogInfoFmt("C_Interface::Load(%s,%s,%s,%s)"
+	D_LogInfoFmt("strLibName=%s,strLibPath=%s,strDebugSuffix=%s,strReleaseSuffix=%s"
 		, strLibName
 		, strLibPath
 		, strDebugSuffix
@@ -61,17 +61,20 @@ I_Lib::T_SharePtr	C_Interface::Load(
 	auto pOldLib = this->Get(strLibName);
 	if (pOldLib && pOldLib.use_count() > 1)
 	{
-		D_LogError("pOldLib using, wait del");
+		D_LogWarn("pOldLib using, wait del");
 		m_WaitDelLibs.push_back(pOldLib);
 	}
 
 	m_Libs[strLibName] = pLib;
+	D_LogInfoFmt("%p"
+		, pLib.get()
+	);
 	return pLib;
 }
 
 I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 {
-	D_LogInfoFmt("C_Interface::Get(%s)"
+	D_LogInfoFmt("strLibName=%s"
 		, strLibName
 	);
 
@@ -87,7 +90,7 @@ I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 
 void	C_Interface::WaitQuit() 
 {
-	D_LogInfoFmt("C_Interface::WaitQuit() m_Libs.size()=%u"
+	D_LogInfoFmt("m_Libs.size()=%u"
 		, m_Libs.size()
 	);
 

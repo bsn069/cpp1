@@ -26,7 +26,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->InfoFmt( \
-			strFormat " file:%s line:%d func:%s" \
+			strFormat " (%s:%d %s)" \
 			, ##__VA_ARGS__ \
 			, __FILE__ \
 			, __LINE__ \
@@ -39,7 +39,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->WarnFmt( \
-			strFormat " file:%s line:%d func:%s" \
+			strFormat " (%s:%d %s)" \
 			, ##__VA_ARGS__ \
 			, __FILE__ \
 			, __LINE__ \
@@ -52,7 +52,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->ErrorFmt( \
-			strFormat " file:%s line:%d func:%s" \
+			strFormat " (%s:%d %s)" \
 			, ##__VA_ARGS__ \
 			, __FILE__ \
 			, __LINE__ \
@@ -65,7 +65,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->InfoFmt( \
-			strInfo " file:%s line:%d func:%s" \
+			strInfo " (%s:%d %s)" \
 			, __FILE__ \
 			, __LINE__ \
 			, __FUNCTION__ \
@@ -77,7 +77,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->WarnFmt( \
-			strInfo " file:%s line:%d func:%s" \
+			strInfo " (%s:%d %s)" \
 			, __FILE__ \
 			, __LINE__ \
 			, __FUNCTION__ \
@@ -89,7 +89,7 @@ public:
 	if (m_pLog) \
 	{ \
 		m_pLog->ErrorFmt( \
-			strInfo " file:%s line:%d func:%s" \
+			strInfo " (%s:%d %s)" \
 			, __FILE__ \
 			, __LINE__ \
 			, __FUNCTION__ \

@@ -7,13 +7,13 @@
 #include <iostream>
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
-
-const char SetBackgroundColor_Red[] = "\033[41m\033[37m";
-const char SetBackgroundColor_Green[] = "\033[42m\033[37m";
-const char SetBackgroundColor_Yellow[] = "\033[43m\033[30m";
-const char SetFontColor_Green[] = "\033[32m\033[40m";
-const char ResetConsolasStyle[] = "\033[0m";
-
+static char const * const sc_logLevel2Color[] = {
+	"\033[40;31m",
+	"\033[40;33m",
+	"\033[40;32m",
+};
+static char const * const sc_endColor = "\033[0m";
+ 
 void C_Interface::SetLib(T_SharePtrLib lib) {
 	m_lib = lib;
 }
@@ -37,41 +37,53 @@ char const* const C_Interface::Name() const
 C_Interface::C_Interface()
 : m_lib(nullptr)
 {
-  	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
+	D_LogInfoFmt("Name()=%s", this->Name());
 }
 
 
 C_Interface::~C_Interface()
 {
-	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
+	D_LogInfoFmt("Name()=%s", this->Name());
 	SetLib(nullptr);
-	std::cout << this->Name() << " C_Interface::~C_Interface()1" << std::endl;
 }
 
+
+void C_Interface::InitLog()
+{
+	m_pLog = CreateLog(Name(), this);
+}
+
+
+void C_Interface::WaitQuit() 
+{
+	D_LogInfoFmt("Name()=%s", this->Name());
+	m_pLog = nullptr;
+}
 
 void C_Interface::Print(uint32_t uLogLevel, const char * strInfo)
 {
-	auto color = SetBackgroundColor_Red;
-	if (uLogLevel == 1)
-	{
-		color = SetBackgroundColor_Yellow;
-	}
-	else if (uLogLevel == 2)
-	{
-		color = SetFontColor_Green;
-	}
-
-	fprintf(stdout, color);
-	fprintf(stdout, "%s", strInfo);
-	fprintf(stdout, "%s", ResetConsolasStyle);
+	fprintf(stdout, "%s%s%s", sc_logLevel2Color[uLogLevel], strInfo, sc_endColor);
 }
 
 
-I_Log::T_SharePtr C_Interface::CreateLog()
+I_Log::T_SharePtr C_Interface::CreateLog(char const * const strName, void* pOwner)
 {
+	D_LogInfoFmt("strName=%s", this->Name());
+
+	char buffer[4096];
+    snprintf(
+        buffer
+		, D_ArrayCount(buffer)
+		, "%s_%p"
+		, strName
+		, pOwner
+    );
+	
 	auto pSelf = shared_from_this();
 	auto pSelfC = std::dynamic_pointer_cast<C_Interface>(pSelf);
- 	auto p = I_Log::T_SharePtr(New<C_Log>(pSelfC), [](C_Log* pLog){Delete(pLog);});
+ 	auto p = I_Log::T_SharePtr(New<C_Log>(pSelfC, buffer), [](C_Log* pLog){Delete(pLog);});
+
+	D_LogInfoFmt("addr=0x%X", p.get());
 	return p;
 }
 //////////////////////////////////////////////////////////////////////

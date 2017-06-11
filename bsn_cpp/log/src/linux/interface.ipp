@@ -56,7 +56,7 @@ void C_Interface::InitLog()
 
 void C_Interface::WaitQuit() 
 {
-	D_LogInfoFmt("Name()=%s", this->Name());
+	D_LogInfo("");
 	m_pLog = nullptr;
 }
 
@@ -68,7 +68,7 @@ void C_Interface::Print(uint32_t uLogLevel, const char * strInfo)
 
 I_Log::T_SharePtr C_Interface::CreateLog(char const * const strName, void* pOwner)
 {
-	D_LogInfoFmt("strName=%s", this->Name());
+	D_LogInfoFmt("strName=%s pOwner=%p", strName, pOwner);
 
 	char buffer[4096];
     snprintf(
@@ -83,7 +83,7 @@ I_Log::T_SharePtr C_Interface::CreateLog(char const * const strName, void* pOwne
 	auto pSelfC = std::dynamic_pointer_cast<C_Interface>(pSelf);
  	auto p = I_Log::T_SharePtr(New<C_Log>(pSelfC, buffer), [](C_Log* pLog){Delete(pLog);});
 
-	D_LogInfoFmt("addr=0x%X", p.get());
+	D_LogInfoFmt("p=%x", p.get());
 	return p;
 }
 //////////////////////////////////////////////////////////////////////

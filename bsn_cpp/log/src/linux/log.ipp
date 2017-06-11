@@ -23,13 +23,13 @@ C_Log::C_Log(T_SharePtrCInterface pInterface, char const * const pstrName)
 , m_logId(0)
 , m_pstrName(pstrName)
 {
-	InfoFmt("C_Log::C_Log() name=%s", this->Name());
+	InfoFmt("C_Log::C_Log() %p", this);
 }
 
 
 C_Log::~C_Log()
 {
-	InfoFmt("C_Log::~C_Log() name=%s", this->Name());
+	InfoFmt("C_Log::~C_Log() %p", this);
 	m_pInterface = nullptr;
 }
 

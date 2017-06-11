@@ -6,7 +6,7 @@
 D_BsnNamespace1(console_input)
 //////////////////////////////////////////////////////////////////////
 
-D_FunImp I_Interface* CreateInterface()
+D_FunImp C_Interface* CreateInterface()
 {
 	C_Interface* imp = New<C_Interface>();
 	return imp;
@@ -20,9 +20,13 @@ D_FunImp void ReleaseInterface(I_Interface* pInterface)
 }
 
 
-D_FunImp D_DllCExport I_Interface::T_SharePtr Create()
+D_FunImp D_DllCExport I_Interface::T_SharePtr Create(I_Interface::T_SharePtrLib lib)
 {
-	return I_Interface::T_SharePtr(CreateInterface(), ReleaseInterface);
+	auto p = C_Interface::T_CSharePtr(CreateInterface(), ReleaseInterface);
+	p->SetLib(lib);
+	
+	auto pSelfC = std::dynamic_pointer_cast<I_Interface>(p);
+	return pSelfC;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

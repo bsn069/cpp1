@@ -13,6 +13,12 @@ class C_Lib : public I_Lib
 public:
 	typedef D_N1(log)::I_Log::T_SharePtr T_SharePtrLog;
 
+
+public:
+	virtual void* 	Func(const char* strFuncName) override;
+	virtual const char* Name( ) override;
+
+
 public:
 	bool   	Open(
 		const char* strLibPath
@@ -21,14 +27,10 @@ public:
 		, uint retryCount
 	);
 	void	Close();
-	virtual void* 	Func(const char* strFuncName) override;
-	virtual const char* Name( ) override;
-
-
-public:
 	void 	SetLog(T_SharePtrLog pLog) {
 		m_pLog = pLog;
 	};
+	void 	SetName(char const * const pstrName);
 
 
 public:
@@ -38,6 +40,7 @@ public:
 private:
 	T_DLL_HANDLE m_dllHandle;
 	T_SharePtrLog m_pLog;
+	std::string m_strName;
 };
 
 //////////////////////////////////////////////////////////////////////

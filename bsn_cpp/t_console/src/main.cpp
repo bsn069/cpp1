@@ -19,25 +19,26 @@ main(int argc, char* argv[])
 
 		D_N1(log)::I_Interface::T_SharePtr pLogInterface = nullptr;
 		{
-			pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
-			auto pLib = pLibLoader->Get("log");
+			auto pLib = pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
 			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLib->Func("Create"));
 			pLogInterface = pFuncCreate(pLib);
 		}
 
 		{
-			auto pLog = pLogInterface->CreateLog("lib_loader", pLibLoader.get());
+			auto pLog = pLogInterface->CreateLog(pLibLoader->Name(), pLibLoader.get());
 			pLibLoader->SetLog(pLog);
 		}
 
-		pLogInterface->WaitQuit();
+		D_N1(console_input)::I_Interface::T_SharePtr pConsoleInputInterface = nullptr;
 		{
-			pLibLoader->Load("log", "bsn_dlib_log", "_d", "");
-			auto pLib = pLibLoader->Get("log");
-			auto pFuncCreate = (D_N1(log)::T_FuncCreate)(pLib->Func("Create"));
-			pLogInterface = pFuncCreate(pLib);
+			auto pLib = pLibLoader->Load("console_input", "bsn_dlib_console_input", "_d", "");
+			auto pFuncCreate = (D_N1(console_input)::T_FuncCreate)(pLib->Func("Create"));
+			pConsoleInputInterface = pFuncCreate(pLib);
+			auto pLog = pLogInterface->CreateLog(pConsoleInputInterface->Name(), pConsoleInputInterface.get());
+			pConsoleInputInterface->SetLog(pLog);
 		}
 
+		pConsoleInputInterface = nullptr;
 		pLogInterface->WaitQuit();
 		pLogInterface = nullptr;
 		pLibLoader->WaitQuit();

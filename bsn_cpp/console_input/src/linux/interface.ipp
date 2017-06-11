@@ -20,15 +20,20 @@ char const* const C_Interface::Name() const
 
 
 C_Interface::C_Interface()
+: m_lib(nullptr)
 {
- 	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
+	D_LogInfoFmt("Name()=%s", this->Name());
 }
 
 
 C_Interface::~C_Interface()
 {
- 	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
+	D_LogInfoFmt("Name()=%s", this->Name());
+	SetLib(nullptr);
 }
 
+void C_Interface::SetLib(T_SharePtrLib lib) {
+	m_lib = lib;
+}
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -22,7 +22,7 @@ SET( OUT_NAME ${BIN_PREFIX}${PROJECT_NAME}${OUTPUT_SUFFIX} )
 ADD_EXECUTABLE(${OUT_NAME} ${SRC_LIST})
 #SET_TARGET_PROPERTIES(${OUT_NAME} PROPERTIES DEBUG_POSTFIX "${OUTPUT_SUFFIX}")
 # 依赖项目
-target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}t_share${OUTPUT_SUFFIX})
+#target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}t_share${OUTPUT_SUFFIX})
 target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}lib_loader${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)

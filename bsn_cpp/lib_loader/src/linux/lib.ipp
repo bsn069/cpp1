@@ -12,15 +12,25 @@ C_Lib::C_Lib()
 
 C_Lib::~C_Lib()
 {
+	D_LogInfoFmt("lib_%p name=%s"
+		, this
+		, Name()
+	);
 	this->Close();
 }
 
 void C_Lib::Close()
 {
+	D_LogInfoFmt("lib_%p name=%s"
+		, this
+		, Name()
+	);
+
 	if (m_dllHandle) {
 		dlclose(m_dllHandle);
 		m_dllHandle = nullptr;
 	}
+	m_pLog = nullptr;
 }
 
 bool C_Lib::Open(
@@ -30,7 +40,9 @@ bool C_Lib::Open(
 	, uint retryCount
 )
 {
-	D_LogInfoFmt("C_Lib::Open(%s,%s,%s,%u)"
+	D_LogInfoFmt("lib_%p name=%s strLibPath=%s,strDebugSuffix=%s,strReleaseSuffix=%s,retryCount%u)"
+		, this
+		, Name()
 		, strLibPath
 		, strDebugSuffix
 		, strReleaseSuffix
@@ -119,7 +131,9 @@ bool C_Lib::Open(
 
 void* C_Lib::Func(const char* strFuncName)
 {
-	D_LogInfoFmt("C_Lib::Func(%s)"
+	D_LogInfoFmt("lib_%p name=%s strFuncName=%s"
+		, this
+		, Name()
 		, strFuncName
 	);
 
@@ -144,8 +158,16 @@ void* C_Lib::Func(const char* strFuncName)
 
 const char* C_Lib::Name( )
 {
-	return "C_Lib::Name";
+	return m_strName.c_str();
 }
 
+
+void 	C_Lib::SetName(char const * const pstrName) {
+	m_strName = pstrName;
+	D_LogInfoFmt("lib_%p Name=%s"
+		, this
+		, Name()
+	);
+};
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

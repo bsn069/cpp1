@@ -21,7 +21,7 @@ public:
 	) override;
 	virtual I_Lib::T_SharePtr	Get(const char* strLibName) override;
 	virtual void	WaitQuit() override;
-	virtual void 	SetLog(T_SharePtrLog pLog) {
+	virtual void 	SetLog(T_SharePtrLog pLog) override {
 		m_pLog = pLog;
 	};
 

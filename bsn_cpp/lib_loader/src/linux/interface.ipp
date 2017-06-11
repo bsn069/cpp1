@@ -51,6 +51,7 @@ I_Lib::T_SharePtr	C_Interface::Load(
 
 	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), [](C_Lib* pLib){Delete(pLib);});
 	pLib->SetLog(m_pLog);
+	pLib->SetName(strLibName);
 	auto bLoadSuccess = pLib->Open(strLibPath, strDebugSuffix, strReleaseSuffix, 0);
 	if (!bLoadSuccess)
 	{
@@ -81,7 +82,7 @@ I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
 	auto itor = m_Libs.find(strLibName);
 	if (itor == m_Libs.end())
 	{
-		D_LogError("not found");
+		D_LogWarn("not found");
 		return nullptr;
 	}
 	return std::dynamic_pointer_cast<I_Lib>(itor->second);

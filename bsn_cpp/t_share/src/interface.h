@@ -1,7 +1,7 @@
 #pragma once
 #include "./../include/i_interface.h"
 
-D_BsnNamespace1(console_input)
+D_BsnNamespace1(t_share)
 //////////////////////////////////////////////////////////////////////
 
 class C_Interface : public I_Interface

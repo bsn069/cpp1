@@ -63,7 +63,7 @@ add_definitions(-DUNICODE -D_UNICODE)
 # -f后面跟一些编译选项
 # 	PIC是其中一种，表示生成位置无关代码（Position Independent Code）位置无关码就是可以在进程的任意内存位置执行的目标码，动态链接库必须使用
 #	exceptions 参数编译出正确处理异常的代码 Enable exception handling
-set(MY_COMMON_FLAG    "-g3 -fexceptions -Wall -DOS_LINUX -D__STDC_FORMAT_MACROS")
+set(MY_COMMON_FLAG    "-g3 -fexceptions -Wall -DOS_LINUX -D__STDC_FORMAT_MACROS -pthread")
 set(MY_C_DEBUG_FLAG   "${MY_COMMON_FLAG} -O0 -D_DEBUG -DCHECK_MEM_LEAK")
 # -O2选项，最大优化
 set(MY_C_RELEASE_FLAG "${MY_COMMON_FLAG} -O2 -DNDEBUG")

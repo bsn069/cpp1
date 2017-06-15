@@ -7,6 +7,8 @@
 #include <locale.h>
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 int 
 main(int argc, char* argv[])
@@ -36,17 +38,24 @@ main(int argc, char* argv[])
 			pConsoleInputInterface = pFuncCreate(pLib);
 			auto pLog = pLogInterface->CreateLog(pConsoleInputInterface->Name(), pConsoleInputInterface.get());
 			pConsoleInputInterface->SetLog(pLog);
+			pConsoleInputInterface->Start();
 		}
 
+		std::this_thread::sleep_for(std::chrono::seconds(10));
+
+		pConsoleInputInterface->WaitQuit();
 		pConsoleInputInterface = nullptr;
+
 		pLogInterface->WaitQuit();
 		pLogInterface = nullptr;
+
 		pLibLoader->WaitQuit();
+		pLibLoader = nullptr;
 	}
 
 	std::cout << "要退出了" << std::endl;
-	// int t;
-	// std::cin >> t;
+	int t;
+	std::cin >> t;
 	return 0;
 }
 

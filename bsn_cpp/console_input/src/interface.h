@@ -1,5 +1,6 @@
 #pragma once
 #include "./../include/i_interface.h"
+#include <thread>
 
 D_BsnNamespace1(console_input)
 //////////////////////////////////////////////////////////////////////
@@ -16,11 +17,13 @@ public:
 	virtual void 	SetLog(T_SharePtrLog pLog) override {
 		m_pLog = pLog;
 	};
+	virtual void 	Start() override;
+	virtual void 	WaitQuit() override;
 
 
 public:
 	void SetLib(T_SharePtrLib lib);
-
+	void ThreadInput();
 
 public:
 	C_Interface();
@@ -28,8 +31,9 @@ public:
 
 private:
 	T_SharePtrLib m_lib;
-		T_SharePtrLog m_pLog;
-
+	T_SharePtrLog m_pLog;
+	std::thread* m_pInputThread;
+	bool m_bQuit;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

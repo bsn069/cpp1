@@ -1,6 +1,6 @@
 #include "./../interface.h"
 
-D_BsnNamespace1(console_input)
+D_BsnNamespace1(t_share)
 //////////////////////////////////////////////////////////////////////
 
 char const* const C_Interface::Error(int32_t const i32ErrorCode) const
@@ -15,7 +15,7 @@ char const* const C_Interface::Error(int32_t const i32ErrorCode) const
 
 char const* const C_Interface::Name() const
 {
-	return "console_input";
+	return "t_share";
 }
 
 

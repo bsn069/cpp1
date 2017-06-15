@@ -3,7 +3,7 @@
 #include "./interface.h"
 
 
-D_BsnNamespace1(console_input)
+D_BsnNamespace1(t_share)
 //////////////////////////////////////////////////////////////////////
 
 D_FunImp C_Interface* CreateInterface()

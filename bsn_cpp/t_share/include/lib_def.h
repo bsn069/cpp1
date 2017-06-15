@@ -1,15 +1,15 @@
 #pragma once
 
-#ifdef D_BSN_IS_DLL_console_input
-	#define D_BSN_console_input_DLL D_DllExport
+#ifdef D_BSN_IS_DLL_t_share
+	#define D_BSN_t_share_DLL D_DllExport
 #else
-	#define D_BSN_console_input_DLL D_DllImport
+	#define D_BSN_t_share_DLL D_DllImport
 
 	#if (defined WIN32)
 		#ifdef _DEBUG
-			#pragma comment(lib, "bsn_dlib_console_input_d.lib")
+			#pragma comment(lib, "bsn_dlib_t_share_d.lib")
 		#else
-			#pragma comment(lib, "bsn_dlib_console_input.lib")
+			#pragma comment(lib, "bsn_dlib_t_share.lib")
 		#endif
 	#endif
 #endif

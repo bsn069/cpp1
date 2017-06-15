@@ -20,8 +20,8 @@ public:
 	
 public:
 	virtual void 	SetLog(T_SharePtrLog pLog) = 0;
-
-
+	virtual void 	Start() = 0;
+	virtual void WaitQuit() = 0;
 };
 typedef D_FunDef I_Interface::T_SharePtr	(*T_FuncCreate)(I_Interface::T_SharePtrLib);
 //////////////////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <memory>
 
-D_BsnNamespace1(console_input)
+D_BsnNamespace1(t_share)
 //////////////////////////////////////////////////////////////////////
 class I_Interface : public I_LibInterface,  public std::enable_shared_from_this<I_Interface>
 {

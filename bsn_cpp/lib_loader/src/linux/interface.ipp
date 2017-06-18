@@ -25,13 +25,13 @@ char const* const C_Interface::Name() const
 
 C_Interface::C_Interface()
 {	
-	std::cout << this->Name() << " C_Interface::C_Interface()" << std::endl;
+	D_LogInfo("");
 }
 
 
 C_Interface::~C_Interface()
 {
-	std::cout << this->Name() << " C_Interface::~C_Interface()" << std::endl;
+	D_LogInfo("");
 }
 
 

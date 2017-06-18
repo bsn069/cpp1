@@ -13,23 +13,22 @@ public:
 	virtual char const* const Name() const override;
 	virtual char const* const Error(int32_t const i32ErrorCode) const override;
 
-	virtual void 	SetLog(T_SharePtrLog pLog) override {
-		m_pLog = pLog;
-	};
+	virtual void Start(int argc, char* argv[]) override;
 
 
 public:
-	void SetLib(T_SharePtrLib lib);
-
+	void Loop();
+	void WaitQuit();
 
 public:
 	C_Interface();
 	virtual ~C_Interface();
 
 private:
-	T_SharePtrLib m_lib;
-		T_SharePtrLog m_pLog;
-
+	bool m_bRun;
+	T_SharePtrLog m_pLog;
+	T_SharePtrLibLoader m_pLibLoader;
+	T_SharePtrLogInterace m_pLogInterface;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

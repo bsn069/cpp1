@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <iostream>
 
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
@@ -32,7 +33,12 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	} \
+	else \
+	{\
+		std::cout << "D_LogInfoFmt(" << strFormat << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
+
 
 
 #define D_LogWarnFmt(strFormat, ...) \
@@ -45,7 +51,12 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	} \
+	else \
+	{\
+		std::cout << "D_LogWarnFmt(" << strFormat << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
+
 
 
 #define D_LogErrorFmt(strFormat, ...) \
@@ -58,7 +69,12 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	} \
+	else \
+	{\
+		std::cout << "D_LogErrorFmt(" << strFormat << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
+
 
 
 #define D_LogInfo(strInfo) \
@@ -70,6 +86,10 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	} \
+	else \
+	{\
+		std::cout << "D_LogInfo(" << strInfo << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
 
 
@@ -82,6 +102,10 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	}\
+	else \
+	{\
+		std::cout << "D_LogWarn(" << strInfo << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
 
 
@@ -94,7 +118,13 @@ public:
 			, __LINE__ \
 			, __FUNCTION__ \
 		); \
+	}\
+	else \
+	{\
+		std::cout << "D_LogError(" << strInfo << ") (" << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ")" << std::endl;\
 	}
+
+
 
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

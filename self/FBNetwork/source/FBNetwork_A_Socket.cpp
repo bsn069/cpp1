@@ -24,7 +24,7 @@ void CFBNetwork_A_Socket::OnRead(CFBNetwork_A_Dg* pDg, const error_code &Error, 
 	pDg->m_dwLen = (DWORD)Bytes;
 	m_Dgs.Push(pDg);
 
-	// ����һ���첽��ȡ
+	// 发出一个异步读取
 	Read();
 }
 void CFBNetwork_A_Socket::OnWrite(CFBNetwork_A_Dg* pDg, const error_code& Error, size_t Bytes)
@@ -59,7 +59,7 @@ CFBNetwork_A_Socket::~CFBNetwork_A_Socket()
 
 BOOL CFBNetwork_A_Socket::Send(char* pBuffer, DWORD dwLen)
 {
-	// ����Ϣ���Ƶ���ǰover 
+	// 将消息复制到当前over 
 	DWORD dwCopyed = 0;
 	while(1)
 	{
@@ -96,7 +96,7 @@ BOOL CFBNetwork_A_Socket::Recv(CFBNetwork_Stuff* pStuff)
 {
 	pStuff->Release();
 
-	// �����ܹ������˶��ٸ��ֽ�
+	// 计算总共接收了多少个字节
 	CFBKernel_Vector<CFBNetwork_A_Dg*>* pVector = m_Dgs.Flip();
 	for(DWORD n = 0; n < pVector->Size(); n++)
 	{
@@ -112,7 +112,7 @@ BOOL CFBNetwork_A_Socket::End(void)
 	{
 		InterlockedExchangeAdd(&m_lFluxOut, (LONG)m_pSendDg->m_dwLen);
 
-		// ����over
+		// 发送over
 		async_write(
 			m_Socket, 
 			buffer(m_pSendDg->m_pBuffer, m_pSendDg->m_dwLen),

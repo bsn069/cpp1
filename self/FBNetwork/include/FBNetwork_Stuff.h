@@ -3,9 +3,9 @@
 class FBNETWORK_API CFBNetwork_Stuff
 {
 public:
-	CFBKernel_Vector<CFBNetwork_Dg*>				m_Dgs;			// ½ÓÊÕµ½µÄÊı¾İ±¨
+	CFBKernel_Vector<CFBNetwork_Dg*>				m_Dgs;			// æ¥æ”¶åˆ°çš„æ•°æ®æŠ¥
 
-	DWORD											m_dwBytes;		// ½ÓÊÕµ½¶àÉÙ¸ö×Ö½Ú
+	DWORD											m_dwBytes;		// æ¥æ”¶åˆ°å¤šå°‘ä¸ªå­—èŠ‚
 
 public:
 	void										Push(CFBNetwork_Dg* pDg);

@@ -92,6 +92,7 @@ ADD_SUBDIRECTORY( lib_loader )
 ADD_SUBDIRECTORY( log )
 ADD_SUBDIRECTORY( console_input )
 ADD_SUBDIRECTORY( global )
+ADD_SUBDIRECTORY( net )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

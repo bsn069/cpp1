@@ -20,17 +20,17 @@ public:
 	#endif
 
 	ip::tcp::socket							m_Socket;
-	CFBKernel_Double<CFBNetwork_A_Dg*>		m_Dgs;							// ¿ÉÒÔ¹©ÉÏ²ã¶ÁÈ¡µÄDg
+	CFBKernel_Double<CFBNetwork_A_Dg*>		m_Dgs;							// å¯ä»¥ä¾›ä¸Šå±‚è¯»å–çš„Dg
 
-	CFBNetwork_A_Dg*						m_pSendDg;						// ÔÜ´ó°ü
+	CFBNetwork_A_Dg*						m_pSendDg;						// æ”’å¤§åŒ…
 
-	STATE volatile							m_State;						// ×´Ì¬
+	STATE volatile							m_State;						// çŠ¶æ€
 
-	// µØÖ·
+	// åœ°å€
 	ip::address								m_Local;
 	ip::address								m_Remote;
 
-	// Á÷Á¿
+	// æµé‡
 	LONG volatile							m_lFluxOut;
 
 public:

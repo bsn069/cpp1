@@ -1,8 +1,7 @@
 #pragma once
 #include "./../include/i_interface.h"
-#include <thread>
 
-D_BsnNamespace1(console_input)
+D_BsnNamespace1(global)
 //////////////////////////////////////////////////////////////////////
 
 class C_Interface : public I_Interface
@@ -17,19 +16,11 @@ public:
 	virtual void 	SetLog(T_SharePtrLog pLog) override {
 		m_pLog = pLog;
 	};
-	virtual void 	Start() override;
-	virtual void 	WaitQuit() override;
 
 
 public:
 	void SetLib(T_SharePtrLib lib);
-	void OnInput(int signum);
-	T_SharePtrLog GetLog() {
-		return m_pLog;
-	};
-	bool IsQuit() {
-		return m_bQuit;
-	};
+
 
 public:
 	C_Interface();
@@ -37,9 +28,8 @@ public:
 
 private:
 	T_SharePtrLib m_lib;
-	T_SharePtrLog m_pLog;
-	bool m_bQuit;
-	bool m_bStart;
+		T_SharePtrLog m_pLog;
+
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

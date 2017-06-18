@@ -91,6 +91,7 @@ ADD_SUBDIRECTORY( t_console )
 ADD_SUBDIRECTORY( lib_loader )
 ADD_SUBDIRECTORY( log )
 ADD_SUBDIRECTORY( console_input )
+ADD_SUBDIRECTORY( global )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

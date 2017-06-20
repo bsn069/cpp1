@@ -28,30 +28,23 @@ E_State C_Session::State()
 bool C_Session::Send(uint8_t* pData, uint32_t uLen) 
 {
 	uint32_t hadCopyLen = 0;
-	while (true)
+	while (uLen > 0)
 	{
 		if (m_pSendBuffer ==  nullptr)
 		{
 			m_pSendBuffer = New<C_Buffer<2048>>();
 		}
 
-		uint32_t u32CanCopyLen = __min(m_pSendBuffer->FreeSize(), uLen - hadCopyLen);
-		CopyMemory(m_pSendBuffer->Data() + m_pSendBuffer->Len(), pData + hadCopyLen, u32CanCopyLen);
+		auto writeLength = m_pSendBuffer->Push(pData, uLen);
+		uLen -= writeLength;
+		pData += writeLength;
 
-		m_pSendBuffer->Len() += u32CanCopyLen;
-		hadCopyLen += u32CanCopyLen;
-
-		if (m_pSendBuffer->FreeSize() == 0)
+		if (m_pSendBuffer->Full()) // buff full
 		{
 			if (SendEnd()) 
 			{
 				return false;
 			}
-		}
-
-		if (hadCopyLen == uLen)
-		{
-			break;
 		}
 	}
 	return true;

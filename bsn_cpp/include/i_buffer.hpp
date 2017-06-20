@@ -5,7 +5,7 @@ namespace N_Bsn
 	class I_Buffer
 	{
 	public:
-		virtual uint8_t* Data() = 0;
+		virtual uint8_t* Data() const = 0;
 		virtual uint32_t& Len() = 0;
 		virtual uint32_t const MaxSize() const = 0;
 		// ret left can write length

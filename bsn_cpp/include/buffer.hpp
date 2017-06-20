@@ -9,7 +9,7 @@ public:
 
 
 public:
-	virtual uint8_t* Data() override {return m_pData;};
+	virtual uint8_t* Data() const override {return m_pData;};
 	virtual uint32_t& Len() override {return m_u32Len;};
 	virtual uint32_t const MaxSize() const override {return u32MaxSize;};
 	virtual uint32_t FreeSize() const override 

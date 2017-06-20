@@ -6,7 +6,7 @@ C_Session::C_Session()
 : m_eState(E_State_Close)
 , m_pSendBuffer(nullptr)
 {
- 
+	m_pRecvBuffer = New<C_Buffer<2048>>();
 }
 
 
@@ -79,12 +79,11 @@ void C_Session::OnSend(I_Buffer* pSendBuffer, asio::error_code& error, size_t by
 
 bool C_Session::Read()
 {
-	auto pRecvBuffer = New<C_Buffer<2048>>();
 	asio::async_read(
 		m_Socket
-		, buffer(pRecvBuffer->Data(), pRecvBuffer->MaxSize())
+		, buffer(m_pRecvBuffer->Data(), m_pRecvBuffer->MaxSize())
 		, transfer_at_least(1)
-		, bind(&C_Session::OnRead, shared_from_this(), pRecvBuffer, placeholders::error, placeholders::bytes_transferred)
+		, bind(&C_Session::OnRead, shared_from_this(), m_pRecvBuffer, placeholders::error, placeholders::bytes_transferred)
 	);
 	return false;
 }
@@ -94,7 +93,7 @@ void C_Session::OnRead(I_Buffer* pReadBuffer, asio::error_code& error, size_t by
 {
 	if (error)
 	{
-		Delete(pReadBuffer);
+		// Delete(pReadBuffer);
 		InterlockedExchange((E_State volatile*)&m_eState, E_State_Close);
 		return;
 	}

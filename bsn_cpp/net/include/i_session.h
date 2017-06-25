@@ -3,6 +3,8 @@
 #include <bsn_cpp/include/i_lib_interface.h>
 #include <bsn_cpp/include/define.h>
 #include <bsn_cpp/include/buffer.hpp>
+#include <memory>
+#include <list>
  
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////

@@ -12,8 +12,7 @@ FILE(GLOB_RECURSE SRC_LIST_H "*.h")
 set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
 # 头文件搜索路径 
-#INCLUDE_DIRECTORIES( Include )
-  
+INCLUDE_DIRECTORIES( ${ROOT_DIR}/third_part/asio-1.10.6/include )
 # 添加定义
 add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
 

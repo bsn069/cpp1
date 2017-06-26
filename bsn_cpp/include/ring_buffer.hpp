@@ -1,5 +1,6 @@
 #pragma once
 
+#include "i_ring_buffer.hpp"
 #include <algorithm>
 #include <atomic>
 /*
@@ -9,7 +10,7 @@ namespace N_Bsn
 {
 
 template<uint32_t uCapcityPowOf2> // uCapcityPowOf2必须是2^x
-class C_RingBuffer : I_RingBuffer
+class C_RingBuffer : public I_RingBuffer
 {
 public:
 	
@@ -26,12 +27,13 @@ public:
 	// 希望写入的数据长度为len，函数返回实际长度
 	uint32_t Write(uint8_t* pData, uint32_t uLen);
 
-	// uLen传入被次已写入长度
 	// 返回下次可写的指针pData 及连续长度uLen
 	void GetNextWriteData(uint8_t*& pData, uint32_t& uLen);
+	// 增加已写入长度
+	void IncWriteDataLength(uint32_t uLen);
 
 public:
-	C_RingBuffer() {};
+	C_RingBuffer();
 	virtual ~C_RingBuffer() = default;
 
 private:
@@ -41,34 +43,38 @@ private:
 };
 
 template<uint32_t uCapcity>
-C_RingBuffer::C_RingBuffer()
+C_RingBuffer<uCapcity>::C_RingBuffer()
 : m_uReadPos(0)
 , m_uWritePos(0)
 {
 
 }
 
-
 template<uint32_t uCapcity>
-void C_RingBuffer::GetNextWriteData(uint8_t*& pData, uint32_t& uLen)
+void C_RingBuffer<uCapcity>::IncWriteDataLength(uint32_t uLen)
 {
 	m_uWritePos += uLen;
+}
+
+template<uint32_t uCapcity>
+void C_RingBuffer<uCapcity>::GetNextWriteData(uint8_t*& pData, uint32_t& uLen)
+{
 	auto uSize =  m_uWritePos - m_uReadPos;
 	auto uSpace = uCapcity - uSize;
 	if (uSpace == 0)
 	{
-		return 0;
+		return;
 	}
-	pData = &m_data[uWriteIndex];
 
 	auto uWriteIndex = (m_uWritePos & (uCapcity - 1));
-	auto uRightSize = uCapcity - uWirteIndex;
-	return std::min(uSpace, uRightSize);
+	pData = &m_data[uWriteIndex];
+	auto uRightSize = uCapcity - uWriteIndex;
+	uLen = std::min(uSpace, uRightSize);
 }
 
 
 template<uint32_t uCapcity>
-uint32_t C_RingBuffer::Write(uint8_t* pData, uint32_t uLen)
+uint32_t C_RingBuffer<uCapcity>::Write(uint8_t* pData, uint32_t uLen)
 {
 	auto uReadPos = m_uReadPos;
 	std::atomic_thread_fence(std::memory_order_acquire);
@@ -84,7 +90,7 @@ uint32_t C_RingBuffer::Write(uint8_t* pData, uint32_t uLen)
 	auto uWirteIndex = (m_uWritePos & (uCapcity - 1));
 	auto uRightSize = uCapcity - uWirteIndex;
 	auto uCopySize = std::min(uLen, uRightSize);
-	memcpy(&m_data[uWirteIndex]), pData, uCopySize); 
+	memcpy(&m_data[uWirteIndex], pData, uCopySize); 
 	/* then put the rest (if any) at the beginning of the buffer */
 	memcpy(m_data, pData + uCopySize, uLen - uCopySize);
 
@@ -103,7 +109,7 @@ uint32_t C_RingBuffer::Write(uint8_t* pData, uint32_t uLen)
 
 
 template<uint32_t uCapcity>
-uint32_t C_RingBuffer::Read(uint8_t* pData, uint32_t uLen)
+uint32_t C_RingBuffer<uCapcity>::Read(uint8_t* pData, uint32_t uLen)
 {
 	auto uWritePos = m_uWritePos;
 	std::atomic_thread_fence(std::memory_order_acquire);
@@ -123,25 +129,25 @@ uint32_t C_RingBuffer::Read(uint8_t* pData, uint32_t uLen)
 }
 
 template<uint32_t uCapcity>
-uint32_t C_RingBuffer::Capcity() const
+uint32_t C_RingBuffer<uCapcity>::Capcity() const
 {
 	return uCapcity;
 }
 
 template<uint32_t uCapcity>
-uint32_t C_RingBuffer::Size() const
+uint32_t C_RingBuffer<uCapcity>::Size() const
 {
 	return (m_uWritePos - m_uReadPos);
 }
 
 template<uint32_t uCapcity>
-uint32_t C_RingBuffer::Space() const
+uint32_t C_RingBuffer<uCapcity>::Space() const
 {
 	return Capcity() - Size();
 }
 
 template<uint32_t uCapcity>
-bool C_RingBuffer::Empty() const
+bool C_RingBuffer<uCapcity>::Empty() const
 {
 	return m_uReadPos == m_uWritePos;
 }

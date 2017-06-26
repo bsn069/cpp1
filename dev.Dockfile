@@ -18,3 +18,4 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 #RUN cd third_part && tar -jxvf asio-1.10.6.tar.bz2 
 ENV workdir /media/sf_/github/cpp1/bsn_cpp
 RUN yum install -y bzip2; yum clean all
+WORKDIR $workdir

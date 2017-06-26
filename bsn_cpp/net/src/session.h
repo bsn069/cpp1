@@ -1,7 +1,9 @@
 #pragma once
 #include "./../include/i_session.h"
 #include <bsn_cpp/include/buffer.hpp>
+#include <bsn_cpp/include/ring_buffer.hpp>
 #include <asio.hpp>
+#include <atomic>
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 
@@ -18,20 +20,24 @@ public:
 
 
 public:
-	void OnSend(I_Buffer* pSendBuffer, asio::error_code const& error, size_t const bytes);
+	void OnSend(asio::error_code const& error, size_t const bytes);
 	bool Read();
-	void OnRead(I_Buffer* pSendBuffer, asio::error_code const& error, size_t const bytes);
+	void OnRead(asio::error_code const& error, size_t const bytes);
 
 public:
 	C_Session(asio::io_service& IOService);
 	virtual ~C_Session();
 
 private:
-	E_State volatile m_eState;
-	I_Buffer* m_pSendBuffer;
-	I_Buffer* m_pRecvBuffer;
 	asio::ip::tcp::socket m_Socket;
-	T_RecvBuffers m_RecvBuffers;
+
+	C_RingBuffer<4096>	m_ReadRingBuffer;
+	std::atomic<bool> 	m_bReading;
+
+	C_RingBuffer<4096>	m_SendRingBuffer;
+	std::atomic<bool> 	m_bSending;
+
+	std::atomic<uint8_t> m_eState;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

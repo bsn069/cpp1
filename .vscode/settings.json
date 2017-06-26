@@ -70,6 +70,7 @@
 		"cwctype": "cpp",
 		"functional": "cpp",
 		"thread": "cpp",
-		"xfunctional": "cpp"
+		"xfunctional": "cpp",
+		"xxatomic": "cpp"
 	}
 }

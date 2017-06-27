@@ -87,6 +87,7 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
  
 # 添加子工程目录
 #-------------------------------------------------------------------------------
+ADD_SUBDIRECTORY( test )
 ADD_SUBDIRECTORY( t_console )
 # ADD_SUBDIRECTORY( t_share )
 ADD_SUBDIRECTORY( lib_loader )

@@ -20,8 +20,10 @@ public:
 
 
 public:
+	bool PostSend();
 	void OnSend(asio::error_code const& error, size_t const bytes);
-	bool Read();
+
+	bool PostRead();
 	void OnRead(asio::error_code const& error, size_t const bytes);
 
 public:

@@ -71,6 +71,13 @@
 		"functional": "cpp",
 		"thread": "cpp",
 		"xfunctional": "cpp",
-		"xxatomic": "cpp"
+		"xxatomic": "cpp",
+		"codecvt": "cpp",
+		"condition_variable": "cpp",
+		"future": "cpp",
+		"locale": "cpp",
+		"mutex": "cpp",
+		"xlocbuf": "cpp",
+		"xlocmes": "cpp"
 	}
 }

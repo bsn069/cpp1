@@ -32,6 +32,11 @@ public:
 	// 增加已写入长度
 	void IncWriteDataLength(uint32_t uLen);
 
+	// 返回下次可读的指针pData 及连续长度uLen
+	void GetNextReadData(uint8_t*& pData, uint32_t& uLen);
+	// 增加已读入长度
+	void IncReadDataLength(uint32_t uLen);
+
 public:
 	C_RingBuffer();
 	virtual ~C_RingBuffer() = default;
@@ -51,6 +56,31 @@ C_RingBuffer<uCapcity>::C_RingBuffer()
 }
 
 template<uint32_t uCapcity>
+void C_RingBuffer<uCapcity>::IncReadDataLength(uint32_t uLen)
+{
+	m_uReadPos += uLen;
+}
+
+template<uint32_t uCapcity>
+void C_RingBuffer<uCapcity>::GetNextReadData(uint8_t*& pData, uint32_t& uLen)
+{
+	auto uWritePos = m_uWritePos;
+	std::atomic_thread_fence(std::memory_order_acquire);
+	
+	auto uSize = uWritePos - m_uReadPos;
+	auto uSpace = uCapcity - uSize;
+	if (uSpace == 0)
+	{
+		return;
+	}
+
+	auto uReadIndex = (m_uReadPos & (uCapcity - 1));
+	pData = &m_data[uReadIndex];
+	auto uRightSize = uCapcity - uReadIndex;
+	uLen = std::min(uSpace, uRightSize);
+}
+
+template<uint32_t uCapcity>
 void C_RingBuffer<uCapcity>::IncWriteDataLength(uint32_t uLen)
 {
 	m_uWritePos += uLen;
@@ -59,7 +89,10 @@ void C_RingBuffer<uCapcity>::IncWriteDataLength(uint32_t uLen)
 template<uint32_t uCapcity>
 void C_RingBuffer<uCapcity>::GetNextWriteData(uint8_t*& pData, uint32_t& uLen)
 {
-	auto uSize =  m_uWritePos - m_uReadPos;
+	auto uReadPos = m_uReadPos;
+	std::atomic_thread_fence(std::memory_order_acquire);
+
+	auto uSize =  m_uWritePos - uReadPos;
 	auto uSpace = uCapcity - uSize;
 	if (uSpace == 0)
 	{

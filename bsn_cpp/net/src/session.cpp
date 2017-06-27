@@ -79,19 +79,10 @@ bool C_Session::SendEnd()
 }
 
 
-void C_Session::OnSend(asio::error_code const& error, size_t const bytes)
-{
-	if (error)
-	{
-		m_eState.store(E_State_Close);
-		return;
-	}
-}
-
-bool C_Session::Read()
+bool C_Session::PostSend()
 {
 	bool bOldValue = false;
-	if (!m_bReading.compare_exchange_strong(bOldValue, true)) // 设置为读取中
+	if (!m_bReading.compare_exchange_strong(bOldValue, true, std::memory_order_relaxed)) // 设置为读取中
 	{
 		return false;
 	}
@@ -101,7 +92,48 @@ bool C_Session::Read()
 	m_ReadRingBuffer.GetNextWriteData(pReadBuff, uLen);
 	if (uLen == 0) // no buff
 	{
-		m_bReading.store(false);
+		m_bReading.store(false, std::memory_order_relaxed);
+		return false;
+	}
+
+	auto pSelfI = shared_from_this();
+	auto pSelf = std::dynamic_pointer_cast<C_Session>(pSelfI);
+	asio::async_read(
+		m_Socket
+		, asio::buffer(pReadBuff, uLen)
+		, asio::transfer_at_least(1)
+		, boost::bind(&C_Session::OnRead, pSelf, asio::placeholders::error, asio::placeholders::bytes_transferred)
+	);
+	return true;
+}
+
+
+void C_Session::OnSend(asio::error_code const& error, size_t const bytes)
+{
+	if (error)
+	{
+		m_eState.store(E_State_Close, std::memory_order_relaxed);
+		return;
+	}
+
+	m_SendRingBuffer.IncReadDataLength(bytes);
+	PostSend();
+}
+
+bool C_Session::PostRead()
+{
+	bool bOldValue = false;
+	if (!m_bReading.compare_exchange_strong(bOldValue, true, std::memory_order_relaxed)) // 设置为读取中
+	{
+		return false;
+	}
+
+	uint8_t* pReadBuff;
+	uint32_t uLen = 0;
+	m_ReadRingBuffer.GetNextWriteData(pReadBuff, uLen);
+	if (uLen == 0) // no buff
+	{
+		m_bReading.store(false, std::memory_order_relaxed);
 		return false;
 	}
 
@@ -121,21 +153,18 @@ void C_Session::OnRead(asio::error_code const& error, size_t const bytes)
 {
 	if (error)
 	{
-		m_eState.store(E_State_Close);
+		m_eState.store(E_State_Close, std::memory_order_relaxed);
 		return;
 	}
 
 	m_ReadRingBuffer.IncWriteDataLength(bytes);
-	bool bOldValue = true;
-	if (m_bReading.compare_exchange_strong(bOldValue, false)) // 设置为未读取
-	{
-		Read();
-	}
+	PostRead();
 }
 
 
 bool C_Session::Recv(T_RecvBuffers& buffers)
 {
+	PostRead();
 	return true;
 }
 //////////////////////////////////////////////////////////////////////

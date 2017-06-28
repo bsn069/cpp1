@@ -8,9 +8,9 @@ D_BsnNamespace1(net)
 C_Session::C_Session(asio::io_service& IOService)
 : m_Socket(IOService)
 {
-	m_eState.store(E_State_Close);
-	m_bSending.store(false);
+	m_eState.store(E_State_WaitingOrConnecting);
 	m_bReading.store(false);
+	m_bSending.store(false);
 }
 
 
@@ -27,81 +27,34 @@ C_Session::E_State C_Session::State()
 
 bool C_Session::Send(uint8_t* pData, uint32_t uLen) 
 {
-	// uint8_t* pSendBuff;
-	// uint32_t uLen = 0;
-	// m_SendRingBuffer.GetNextWriteData(pSendBuff, uLen);
-	// if (uLen == 0) // no buff
-	// {
-	// 	m_bSending.store(false);
-	// 	return false;
-	// }
-
-	// while (uLen > 0)
-	// {
-	// 	if (m_pSendBuffer ==  nullptr)
-	// 	{
-	// 		m_pSendBuffer = New<C_Buffer<2048>>();
-	// 	}
-
-	// 	auto writeLength = m_pSendBuffer->Push(pData, uLen);
-	// 	uLen -= writeLength;
-	// 	pData += writeLength;
-
-	// 	if (m_pSendBuffer->Full()) // buff full
-	// 	{
-	// 		if (SendEnd()) 
-	// 		{
-	// 			return false;
-	// 		}
-	// 	}
-	// }
-	return true;
-}
-
-
-bool C_Session::SendEnd()
-{
-	// if (m_pSendBuffer == nullptr)
-	// {
-	// 	return false;
-	// }
-
-	// auto pSelfI = shared_from_this();
-	// auto pSelf = std::dynamic_pointer_cast<C_Session>(pSelfI);
-
-	// asio::async_write(
-	// 	m_Socket 
-	// 	, asio::buffer(m_pSendBuffer->Data(), m_pSendBuffer->Len())
-	// 	, boost::bind(&C_Session::OnSend, pSelf, m_pSendBuffer, asio::placeholders::error, asio::placeholders::bytes_transferred)
-	// );
-	// m_pSendBuffer = nullptr;
-	return false;
+	auto uRealLen = m_SendRingBuffer.Write(pData, uLen);
+	PostSend();
+	return uRealLen == uLen;
 }
 
 
 bool C_Session::PostSend()
 {
 	bool bOldValue = false;
-	if (!m_bReading.compare_exchange_strong(bOldValue, true, std::memory_order_relaxed)) // 设置为读取中
+	if (!m_bSending.compare_exchange_strong(bOldValue, true, std::memory_order_relaxed)) // 设置为发送中
 	{
 		return false;
 	}
 
 	uint8_t* pReadBuff;
 	uint32_t uLen = 0;
-	m_ReadRingBuffer.GetNextWriteData(pReadBuff, uLen);
+	m_SendRingBuffer.GetNextReadData(pReadBuff, uLen);
 	if (uLen == 0) // no buff
 	{
-		m_bReading.store(false, std::memory_order_relaxed);
+		m_bSending.store(false, std::memory_order_relaxed);
 		return false;
 	}
 
 	auto pSelfI = shared_from_this();
 	auto pSelf = std::dynamic_pointer_cast<C_Session>(pSelfI);
-	asio::async_read(
+	asio::async_write(
 		m_Socket
 		, asio::buffer(pReadBuff, uLen)
-		, asio::transfer_at_least(1)
 		, boost::bind(&C_Session::OnRead, pSelf, asio::placeholders::error, asio::placeholders::bytes_transferred)
 	);
 	return true;
@@ -128,9 +81,9 @@ bool C_Session::PostRead()
 		return false;
 	}
 
-	uint8_t* pReadBuff;
+	uint8_t* pWriteBuff;
 	uint32_t uLen = 0;
-	m_ReadRingBuffer.GetNextWriteData(pReadBuff, uLen);
+	m_ReadRingBuffer.GetNextWriteData(pWriteBuff, uLen);
 	if (uLen == 0) // no buff
 	{
 		m_bReading.store(false, std::memory_order_relaxed);
@@ -141,7 +94,7 @@ bool C_Session::PostRead()
 	auto pSelf = std::dynamic_pointer_cast<C_Session>(pSelfI);
 	asio::async_read(
 		m_Socket
-		, asio::buffer(pReadBuff, uLen)
+		, asio::buffer(pWriteBuff, uLen)
 		, asio::transfer_at_least(1)
 		, boost::bind(&C_Session::OnRead, pSelf, asio::placeholders::error, asio::placeholders::bytes_transferred)
 	);
@@ -164,6 +117,12 @@ void C_Session::OnRead(asio::error_code const& error, size_t const bytes)
 
 bool C_Session::Recv(T_RecvBuffers& buffers)
 {
+	auto uSize = m_ReadRingBuffer.Size();
+	auto pData = new char[uSize];
+	auto uRealLen = m_ReadRingBuffer.Read(pData, uSize);
+	m_ReadRingBuffer.IncReadDataLength(uRealLen);
+	delete [] pData;
+
 	PostRead();
 	return true;
 }

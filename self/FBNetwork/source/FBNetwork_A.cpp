@@ -28,7 +28,7 @@ void CFBNetwork_A::OnAccept(CFBNetwork_A_Socket::Ptr Socket, const error_code& E
 	Socket->m_Local = Socket->m_Socket.local_endpoint().address();
 	Socket->m_Remote = Socket->m_Socket.remote_endpoint().address();
 
-	// ÐÞ¸ÄÒ»Ð©ÅäÖÃ
+	// ä¿®æ”¹ä¸€äº›é…ç½®
 	// 1
 	{
 		ip::tcp::no_delay Option(false);
@@ -69,14 +69,14 @@ void CFBNetwork_A::OnAccept(CFBNetwork_A_Socket::Ptr Socket, const error_code& E
 */
 	}
 
-	// ·¢³öÒ»¸öÒì²½¶ÁÈ¡
+	// å‘å‡ºä¸€ä¸ªå¼‚æ­¥è¯»å–
 	Socket->Read();
 
-	// Í¨ÖªÉÏ²ã
+	// é€šçŸ¥ä¸Šå±‚
 	InterlockedExchange((LONG volatile*)&Socket->m_State, CFBNetwork_A_Socket::S_ESTABLISHED);
 	m_Accepts.Push(Socket);
 
-	// ·¢³öÒ»¸öAccept
+	// å‘å‡ºä¸€ä¸ªAccept
 	Accept();
 }
 void CFBNetwork_A::OnConnect(CFBNetwork_A_Socket::Ptr Socket, const error_code& Error)
@@ -91,7 +91,7 @@ void CFBNetwork_A::OnConnect(CFBNetwork_A_Socket::Ptr Socket, const error_code& 
 	Socket->m_Local = Socket->m_Socket.local_endpoint().address();
 	Socket->m_Remote = Socket->m_Socket.remote_endpoint().address();
 
-	// ÐÞ¸ÄÒ»Ð©ÅäÖÃ
+	// ä¿®æ”¹ä¸€äº›é…ç½®
 	// 1
 	{
 		ip::tcp::no_delay Option(false);
@@ -132,10 +132,10 @@ void CFBNetwork_A::OnConnect(CFBNetwork_A_Socket::Ptr Socket, const error_code& 
 */
 	}
 
-	// ·¢³öÒ»¸öÒì²½¶ÁÈ¡
+	// å‘å‡ºä¸€ä¸ªå¼‚æ­¥è¯»å–
 	Socket->Read();
 
-	// Í¨ÖªÉÏ²ã
+	// é€šçŸ¥ä¸Šå±‚
 	InterlockedExchange((LONG volatile*)&Socket->m_State, CFBNetwork_A_Socket::S_ESTABLISHED);
 }
 
@@ -149,7 +149,7 @@ CFBNetwork_A::~CFBNetwork_A()
 
 BOOL CFBNetwork_A::Init(int nIOCPThreads, DWORD dwThreads)
 {
-	// ´´½¨¹¤×÷ÕßÏß³Ì
+	// åˆ›å»ºå·¥ä½œè€…çº¿ç¨‹
 	DWORD dwThreadID;
 	for(DWORD n = 0; n < dwThreads; n++)
 	{
@@ -172,11 +172,11 @@ void CFBNetwork_A::Quit(void)
 {
 	Stop();
 
-	// bugÕâÀïÏÈÁÙÊ±ÕâÃ´Ð´£¬¿ÉÄÜÊÇµ÷ÓÃstop»òÕßreset£¬µ«ÊÇÃ»ÕÒµ½×ÊÁÏ
-	// ÕâÃ´ÏÈÌæ´úÓ¦¸ÃÊÇÃ»ÎÊÌâµÄ
+	// bugè¿™é‡Œå…ˆä¸´æ—¶è¿™ä¹ˆå†™ï¼Œå¯èƒ½æ˜¯è°ƒç”¨stopæˆ–è€…resetï¼Œä½†æ˜¯æ²¡æ‰¾åˆ°èµ„æ–™
+	// è¿™ä¹ˆå…ˆæ›¿ä»£åº”è¯¥æ˜¯æ²¡é—®é¢˜çš„
 	m_Work.~work();
 
-	// µÈ´ýËùÓÐ¹¤×÷Ïß³ÌÍË³ö
+	// ç­‰å¾…æ‰€æœ‰å·¥ä½œçº¿ç¨‹é€€å‡º
 	WaitForMultipleObjects(m_Threads.Size(), m_Threads.Ptr(), TRUE, INFINITE);
 }
 
@@ -187,7 +187,7 @@ void CFBNetwork_A::Listen(sockaddr_in* pAddr)
 		m_Acceptor.open(ip::tcp::v4());
 	}
 
-	// ÐÞ¸ÄÒ»Ð©ÅäÖÃ
+	// ä¿®æ”¹ä¸€äº›é…ç½®
 	// 1
 	{
 		ip::tcp::no_delay Option(false);
@@ -234,7 +234,7 @@ void CFBNetwork_A::Listen(sockaddr_in* pAddr)
 	m_Acceptor.bind(EndPoint);
 	m_Acceptor.listen();
 
-	// ·¢³öÒ»¸öAccept
+	// å‘å‡ºä¸€ä¸ªAccept
 	Accept();
 }
 void CFBNetwork_A::Stop(void)

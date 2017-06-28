@@ -10,7 +10,7 @@ namespace N_Bsn
 {
 
 template<uint32_t uCapcityPowOf2> // uCapcityPowOf2必须是2^x
-class C_RingBuffer : public I_RingBuffer
+class C_RingBuffer
 {
 public:
 	
@@ -22,20 +22,17 @@ public:
 	// 剩余容量
 	uint32_t Space() const;
 	bool 	Empty() const;
+	
 	// 希望读取的数据长度为len，函数返回实际长度
 	uint32_t Read(uint8_t* pData, uint32_t uLen);
 	// 希望写入的数据长度为len，函数返回实际长度
 	uint32_t Write(uint8_t* pData, uint32_t uLen);
 
-	// 返回下次可写的指针pData 及连续长度uLen
-	void GetNextWriteData(uint8_t*& pData, uint32_t& uLen);
-	// 增加已写入长度
-	void IncWriteDataLength(uint32_t uLen);
-
-	// 返回下次可读的指针pData 及连续长度uLen
-	void GetNextReadData(uint8_t*& pData, uint32_t& uLen);
-	// 增加已读入长度
 	void IncReadDataLength(uint32_t uLen);
+	void GetNextReadData(uint8_t*& pData, uint32_t& uLen);
+
+	void IncWriteDataLength(uint32_t uLen);
+	void GetNextWriteData(uint8_t*& pData, uint32_t& uLen);
 
 public:
 	C_RingBuffer();
@@ -170,13 +167,16 @@ uint32_t C_RingBuffer<uCapcity>::Capcity() const
 template<uint32_t uCapcity>
 uint32_t C_RingBuffer<uCapcity>::Size() const
 {
-	return (m_uWritePos - m_uReadPos);
+	auto uWritePos = m_uWritePos;
+	std::atomic_thread_fence(std::memory_order_acquire);
+	auto uSize =  (uWritePos - m_uReadPos);
+	return uSize;
 }
 
 template<uint32_t uCapcity>
 uint32_t C_RingBuffer<uCapcity>::Space() const
 {
-	return Capcity() - Size();
+	return uCapcity - Size();
 }
 
 template<uint32_t uCapcity>

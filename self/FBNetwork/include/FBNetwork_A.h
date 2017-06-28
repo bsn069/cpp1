@@ -9,7 +9,7 @@ public:
 
 	CFBKernel_Vector<HANDLE>									m_Threads;
 
-	CFBKernel_Double<CFBNetwork_A_Socket::Ptr>					m_Accepts;						// 新接受的连接
+	CFBKernel_Double<CFBNetwork_A_Socket::Ptr>					m_Accepts;						// 鏂版帴鍙楃殑杩炴帴
 
 public:
 	void									Accept(void);

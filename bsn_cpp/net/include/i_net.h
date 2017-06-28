@@ -8,7 +8,7 @@
  
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
-class I_Session : public std::enable_shared_from_this<I_Session>
+class I_Net : public std::enable_shared_from_this<I_Session>
 {
 public:
 	typedef std::shared_ptr<I_Session> T_SharePtrISession;

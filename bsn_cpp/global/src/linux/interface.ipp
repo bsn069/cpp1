@@ -88,6 +88,12 @@ void C_Interface::WaitQuit()
 			m_pLogInterface->WaitQuit();
 			m_pLogInterface = nullptr;
 		}
+
+		if (m_pNetInterface)
+		{
+			m_pNetInterface->WaitQuit();
+			m_pNetInterface = nullptr;
+		}
 	}
 
 	D_LogInfo("close lib loader");
@@ -137,6 +143,18 @@ void C_Interface::Start(int argc, char* argv[])
 		D_LogInfo("set lib loader log");
 		auto pLog = m_pLogInterface->CreateLog(m_pLibLoader->Name(), m_pLibLoader.get());
 		m_pLibLoader->SetLog(pLog);
+	}
+
+	{
+		auto pLib = m_pLibLoader->Load("net", "bsn_dlib_net", "_d", "");
+		auto pFuncCreate = (D_N1(net)::T_FuncCreate)(pLib->Func("Create"));
+		m_pNetInterface = pFuncCreate(pLib);
+		D_LogInfoFmt("m_pNetInterface=%p", m_pLogInterface.get());
+		auto pLog = m_pLogInterface->CreateLog(m_pNetInterface->Name(), m_pNetInterface.get());
+		m_pNetInterface->SetLog(pLog);
+		// auto p = m_pNetInterface->Create();
+		// D_LogInfoFmt("p=%p", p.get());
+		// m_pNetInterface->Release(p);
 	}
 
 	{

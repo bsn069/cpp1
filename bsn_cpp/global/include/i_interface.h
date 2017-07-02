@@ -6,6 +6,7 @@
 #include <bsn_cpp/lib_loader/include/i_interface.h>
 #include <bsn_cpp/log/include/i_interface.h>
 #include <bsn_cpp/log/include/i_log.h>
+#include <bsn_cpp/net/include/i_interface.h>
 
 D_BsnNamespace1(global)
 //////////////////////////////////////////////////////////////////////
@@ -16,6 +17,7 @@ public:
 	typedef D_N1(lib_loader)::I_Interface::T_SharePtr T_SharePtrLibLoader;
 	typedef D_N1(log)::I_Log::T_SharePtr T_SharePtrLog;
 	typedef D_N1(log)::I_Interface::T_SharePtr T_SharePtrLogInterace;
+	typedef D_N1(net)::I_Interface::T_SharePtr T_SharePtrNetInterace;
 
 public:
 	virtual void Start(int argc, char* argv[]) = 0;

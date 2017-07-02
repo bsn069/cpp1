@@ -22,6 +22,8 @@ public:
 	
 public:
 	virtual E_State State() = 0;
+	virtual void Close() = 0;
+
 	virtual bool Send(uint8_t* pData, uint32_t uLen) = 0;
 	virtual bool Recv(T_RecvBuffers& buffers) = 0;
 };

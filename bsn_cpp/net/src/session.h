@@ -16,6 +16,7 @@ public:
 	virtual E_State State() override;
 	virtual bool Send(uint8_t* pData, uint32_t uLen) override;
 	virtual bool Recv(T_RecvBuffers& buffers) override;
+	virtual void Close() override;
 
 
 public:
@@ -25,12 +26,12 @@ public:
 	bool PostRead();
 	void OnRead(asio::error_code const& error, size_t const bytes);
 
+	void OnAccept();
+	void OnConnect();
+
+
 	asio::ip::tcp::socket& Socket() {
 		return m_Socket;
-	}
-	void OnAccept() {
-		m_eState.store(E_State_Established);
-		PostRead();
 	}
 
 public:

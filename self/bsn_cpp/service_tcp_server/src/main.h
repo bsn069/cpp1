@@ -8,8 +8,8 @@ using namespace N_Bsn;
 
 
 
-//#error ´óĞ¡Ğ´Ìæ»» service_tcp_server Îª¹¤³ÌÃû
-//#error È«×Ö´óĞ¡Ğ´Æ¥Åä ServiceTCPServer Îª¹¤³ÌÃûÊ××ÖÄ¸´óĞ´
+//#error å¤§å°å†™æ›¿æ¢ service_tcp_server ä¸ºå·¥ç¨‹å
+//#error å…¨å­—å¤§å°å†™åŒ¹é… ServiceTCPServer ä¸ºå·¥ç¨‹åé¦–å­—æ¯å¤§å†™
 
 
 D_BsnNamespace1(ServiceTCPServer)

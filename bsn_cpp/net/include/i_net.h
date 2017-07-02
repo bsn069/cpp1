@@ -5,25 +5,22 @@
 #include <bsn_cpp/include/buffer.hpp>
 #include <memory>
 #include <list>
+#include "i_session.h"
  
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
-class I_Net : public std::enable_shared_from_this<I_Session>
+class I_Net
 {
 public:
-	typedef std::shared_ptr<I_Session> T_SharePtrISession;
- 	enum E_State : uint8_t
-	{
-		E_State_Close	= 0,
-		E_State_WaitingOrConnecting,
-		E_State_Established,
-	};
-	typedef std::list<I_Buffer*> T_RecvBuffers;
+	typedef std::shared_ptr<I_Net> T_SharePtr;
+	typedef I_Session::T_SharePtrISession T_SharePtrISession;
 	
 public:
-	virtual E_State State() = 0;
-	virtual bool Send(uint8_t* pData, uint32_t uLen) = 0;
-	virtual bool Recv(T_RecvBuffers& buffers) = 0;
+	virtual void Init() = 0;
+	virtual void UnInit() = 0;
+
+	virtual void Listen(std::string strIp, uint8_t uPort) = 0;
+	virtual T_SharePtrISession Connect(std::string strIp, uint8_t uPort) = 0;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -29,6 +29,7 @@ private:
 	T_SharePtrLog m_pLog;
 	T_SharePtrLibLoader m_pLibLoader;
 	T_SharePtrLogInterace m_pLogInterface;
+	T_SharePtrNetInterace m_pNetInterface;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

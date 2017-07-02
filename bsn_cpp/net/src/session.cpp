@@ -24,6 +24,10 @@ C_Session::E_State C_Session::State()
 	return (E_State)m_eState.load();
 }
 
+void C_Session::Close() 
+{
+	m_eState.store(E_State_Close, std::memory_order_relaxed);
+}
 
 bool C_Session::Send(uint8_t* pData, uint32_t uLen) 
 {
@@ -65,11 +69,12 @@ void C_Session::OnSend(asio::error_code const& error, size_t const bytes)
 {
 	if (error)
 	{
-		m_eState.store(E_State_Close, std::memory_order_relaxed);
+		Close();
 		return;
 	}
 
 	m_SendRingBuffer.IncReadDataLength(bytes);
+	m_bSending.store(false, std::memory_order_relaxed);
 	PostSend();
 }
 
@@ -106,11 +111,12 @@ void C_Session::OnRead(asio::error_code const& error, size_t const bytes)
 {
 	if (error)
 	{
-		m_eState.store(E_State_Close, std::memory_order_relaxed);
+		Close();
 		return;
 	}
 
 	m_ReadRingBuffer.IncWriteDataLength(bytes);
+	m_bReading.store(false, std::memory_order_relaxed);
 	PostRead();
 }
 
@@ -118,13 +124,29 @@ void C_Session::OnRead(asio::error_code const& error, size_t const bytes)
 bool C_Session::Recv(T_RecvBuffers& buffers)
 {
 	auto uSize = m_ReadRingBuffer.Size();
-	auto pData = new char[uSize];
+	if (uSize == 0)
+	{
+		return true;
+	}
+
+	auto pData = new uint8_t[uSize];
 	auto uRealLen = m_ReadRingBuffer.Read(pData, uSize);
-	m_ReadRingBuffer.IncReadDataLength(uRealLen);
 	delete [] pData;
+	assert(uRealLen == uSize);
+	m_ReadRingBuffer.IncReadDataLength(uRealLen);
 
 	PostRead();
 	return true;
+}
+
+void C_Session::OnAccept() {
+	m_eState.store(E_State_Established);
+	PostRead();
+}
+
+void C_Session::OnConnect() {
+	m_eState.store(E_State_Established);
+	PostRead();
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

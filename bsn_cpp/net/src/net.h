@@ -2,6 +2,7 @@
 #include "./../include/i_net.h"
 #include "session.h"
 #include <bsn_cpp/log/include/i_Log.h>
+#include <bsn_cpp/include/i_init.h>
 
 #include <bsn_cpp/include/buffer.hpp>
 #include <bsn_cpp/include/ring_buffer.hpp>
@@ -11,7 +12,7 @@
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 
-class C_Net : public I_Net
+class C_Net : public I_Net, public I_Init
 {
 public:
 	typedef std::shared_ptr<C_Net> T_SharePtrCNet;
@@ -22,6 +23,7 @@ public:
 public:
 	virtual void Listen(std::string strIp, uint8_t uPort) override;
 	virtual T_SharePtrISession Connect(std::string strIp, uint8_t uPort) override;
+	
 	virtual void Init() override;
 	virtual void UnInit() override;
 

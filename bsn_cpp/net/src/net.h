@@ -21,8 +21,9 @@ public:
 	typedef D_N1(log)::I_Log::T_SharePtr T_SharePtrLog;
 
 public:
-	virtual void Listen(std::string strIp, uint8_t uPort) override;
-	virtual T_SharePtrISession Connect(std::string strIp, uint8_t uPort) override;
+	virtual bool Listen(std::string strIp, uint16_t u16Port) override;
+	virtual T_SharePtrISession GetAcceptSession() override;
+	virtual T_SharePtrISession Connect(std::string strIp, uint16_t u16Port) override;
 	
 	virtual void Init() override;
 	virtual void UnInit() override;

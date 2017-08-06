@@ -106,13 +106,13 @@ void C_Net::OnAccept(T_SharePtrCSession Session, const error_code& Error)
 
 
 
-void C_Net::Listen(std::string strIp, uint8_t uPort)
+bool C_Net::Listen(std::string strIp, uint16_t u16Port)
 {
 	D_LogInfoFmt("p=%p", this);
 	
 	if(m_Acceptor.is_open())
 	{
-		return;
+		return false;
 	}
 	m_Acceptor.open(asio::ip::tcp::v4());
 
@@ -132,20 +132,21 @@ void C_Net::Listen(std::string strIp, uint8_t uPort)
 	}
 	
 	auto Address = asio::ip::address_v4::from_string(strIp);
-	asio::ip::tcp::endpoint EndPoint(Address, htons(uPort));
+	asio::ip::tcp::endpoint EndPoint(Address, htons(u16Port));
 
 	m_Acceptor.bind(EndPoint);
 	m_Acceptor.listen();
 
 	PostAccept();
+	return true;
 }
 
-C_Net::T_SharePtrISession C_Net::Connect(std::string strIp, uint8_t uPort)
+C_Net::T_SharePtrISession C_Net::Connect(std::string strIp, uint16_t u16Port)
 {	
 	D_LogInfoFmt("p=%p", this);
 	
 	auto Address = asio::ip::address_v4::from_string(strIp);
-	asio::ip::tcp::endpoint EndPoint(Address, htons(uPort));
+	asio::ip::tcp::endpoint EndPoint(Address, htons(u16Port));
 
 	T_SharePtrCSession Session(new C_Session(m_IO));
 	Session->Socket().async_connect(

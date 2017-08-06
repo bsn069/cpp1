@@ -8,7 +8,7 @@
 namespace N_Bsn
 {
 //////////////////////////////////////////////////////////////////////
-class I_LibInterfaceEx : public I_LibInterface,  public std::enable_shared_from_this<I_Interface>
+class I_LibInterfaceEx : public I_LibInterface
 {
 public:
 	typedef D_N1(lib_loader)::I_Lib::T_SharePtr T_SharePtrLib;

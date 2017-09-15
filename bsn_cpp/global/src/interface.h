@@ -25,11 +25,11 @@ public:
 	virtual ~C_Interface();
 
 private:
-	bool m_bRun;
-	T_SharePtrLog m_pLog;
-	T_SharePtrLibLoader m_pLibLoader;
-	T_SharePtrLogInterace m_pLogInterface;
-	T_SharePtrNetInterace m_pNetInterface;
+	bool 					m_bRun;
+	T_SharePtrLog 			m_pLog;
+	T_SharePtrLibLoader 	m_pLibLoader;
+	T_SharePtrLogInterace 	m_pLogInterface;
+	T_SharePtrNetInterace 	m_pNetInterface;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

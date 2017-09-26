@@ -1,0 +1,61 @@
+#docker build -t bsn/cppdev:latest -f dev.Dockfile .
+FROM centos:6.7
+MAINTAINER BSN 513026809@qq.com 
+
+# set time zone
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
+	echo 'Asia/Shanghai' >/etc/timezone
+
+RUN yum -y install wget bzip2 cmake make ; yum clean all
+RUN yum -y install tar; yum clean all
+RUN yum -y install gcc gcc-c++; yum clean all
+
+RUN mkdir download
+WORKDIR /download
+
+RUN yum -y install gmp-devel mpfr-devel libmpc-devel; yum clean all
+
+RUN mkdir gcc7objdir
+RUN wget http://mirrors-usa.go-parts.com/gcc/releases/gcc-7.2.0/gcc-7.2.0.tar.gz
+RUN wget ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.bz2
+RUN tar xvf gcc-7.2.0.tar.gz
+RUN tar -jxvf isl-0.15.tar.bz2
+
+WORKDIR isl-0.15
+RUN ./configure
+RUN make
+RUN make install
+WORKDIR ../gcc7objdir
+RUN pwd
+
+WORKDIR /download
+RUN wget https://ftp.gnu.org/gnu/gmp/gmp-6.1.2.tar.bz2
+RUN wget https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.6.tar.gz
+RUN wget https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+RUN tar jxvf gmp-6.1.2.tar.bz2
+RUN tar zxvf mpfr-3.1.6.tar.gz
+RUN tar zxvf mpc-1.0.3.tar.gz
+
+WORKDIR gmp-6.1.2
+RUN yum -y install m4;yum clean all
+RUN ./configure --enable-cxx CPPFLAGS=-fexceptions 
+RUN make; make install
+
+WORKDIR /download/mpfr-3.1.6
+RUN ./configure
+RUN make; make install
+
+WORKDIR /download/mpc-1.0.3
+RUN ./configure
+RUN make; make install
+ 
+WORKDIR /download/gcc7objdir
+#RUN ../gcc-7.2.0/configure --prefix=/usr/local/gcc7 --enable-languages=c,c++  --disable-multilib
+#RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+#RUN make
+#RUN make install
+#RUN gcc -v
+
+#RUN yum -y install glibc-devel.i686 glibc-devel; yum clean all
+#RUN wget http://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2;tar -jxvf  gcc-4.8.2.tar.bz2;cd gcc-4.8.2;./contrib/download_prerequisites;mkdir gcc-build-4.8.2;cd gcc-build-4.8.2;../configure -enable-checking=release -enable-languages=c,c++ -disable-multilib
+#RUN make -j4

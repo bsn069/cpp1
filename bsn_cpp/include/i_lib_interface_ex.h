@@ -1,10 +1,14 @@
 #pragma once
 #include "define.h"
 #include "name_space.h"
-#include "i_interface.h"
+#include "i_lib_interface.h"
+
+#include <bsn_cpp/lib_loader/include/i_lib.h>
+#include <bsn_cpp/log/include/i_interface.h>
 
 #include <stdint.h>
 #include <memory>
+
 namespace N_Bsn
 {
 //////////////////////////////////////////////////////////////////////

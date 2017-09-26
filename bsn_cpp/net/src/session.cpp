@@ -59,7 +59,7 @@ bool C_Session::PostSend()
 	asio::async_write(
 		m_Socket
 		, asio::buffer(pReadBuff, uLen)
-		, boost::bind(&C_Session::OnRead, pSelf, asio::placeholders::error, asio::placeholders::bytes_transferred)
+		, boost::bind(&C_Session::OnSend, pSelf, asio::placeholders::error, asio::placeholders::bytes_transferred)
 	);
 	return true;
 }

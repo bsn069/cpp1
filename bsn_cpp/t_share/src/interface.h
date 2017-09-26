@@ -28,7 +28,7 @@ public:
 
 private:
 	T_SharePtrLib m_lib;
-		T_SharePtrLog m_pLog;
+	T_SharePtrLog m_pLog;
 
 };
 //////////////////////////////////////////////////////////////////////

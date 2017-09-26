@@ -1,12 +1,19 @@
 #docker build -t bsn/cppdev:latest -f dev.Dockfile .
-FROM centos:6.7
+FROM centos:7.3.1611
 MAINTAINER BSN 513026809@qq.com 
 
 # set time zone
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
 	echo 'Asia/Shanghai' >/etc/timezone
 
-RUN yum -y install wget bzip2 cmake make ; yum clean all
-RUN yum -y install tar glibc-devel.i686 glibc-devel; yum clean all
-#RUN wget http://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2;tar -jxvf  gcc-4.8.2.tar.bz2;cd gcc-4.8.2;./contrib/download_prerequisites;mkdir gcc-build-4.8.2;cd gcc-build-4.8.2;../configure -enable-checking=release -enable-languages=c,c++ -disable-multilib
-#RUN make -j4
+RUN yum -y install gcc gcc-c++ make tar wget bzip2 cmake gdb boost-devel; yum clean all
+ADD ./CentOS-Debuginfo.repo /etc/yum.repos.d/
+RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64 
+RUN debuginfo-install -y libgcc-4.8.5-11.el7.x86_64 
+RUN debuginfo-install -y  libstdc++-4.8.5-11.el7.x86_64
+ 
+WORKDIR /media/sf_F_DRIVE/github/cpp1/bsn_cpp
+RUN yum -y install git; yum clean all
+RUN yum -y install automake libtool zlib-devel; yum clean all
+
+ 

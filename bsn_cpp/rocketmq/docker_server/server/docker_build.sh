@@ -2,7 +2,6 @@
 
 bsn_var_rocketmq_ver=4.1.0
 
-
 bsn_var_rocketmq_zip="rocketmq.zip"
 echo ${bsn_var_rocketmq_zip}
 
@@ -24,3 +23,5 @@ pushd nogit
 	fi
 popd
 
+sudo docker build -t bsn069/rocketmq_server:latest .
+ 

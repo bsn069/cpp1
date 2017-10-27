@@ -20,7 +20,6 @@ FROM java:8
 
 # Rocketmq home
 ENV ROCKETMQ_HOME  /opt/rocketmq
-WORKDIR  ${ROCKETMQ_HOME}
 
 RUN mkdir -p \
 		/opt/logs \
@@ -32,6 +31,8 @@ VOLUME /opt/logs \
 		/opt/store
 
 COPY nogit/rocketmq ${ROCKETMQ_HOME}
+COPY bin ${ROCKETMQ_HOME}/bin
+WORKDIR  ${ROCKETMQ_HOME}/bin
 
 # EXPOSE 9876
 # RUN curl https://dist.apache.org/repos/dist/release/rocketmq/${ROCKETMQ_VERSION}/rocketmq-all-${ROCKETMQ_VERSION}-bin-release.zip -o rocketmq.zip \

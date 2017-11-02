@@ -15,5 +15,6 @@ RUN debuginfo-install -y  libstdc++-4.8.5-11.el7.x86_64
 WORKDIR /media/sf_F_DRIVE/github/cpp1/bsn_cpp
 RUN yum -y install git; yum clean all
 RUN yum -y install automake libtool zlib-devel; yum clean all
+ENV BSN_DIR  /media/sf_F_DRIVE/github/cpp1/bsn_cpp
 
  

@@ -13,6 +13,10 @@ if [ ! -d "LuaJIT" ]; then
 	mv LuaJIT-2.0.5 LuaJIT
 fi
  
+if [ ! -d "LuaBridge" ]; then
+	git clone https://github.com/bsn069/LuaBridge.git
+fi
+
 if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then
 	curl https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz -o protobuf-cpp-3.4.1.tar.gz
 fi
@@ -21,7 +25,10 @@ if [ ! -d "protobuf-cpp" ]; then
 	tar -xzvf protobuf-cpp-3.4.1.tar.gz
 	mv protobuf-cpp-3.4.1 protobuf-cpp
 fi
- 
 
+if [ ! -d "pbc" ]; then
+	git clone https://github.com/bsn069/pbc.git
+fi
+ 
  
 

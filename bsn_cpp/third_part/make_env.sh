@@ -22,7 +22,7 @@ if [ ! -d "pbc" ]; then
 fi
 
 if [ ! -d "protobuf" ]; then
-	git clone https://github.com/google/protobuf.git
+	git clone https://github.com/bsn069/protobuf.git
 fi
  
  

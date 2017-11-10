@@ -1,5 +1,6 @@
 #pragma once
 #include <bsn_cpp/include/name_space.h>
+#include <bsn_cpp/include/i_lib_interface.h>
 #include <bsn_cpp/include/define.h>
 #include <bsn_cpp/include/buffer.hpp>
 #include <memory>

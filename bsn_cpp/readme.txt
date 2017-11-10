@@ -1,0 +1,1 @@
+typedef std::shared_ptr<I_Session> T_SPISession;

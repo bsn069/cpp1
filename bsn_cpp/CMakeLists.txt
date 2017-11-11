@@ -87,14 +87,15 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
  
 # 添加子工程目录
 #-------------------------------------------------------------------------------
-ADD_SUBDIRECTORY( test )
-ADD_SUBDIRECTORY( t_console )
+# ADD_SUBDIRECTORY( test )
+# ADD_SUBDIRECTORY( t_console )
 # ADD_SUBDIRECTORY( t_share )
-ADD_SUBDIRECTORY( lib_loader )
-ADD_SUBDIRECTORY( log )
-ADD_SUBDIRECTORY( console_input )
-ADD_SUBDIRECTORY( global )
-ADD_SUBDIRECTORY( net )
+# ADD_SUBDIRECTORY( lib_loader )
+# ADD_SUBDIRECTORY( log )
+# ADD_SUBDIRECTORY( console_input )
+# ADD_SUBDIRECTORY( global )
+# ADD_SUBDIRECTORY( net )
+ADD_SUBDIRECTORY( loader )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

@@ -1,78 +1,26 @@
 #include "./../log.h"
+
+#include <bsn_cpp/include/new.hpp>
+#include <bsn_cpp/include/delete.hpp>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <iostream>
 #include <chrono>
 #include <ctime>
+
 D_BsnNamespace1(log)
 //////////////////////////////////////////////////////////////////////
-static char const * const sc_logLevel2Name[] = {
-	"Error",
-	"Warn",
-	"Info"
+
+static char const * const sc_logLevel2Color[] = {
+	"\033[40;32m",
+	"\033[40;32m",
+	"\033[40;33m",
+	"\033[40;31m",
 };
+static char const * const sc_endColor = "\033[0m";
 
-char const * const C_Log::Name() const 
-{
-	return m_pstrName.c_str();
-}
-
-
-C_Log::C_Log(T_SharePtrCInterface pInterface, char const * const pstrName)
-: m_pInterface(pInterface)
-, m_logId(0)
-, m_pstrName(pstrName)
-{
-	InfoFmt("C_Log::C_Log() %p", this);
-}
-
-
-C_Log::~C_Log()
-{
-	InfoFmt("C_Log::~C_Log() %p", this);
-	m_pInterface = nullptr;
-}
-
-void C_Log::Info(const char * strInfo)
-{
-	m_pInterface->Print(2, strInfo);
-}
-
-void C_Log::Warn(const char * strInfo)
-{
-	m_pInterface->Print(1, strInfo);
-}
-
-void C_Log::Error(const char * strInfo)
-{
-	m_pInterface->Print(0, strInfo);
-}
-
-void C_Log::InfoFmt(const char * strFormat, ...)
-{
-	va_list args;
-	va_start(args, strFormat);
-	FmtPrint(2, strFormat, args);
-	va_end(args);
-}
-
-void C_Log::WarnFmt(const char * strFormat, ...)
-{
-	va_list args;
-	va_start(args, strFormat);
-	FmtPrint(1, strFormat, args);
-	va_end(args);
-}
-
-void C_Log::ErrorFmt(const char * strFormat, ...)
-{
-	va_list args;
-	va_start(args, strFormat);
-	FmtPrint(0, strFormat, args);
-	va_end(args);
-}
-
-void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
+void C_Log::FmtPrint(I_Log::E_Level eLevel, const char * strFormat, va_list args)
 {
 	char buffer[4096];
     int length = 0;
@@ -83,7 +31,6 @@ void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
 	std::time_t tt = system_clock::to_time_t( nowTime );
 	struct tm* ptm = localtime(&tt);
 	
-	
 	freeSize = (int)D_ArrayCount(buffer) - length;
 	length += strftime(
         buffer + length
@@ -92,15 +39,12 @@ void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
 		, ptm
 	);
 
-	m_logId++;
     freeSize = (int)D_ArrayCount(buffer) - length;
     length += snprintf(
         buffer + length
 		, freeSize
-		, "[%s][%u][%s]"
-		, Name()
-		, m_logId
-		, sc_logLevel2Name[uLogLevel]
+		, "[%s]"
+		, sc_logLevel2Name[eLevel]
     );
 
     freeSize = (int)D_ArrayCount(buffer) - length - 2;
@@ -124,7 +68,12 @@ void C_Log::FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args)
     buffer[length++] = '\n';
     buffer[length]   = '\0';
 
-	m_pInterface->Print(uLogLevel, buffer);	
+	Print(eLevel, buffer);	
+}
+
+void C_Log::Print(I_Log::E_Level eLevel, char const * strInfo)
+{
+	fprintf(stdout, "%s%s%s", sc_logLevel2Color[eLevel], strInfo, sc_endColor);
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

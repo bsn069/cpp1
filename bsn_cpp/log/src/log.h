@@ -1,7 +1,9 @@
 #pragma once
+
 #include "./../include/i_log.h"
-#include "./../include/i_interface.h"
-#include "interface.h"
+ 
+#include <bsn_cpp/load_lib/include/i_lib.h>
+
 #include <stdarg.h>
 
 D_BsnNamespace1(log)
@@ -9,29 +11,42 @@ D_BsnNamespace1(log)
 class C_Log : public I_Log 
 {
 public:
-	typedef C_Interface::T_CSharePtr T_SharePtrCInterface;
+	typedef std::shared_ptr<C_Log> T_SPC_Log;	
+	typedef D_N1(load_lib)::I_Lib::T_SPI_Lib T_SPI_Lib;
 
 public:
-	virtual void InfoFmt(const char * strFormat, ...) override;
-	virtual void WarnFmt(const char * strFormat, ...) override;
-	virtual void ErrorFmt(const char * strFormat, ...) override;
+	virtual void Push(
+		E_Level eLevel
+		, char const * strFile
+		, uint32_t u32Line
+		, char const * strFunc
+		, char const * strLog
+	) override;
 
-	virtual void Info(const char * strInfo) override;
-	virtual void Warn(const char * strInfo) override;
-	virtual void Error(const char * strInfo) override;
+	virtual void PushF(
+		E_Level eLevel
+		, char const * strFile
+		, uint32_t u32Line
+		, char const * strFunc
+		, char const * strLog
+		, ...
+	) override;
+
 
 public:
-	char const* const Name() const;
-	void FmtPrint(uint32_t uLogLevel, const char * strFormat, va_list args);
+	void SetLib(T_SPI_Lib iLib)
+	{
+		m_iLib = iLib;
+	};
+	void FmtPrint(I_Log::E_Level eLevel,const char * strFormat, va_list args);
+	void Print(I_Log::E_Level eLevel, const char * strInfo);
 
 public:
-	C_Log(T_SharePtrCInterface pInterface, char const * const pstrName);
+	C_Log();
 	virtual ~C_Log();
 
 private:
-	T_SharePtrCInterface m_pInterface;
-	uint32_t m_logId;
-	std::string m_pstrName;
+	T_SPI_Lib m_iLib;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

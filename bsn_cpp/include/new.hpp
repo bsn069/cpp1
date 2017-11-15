@@ -11,7 +11,6 @@ New( void )
 {
 	return new T_Type();
 }
- ?
 
 template<typename T_Type, typename T_Param1>
 D_inline

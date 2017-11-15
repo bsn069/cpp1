@@ -7,11 +7,11 @@
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Info \
-		, strFormat \
+		D_N1(log)::I_Log::E_Level::Info \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
 } 
@@ -21,11 +21,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Info \
-		, strLog \
+		D_N1(log)::I_Log::E_Level::Info \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strLog \
 	); \
 } 
 
@@ -33,11 +33,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Debug \
-		, strFormat \
+		D_N1(log)::I_Log::E_Level::Debug \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
 } 
@@ -47,11 +47,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Debug \
-		, strLog \
+		D_N1(log)::I_Log::E_Level::Debug \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strLog \
 	); \
 } 
 
@@ -59,11 +59,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Warn \
-		, strFormat \
+		D_N1(log)::I_Log::E_Level::Warn \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
 } 
@@ -73,11 +73,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Warn \
-		, strLog \
+		D_N1(log)::I_Log::E_Level::Warn \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strLog \
 	); \
 } 
 
@@ -85,11 +85,11 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Error \
-		, strFormat \
+		D_N1(log)::I_Log::E_Level::Error \
 		, __FILE__ \
 		, __LINE__ \
 		, __FUNCTION__ \
+		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
 } 
@@ -99,10 +99,15 @@ if (iLog != nullptr) \
 if (iLog != nullptr) \
 { \
 	iLog->PushF( \
-		I_Log::E_Level::Error \
-		, strLog \
+		D_N1(log)::I_Log::E_Level::Error \
 		, __FILE__ \
 		, __LINE__ \
+		, strLog \
 		, __FUNCTION__ \
 	); \
 } 
+
+D_BsnNamespace1(log)
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+D_BsnNamespace1End

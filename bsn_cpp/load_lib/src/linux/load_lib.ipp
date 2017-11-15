@@ -1,48 +1,36 @@
+#include "./../load_lib.h"
+
+#include <bsn_cpp/log/include/i_log_ex.h>
+
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
-#include "./../interface.h"
+
 #include <iostream>
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
-D_BsnNamespace1(lib_loader)
+
+D_BsnNamespace1(load_lib)
 //////////////////////////////////////////////////////////////////////
-
-char const* const C_Interface::Error(int32_t const i32ErrorCode) const
-{
-	switch (i32ErrorCode)
-	{
-		case 1: return "1";
-		default: return "Unknown";
-	}
-}
-
-
-char const* const C_Interface::Name() const
-{
-	return "lib_loader";
-}
-
-
-C_Interface::C_Interface()
+C_LoadLib::C_LoadLib()
 {	
-	D_LogInfo("");
+	D_LogInfo(m_iLog, "");
 }
 
 
-C_Interface::~C_Interface()
+C_LoadLib::~C_LoadLib()
 {
-	D_LogInfo("");
+	D_LogInfo(m_iLog, "");
 }
 
 
-I_Lib::T_SharePtr	C_Interface::Load(
+I_Lib::T_SPI_Lib	C_LoadLib::Load(
 	const char* strLibName
 	, const char* strLibPath
 	, const char* strDebugSuffix
 	, const char* strReleaseSuffix
 )
 {
-	D_LogInfoFmt("strLibName=%s,strLibPath=%s,strDebugSuffix=%s,strReleaseSuffix=%s"
+	D_LogInfoF(m_iLog, "strLibName=%s,strLibPath=%s,strDebugSuffix=%s,strReleaseSuffix=%s"
 		, strLibName
 		, strLibPath
 		, strDebugSuffix
@@ -50,48 +38,52 @@ I_Lib::T_SharePtr	C_Interface::Load(
 	);
 
 	auto pLib = std::shared_ptr<C_Lib>(New<C_Lib>(), [](C_Lib* pLib){Delete(pLib);});
-	pLib->SetLog(m_pLog);
+	pLib->SetLog(m_iLog);
 	pLib->SetName(strLibName);
 	auto bLoadSuccess = pLib->Open(strLibPath, strDebugSuffix, strReleaseSuffix, 0);
 	if (!bLoadSuccess)
 	{
-		D_LogError("!bLoadSuccess")
+		D_LogError(m_iLog, "!bLoadSuccess")
 		return nullptr;
 	}
 
 	auto pOldLib = this->Get(strLibName);
 	if (pOldLib && pOldLib.use_count() > 1)
 	{
-		D_LogWarn("pOldLib using, wait del");
+		D_LogWarn(m_iLog, "pOldLib using, wait del");
 		m_WaitDelLibs.push_back(pOldLib);
 	}
 
 	m_Libs[strLibName] = pLib;
-	D_LogInfoFmt("%p"
+	D_LogInfoF(m_iLog, "%p"
 		, pLib.get()
 	);
 	return pLib;
 }
 
-I_Lib::T_SharePtr	C_Interface::Get(const char* strLibName)
+I_Lib::T_SPI_Lib	C_LoadLib::Get(const char* strLibName)
 {
-	D_LogInfoFmt("strLibName=%s"
+	D_LogInfoF(
+		m_iLog
+		, "strLibName=%s"
 		, strLibName
 	);
 
 	auto itor = m_Libs.find(strLibName);
 	if (itor == m_Libs.end())
 	{
-		D_LogWarn("not found");
+		D_LogWarn(m_iLog, "not found");
 		return nullptr;
 	}
 	return std::dynamic_pointer_cast<I_Lib>(itor->second);
 }
 
 
-void	C_Interface::WaitQuit() 
+void	C_LoadLib::WaitQuit() 
 {
-	D_LogInfoFmt("m_Libs.size()=%u"
+	D_LogInfoF(
+		m_iLog
+		, "m_Libs.size()=%u"
 		, m_Libs.size()
 	);
 
@@ -104,7 +96,7 @@ void	C_Interface::WaitQuit()
 	}
 	m_Libs.clear();
 
-	D_LogInfo("SetLog(nullptr)");
+	D_LogInfo(m_iLog, "SetLog(nullptr)");
 	SetLog(nullptr);
 
 	auto itor = m_WaitDelLibs.begin();

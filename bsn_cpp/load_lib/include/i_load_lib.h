@@ -1,21 +1,22 @@
 #pragma once
-#include <bsn_cpp/include/i_lib.h>
+
+#include "i_lib.h"
+
 #include <bsn_cpp/include/name_space.h>
-#include <bsn_cpp/include/i_lib_interface.h>
 #include <bsn_cpp/include/define.h>
-#include <bsn_cpp/log/include/i_interface.h>
+#include <bsn_cpp/log/include/i_log.h>
 
 #include <stdint.h>
 #include <memory>
-
-D_BsnNamespace1(lib_loader)
+ 
+D_BsnNamespace1(load_lib)
 //////////////////////////////////////////////////////////////////////
-class I_Interface : public I_LibInterface
+class I_LoadLib
 {
 public:
-	typedef std::shared_ptr<I_Interface> 	T_SPI_Interface;
+	typedef std::shared_ptr<I_LoadLib> 	T_SPI_LoadLib;
 	typedef D_N1(log)::I_Log::T_SPI_Log 	T_SPI_Log;
-	typedef I_Lib::T_SPI_Lib 				T_SPI_Lib;
+	typedef I_Lib::T_SPI_Lib 	T_SPI_Lib;
 
 public:
 	virtual T_SPI_Lib	Load(
@@ -26,8 +27,9 @@ public:
 	) = 0;
 	virtual T_SPI_Lib	Get(const char* strLibName) = 0;
 	virtual void 		SetLog(T_SPI_Log iLog) = 0;
+	virtual void		WaitQuit() = 0;
 };
-typedef D_FunDef I_Interface::T_SharePtr	(*T_FuncCreate)();
+typedef D_FunDef I_LoadLib::T_SPI_LoadLib	(*T_FuncCreate)();
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End
 

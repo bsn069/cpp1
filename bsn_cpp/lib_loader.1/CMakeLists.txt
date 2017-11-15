@@ -15,17 +15,19 @@ set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
 #INCLUDE_DIRECTORIES( Include )
   
 # 添加定义
-#add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
+add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
 
-# 生成二进制文件 ${SubProjectName}
-SET( OUT_NAME ${BIN_PREFIX}${PROJECT_NAME}${OUTPUT_SUFFIX} )
-ADD_EXECUTABLE(${OUT_NAME} ${SRC_LIST})
+# 生成lib
+SET( OUT_NAME ${LIB_PREFIX_D}${PROJECT_NAME}${OUTPUT_SUFFIX} )
+ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 #SET_TARGET_PROPERTIES(${OUT_NAME} PROPERTIES DEBUG_POSTFIX "${OUTPUT_SUFFIX}")
 # 依赖项目
-#target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}t_share${OUTPUT_SUFFIX})
-#target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}global${OUTPUT_SUFFIX})
+#target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 # 链接库
-target_link_libraries(${OUT_NAME} bsn_nedmalloc)
+#target_link_libraries(${OUT_NAME} bsn_nedmalloc)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic -ldl")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic -ldl")
 
 MESSAGE(STATUS "")
 MESSAGE(STATUS "------------------------------------------------------------- ")
@@ -33,6 +35,8 @@ MESSAGE(STATUS "工程名 " ${PROJECT_NAME})
 MESSAGE(STATUS "工程cmake文件 " ${V_SelfPath})
 MESSAGE(STATUS "工程PROJECT_BINARY_DIR " ${PROJECT_BINARY_DIR})
 MESSAGE(STATUS "工程PROJECT_SOURCE_DIR " ${PROJECT_SOURCE_DIR})
+MESSAGE(STATUS "CMAKE_C_FLAGS " ${CMAKE_C_FLAGS})
+MESSAGE(STATUS "CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS})
 MESSAGE(STATUS "OUT_NAME " ${OUT_NAME})
 MESSAGE(STATUS "源码列表 ")
 FOREACH(src ${SRC_LIST})

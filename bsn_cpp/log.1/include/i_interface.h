@@ -13,7 +13,7 @@ D_BsnNamespace1(log)
 class I_Interface : public I_LibInterface,  public std::enable_shared_from_this<I_Interface>
 {
 public:
-	typedef std::shared_ptr<I_Interface> T_SPInterface;
+	typedef std::shared_ptr<I_Interface> T_SharePtr;
 	typedef D_N1(lib_loader)::I_Lib::T_SharePtr T_SharePtrLib;
 	
 public:

@@ -2,7 +2,7 @@
 #include "./../include/i_session.h"
 #include <bsn_cpp/include/buffer.hpp>
 #include <bsn_cpp/include/ring_buffer.hpp>
-#include <asio.hpp>
+#include <boost/asio.hpp>
 #include <atomic>
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
@@ -10,14 +10,12 @@ D_BsnNamespace1(net)
 class C_Session : public I_Session
 {
 public:
-	typedef std::shared_ptr<C_Session> T_SharePtrCSession;
+	typedef std::shared_ptr<C_Session> T_SPC_Session;
 
 public:
-	virtual E_State State() override;
-	virtual bool Send(uint8_t* pData, uint32_t uLen) override;
-	virtual bool Recv(T_RecvBuffers& buffers) override;
+	virtual E_State State() const override;
+	virtual bool Send(uint8_t const* pData, uint32_t uLen) override;
 	virtual void Close() override;
-
 
 public:
 	bool PostSend();

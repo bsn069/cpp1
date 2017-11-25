@@ -21,7 +21,6 @@ D_FunImp void ReleaseILog(I_Log* iLog)
 	Delete(pImp);
 }
 
-
 D_FunImp D_DllExport I_Log::T_SPI_Log Create(D_N1(load_lib)::I_Lib::T_SPI_Lib iLib)
 {
 	auto p = C_Log::T_SPC_Log(CreateCLog(), ReleaseILog);

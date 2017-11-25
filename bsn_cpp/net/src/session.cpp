@@ -2,7 +2,7 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 #include <boost/bind.hpp>
-using namespace asio;
+using namespace boost::asio;
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 C_Session::C_Session(asio::io_service& IOService)
@@ -29,11 +29,11 @@ void C_Session::Close()
 	m_eState.store(E_State_Close, std::memory_order_relaxed);
 }
 
-bool C_Session::Send(uint8_t* pData, uint32_t uLen) 
+bool C_Session::Send(uint8_t const* pData, uint32_t uLen) 
 {
 	auto uRealLen = m_SendRingBuffer.Write(pData, uLen);
 	PostSend();
-	return uRealLen == uLen;
+	return true;
 }
 
 

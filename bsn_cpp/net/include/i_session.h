@@ -1,30 +1,28 @@
 #pragma once
+
 #include <bsn_cpp/include/name_space.h>
 #include <bsn_cpp/include/define.h>
-#include <bsn_cpp/include/buffer.hpp>
+
 #include <memory>
-#include <list>
  
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 class I_Session : public std::enable_shared_from_this<I_Session>
 {
 public:
-	typedef std::shared_ptr<I_Session> T_SPISession;
+	typedef std::shared_ptr<I_Session> T_SPI_Session;
  	enum E_State : uint8_t
 	{
 		E_State_Close	= 0,
-		E_State_WaitingOrConnecting,
+		E_State_Connecting,
 		E_State_Established,
 	};
-	typedef std::list<I_Buffer*> T_RecvBuffers;
 	
 public:
-	virtual E_State State() = 0;
+	virtual E_State GetState() const = 0;
 	virtual void Close() = 0;
 
-	virtual bool Send(uint8_t* pData, uint32_t uLen) = 0;
-	virtual bool Recv(T_RecvBuffers& buffers) = 0;
+	virtual bool Send(uint8_t const* pData, uint32_t uLen) = 0;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

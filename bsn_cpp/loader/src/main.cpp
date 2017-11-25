@@ -1,20 +1,25 @@
+#include "alloc_raw.h"
+
 #include <bsn_cpp/load_lib/include/port.h>
 #include <bsn_cpp/log/include/port.h>
+
+#include <bsn_cpp/include/new.hpp>
+#include <bsn_cpp/include/delete.hpp>
 
 #include <iostream>
 #include <thread>
 
-typedef D_FunDef D_N1(log)::I_Log::T_SPI_Log (*T_LogFuncCreate)(D_N1(load_lib)::I_Lib::T_SPI_Lib);
-
 int main(int argc, char* argv[])
 {
+	auto pAllocRaw = New<D_N1(loader)::C_AllocRaw>();
+
 	auto iLoadLib = D_N1(load_lib)::Create();
 	std::cout << "iLoadLib=" << iLoadLib << std::endl;
 
 	D_N1(log)::I_Log::T_SPI_Log iLog = nullptr;
 	{
 		auto pLib = iLoadLib->Load("log", "bsn_dlib_log", "_d", "");
-		auto pFuncCreate = (T_LogFuncCreate)(pLib->Func("Create"));
+		auto pFuncCreate = (D_N1(log)::Create)(pLib->Func("Create"));
 		iLog = pFuncCreate(pLib);
 		std::cout << "iLog=" << iLog << std::endl;
 	}
@@ -24,4 +29,6 @@ int main(int argc, char* argv[])
 	iLog = nullptr;
 	iLoadLib.WaitQuit();
 	iLoadLib = nullptr;
+
+	Delete(pAllocRaw);
 }

@@ -45,6 +45,7 @@
 			, __FUNCTION__ \
 			, __LINE__ \
 		); \
+		ptr = nullptr; \
 	} \
 	else \
 	{ \
@@ -88,6 +89,7 @@
 		iAlloc->FreeTrack( \
 			ptr \
 		); \
+		ptr = nullptr; \
 	} \
 	else \
 	{ \

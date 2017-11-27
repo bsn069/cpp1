@@ -1,6 +1,6 @@
 #include "alloc_raw.h"
 
-D_BsnNamespace1(loader)
+D_BsnNamespace1(common)
 //////////////////////////////////////////////////////////////////////
 
 void* C_AllocRaw::Malloc(size_t size)

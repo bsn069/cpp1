@@ -1,5 +1,6 @@
 #include "alloc_raw.h"
 
+#include <bsn_cpp/common/include/port.h>
 #include <bsn_cpp/load_lib/include/port.h>
 #include <bsn_cpp/log/include/port.h>
 
@@ -11,6 +12,9 @@
 
 int main(int argc, char* argv[])
 {
+	auto iCommon = D_N1(common)::Create();
+	std::cout << "iCommon=" << iCommon << std::endl;
+
 	auto pAllocRaw = New<D_N1(loader)::C_AllocRaw>();
 
 	auto iLoadLib = D_N1(load_lib)::Create();

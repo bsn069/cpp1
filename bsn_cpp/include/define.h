@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <assert.h>
 
 namespace N_Bsn
 {

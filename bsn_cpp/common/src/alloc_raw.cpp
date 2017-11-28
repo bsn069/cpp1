@@ -3,6 +3,21 @@
 D_BsnNamespace1(common)
 //////////////////////////////////////////////////////////////////////
 
+C_AllocRaw::C_AllocRaw() 
+	: m_eType(I_Alloc::Raw)
+{
+
+}
+
+C_AllocRaw::~C_AllocRaw() {
+
+}
+
+I_Alloc::E_Type 
+C_AllocRaw::GetType() const {
+	return m_eType;
+}
+
 void* C_AllocRaw::Malloc(size_t size)
 {
 	return malloc(size);
@@ -25,7 +40,7 @@ void* C_AllocRaw::MallocTrack(
 	, uint32_t line
 )
 {
-	return Alloc(size);
+	return Malloc(size);
 }
 
 void* C_AllocRaw::ReallocTrack(

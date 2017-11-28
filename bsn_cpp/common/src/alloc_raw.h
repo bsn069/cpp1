@@ -7,31 +7,47 @@
 D_BsnNamespace1(common)
 //////////////////////////////////////////////////////////////////////
 
-class C_AllocRaw : I_Alloc {
+class C_AllocRaw : public I_Alloc {
 public:
-    virtual void* Malloc(size_t size) override;
+    virtual E_Type 
+		GetType() const override;
 
-    virtual void* Realloc(void* ptr, size_t size) override;
+    virtual void* 
+		Malloc(size_t) override;
 
-    virtual void  Free(void* ptr) override;
+    virtual void* 
+		Realloc(void*, size_t) override;
 
-    virtual void* MallocTrack(
-		size_t size
-		, char const * const file
-		, char const * const func
-		, uint32_t line
-	) override;
+    virtual void  
+		Free(void*) override;
 
-    virtual void* ReallocTrack(
-		void* ptr
-		, size_t size
-		, char const * const file
-		, char const * const func
-		, uint32_t line
-	) override;
+    virtual void* 
+		MallocTrack(
+			size_t 
+			, char const * const
+			, char const * const
+			, uint32_t
+		) override;
 
-    virtual void  FreeTrack(void* ptr) override;
-}
+    virtual void* 
+		ReallocTrack(
+			void*
+			, size_t
+			, char const * const
+			, char const * const
+			, uint32_t
+		) override;
+
+    virtual void  
+		FreeTrack(void*) override;
+
+public:
+	C_AllocRaw();
+	virtual ~C_AllocRaw();
+
+public:
+	E_Type m_eType;
+};
 
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

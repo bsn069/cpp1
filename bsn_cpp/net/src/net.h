@@ -27,6 +27,9 @@ public:
 	
 	virtual void Init() override;
 	virtual void UnInit() override;
+	virtual void SetCommon(D_N1(common)::T_SPI_Common spI_Common) override {
+		m_spI_Common = spI_Common;
+	};
 
 public: 
 	void PostAccept();
@@ -45,6 +48,7 @@ public:
 	virtual ~C_Net();
 
 private:
+	D_N1(common)::T_SPI_Common m_spI_Common;
 	asio::io_service		m_IO;
 	asio::io_service::work	m_Work;
 	asio::ip::tcp::acceptor	m_Acceptor;
@@ -53,7 +57,6 @@ private:
 	T_AcceptSession m_Accepts;
 	std::vector<std::thread*> m_workThread;
 	T_SharePtrLog m_pLog;
-
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

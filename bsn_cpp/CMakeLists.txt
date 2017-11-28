@@ -96,9 +96,9 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
 # ADD_SUBDIRECTORY( global )
 # ADD_SUBDIRECTORY( net )
 ADD_SUBDIRECTORY( common )
-ADD_SUBDIRECTORY( load_lib )
-ADD_SUBDIRECTORY( log )
-ADD_SUBDIRECTORY( loader )
+# ADD_SUBDIRECTORY( load_lib )
+# ADD_SUBDIRECTORY( log )
+# ADD_SUBDIRECTORY( loader )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

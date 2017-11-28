@@ -1,100 +1,56 @@
-#pragma once
-
 #ifdef D_MemTrack
 
 
 	#define D_Malloc(iAlloc, stSize) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->Malloc( \
+		iAlloc->MallocTrack( \
 			stSize \
 			, __FILE__ \
 			, __FUNCTION__ \
 			, __LINE__ \
-		); \
-	} \
-	else \
-	{ \
-		return nullptr; \
-	}
+		)
 
 
 	#define D_Realloc(iAlloc, ptr, stSize) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->Realloc( \
+		iAlloc->ReallocTrack( \
 			ptr \
 			, stSize \
 			, __FILE__ \
 			, __FUNCTION__ \
 			, __LINE__ \
-		); \
-	} \
-	else \
-	{ \
-		return nullptr; \
-	}
+		) 
 
 
 	#define D_Free(iAlloc, ptr) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->Free( \
+		iAlloc->FreeTrack( \
 			ptr \
 			, __FILE__ \
 			, __FUNCTION__ \
 			, __LINE__ \
 		); \
-		ptr = nullptr; \
-	} \
-	else \
-	{ \
-		return; \
-	}
+		ptr = nullptr 
 
 
 #else
 
 
 	#define D_Malloc(iAlloc, stSize) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->MallocTrack( \
+		iAlloc->Malloc( \
 			stSize \
-		); \
-	} \
-	else \
-	{ \
-		return nullptr; \
-	}
+		) 
 
 
 	#define D_Realloc(iAlloc, ptr, stSize) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->ReallocTrack( \
+		iAlloc->Realloc( \
 			ptr \
 			, stSize \
-		); \
-	} \
-	else \
-	{ \
-		return nullptr; \
-	}
+		) 
 
 
 	#define D_Free(iAlloc, ptr) \
-	if (iAlloc != nullptr) \
-	{ \
-		iAlloc->FreeTrack( \
+		iAlloc->Free( \
 			ptr \
 		); \
-		ptr = nullptr; \
-	} \
-	else \
-	{ \
-		return; \
-	}
+		ptr = nullptr
 
 
 #endif

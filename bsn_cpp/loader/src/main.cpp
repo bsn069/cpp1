@@ -15,7 +15,9 @@ int main(int argc, char* argv[])
 	auto iCommon = D_N1(common)::Create();
 	std::cout << "iCommon=" << iCommon << std::endl;
 
-	auto pAllocRaw = New<D_N1(loader)::C_AllocRaw>();
+	auto pAllocRaw = iCommon->NewAlloc(D_N1(common)::I_Alloc::Raw);
+	std::cout << "pAllocRaw=" << pAllocRaw << std::endl;
+	iCommon->SetGlobalAlloc(pAllocRaw);
 
 	auto iLoadLib = D_N1(load_lib)::Create();
 	std::cout << "iLoadLib=" << iLoadLib << std::endl;
@@ -34,5 +36,8 @@ int main(int argc, char* argv[])
 	iLoadLib.WaitQuit();
 	iLoadLib = nullptr;
 
-	Delete(pAllocRaw);
+	pAllocRaw = nullptr;
+	iCommon = nullptr;
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 }

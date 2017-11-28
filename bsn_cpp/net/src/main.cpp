@@ -23,7 +23,7 @@ D_FunImp void ReleaseINet(I_Net* iNet)
 	Delete(pImp);
 }
 
-D_FunImp D_DllExport I_Net::T_SPI_Net Create(D_N1(load_lib)::I_Lib::T_SPI_Lib iLib)
+D_FunImp D_DllExport I_Net::T_SPI_Net Create(D_N1(load_lib)::I_Lib::T_SPI_Lib iLib, D_N1(common)::T_SPI_Common iCommon)
 {
 	auto p = C_Net::T_SPC_Net(CreateCNet(), ReleaseINet);
 	p->SetLib(iLib);

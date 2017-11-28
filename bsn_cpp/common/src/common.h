@@ -4,21 +4,30 @@
 
 #include <bsn_cpp/include/name_space.h>
 #include <bsn_cpp/include/define.h>
-#include <bsn_cpp/include/i_alloc.h>
 
 #include <stdint.h>
 
 D_BsnNamespace1(common)
 //////////////////////////////////////////////////////////////////////
-class C_Common : I_Common 
+class C_Common : public I_Common 
 {
 public:
-	virtual D_N1(common)::I_Buffer::T_SPI_Buffer NewBuff(D_N1(common)::I_Alloc::T_SPI_Alloc spI_Alloc, uint32_t u32InitSize) override;
-	virtual D_N1(common)::I_Alloc::T_SPI_Alloc NewAlloc(D_N1(common)::I_Alloc::E_Type type) override;
-	
+	virtual I_Buffer::T_SPI_Buffer 
+		NewBuffer(I_Alloc::T_SPI_Alloc, uint32_t) override;
+	virtual I_Alloc::T_SPI_Alloc 
+		NewAlloc(I_Alloc::E_Type) override;
+
+	virtual void 
+		SetGlobalAlloc(I_Alloc::T_SPI_Alloc) override;
+	virtual I_Alloc::T_SPI_Alloc 
+		GetGlobalAlloc(I_Alloc::E_Type) override;
+
 public:
 	C_Common();
-	~C_Common();
+	virtual ~C_Common();
+
+public:
+	I_Alloc::T_SPI_Alloc m_alloc[I_Alloc::Count];
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

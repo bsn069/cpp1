@@ -42,6 +42,7 @@
 		"list": "cpp",
 		"stdexcept": "cpp",
 		"vector": "cpp",
-		"xhash": "cpp"
+		"xhash": "cpp",
+		"xxatomic": "cpp"
 	}
 }

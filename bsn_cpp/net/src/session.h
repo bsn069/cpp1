@@ -13,39 +13,38 @@ public:
 	typedef std::shared_ptr<C_Session> T_SPC_Session;
 
 public:
-	virtual E_State State() const override;
-	virtual bool Send(uint8_t const* pData, uint32_t uLen) override;
-	virtual void Close() override;
+	virtual E_State 
+		State() const override {
+			return m_eState;
+		};
+	virtual bool 
+		Send(uint8_t const* pData, uint32_t u32Len) override;
+	virtual void 
+		Close() override;
 
 public:
-	bool PostSend();
-	void OnSend(asio::error_code const& error, size_t const bytes);
-
-	bool PostRead();
-	void OnRead(asio::error_code const& error, size_t const bytes);
-
-	void OnAccept();
-	void OnConnect();
-
-
-	asio::ip::tcp::socket& Socket() {
-		return m_Socket;
-	}
+	asio::ip::tcp::socket 
+		GetSocket() {
+			return m_Socket;
+		};
+	
+	void 
+		OnSend(asio::error_code const&, size_t const);
+	bool 
+		IsWork(); 
+	bool 
+		CommitSendData();
 
 public:
-	C_Session(asio::io_service& IOService);
+	C_Session(asio::io_service&, D_N1(common)::T_SPI_Common);
 	virtual ~C_Session();
 
-private:
-	asio::ip::tcp::socket m_Socket;
-
-	C_RingBuffer<4096>	m_ReadRingBuffer;
-	std::atomic<bool> 	m_bReading;
-
-	C_RingBuffer<4096>	m_SendRingBuffer;
-	std::atomic<bool> 	m_bSending;
-
-	std::atomic<uint8_t> m_eState;
+protected:
+	asio::ip::tcp::socket 	m_Socket;
+	E_State 				m_eState;
+	D_N1(common)::I_Buffer::T_SPI_Buffer 	m_spI_BufferWaitSend;
+	D_N1(common)::I_Buffer::T_SPI_Buffer 	m_spI_BufferSending;
+	bool m_bCanCommitSendData;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -15,7 +15,6 @@ class I_Net
 {
 public:
 	typedef std::shared_ptr<I_Net> T_SPI_Net;
-	typedef std::function<void(T_SPI_Session)> T_FuncOnAccept;
 	typedef std::function<void(T_SPI_Session)> T_FuncOnConnect;
 	
 public:
@@ -25,9 +24,14 @@ public:
 		SetCommon(D_N1(common)::T_SPI_Common) = 0;
 
 	virtual bool 
-		Listen(std::string const& strIp, uint16_t u16Port, T_FuncOnAccept func) = 0;
-	virtual bool 
-		Connect(std::string const& strIp, uint16_t u16Port, T_FuncOnConnect func) = 0;
+		Connect(
+			std::string const& strIp
+			, uint16_t u16Port
+			, T_FuncOnConnect 
+		) = 0;
+
+protected:
+	virtual ~I_Net() = default;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

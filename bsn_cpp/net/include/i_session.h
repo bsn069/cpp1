@@ -19,10 +19,16 @@ public:
 	};
 	
 public:
-	virtual E_State GetState() const = 0;
-	virtual void Close() = 0;
+	virtual E_State 
+		GetState() const = 0;
+	virtual void 
+		Close() = 0;
 
-	virtual bool Send(uint8_t const* pData, uint32_t uLen) = 0;
+	virtual bool 
+		Send(uint8_t const* pData, uint32_t u32Len) = 0;
+
+public:
+	virtual ~I_Session() = default;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

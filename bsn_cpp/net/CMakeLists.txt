@@ -21,7 +21,7 @@ SET( OUT_NAME ${LIB_PREFIX_D}${PROJECT_NAME}${OUTPUT_SUFFIX} )
 ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 #SET_TARGET_PROPERTIES(${OUT_NAME} PROPERTIES DEBUG_POSTFIX "${OUTPUT_SUFFIX}")
 # 依赖项目
-#target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
+target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
 

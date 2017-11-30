@@ -6,23 +6,23 @@
 D_BsnNamespace1(load_lib)
 //////////////////////////////////////////////////////////////////////
 
-D_FunImp I_LoadLib* CreateILoadLib()
+D_FunImp I_LoadLib* CreateCLoadLib()
 {
 	C_LoadLib* imp = New<C_LoadLib>();
 	return imp;
 }
 
 
-D_FunImp void ReleaseILoadLib(I_LoadLib* iLoadLib)
+D_FunImp void ReleaseCLoadLib(I_LoadLib* iLoadLib)
 {
 	C_LoadLib* pImp = static_cast<C_LoadLib*>(iLoadLib);
 	Delete(pImp);
 }
 
 
-D_FunImp D_DllExport I_LoadLib::T_SPI_LoadLib Create()
+D_FunImp D_DllExport I_LoadLib::T_SPI_LoadLib NewLoadLib()
 {
-	auto p = I_LoadLib::T_SPI_LoadLib(CreateILoadLib(), ReleaseILoadLib);
+	auto p = I_LoadLib::T_SPI_LoadLib(CreateCLoadLib(), ReleaseCLoadLib);
 	return p;
 }
 

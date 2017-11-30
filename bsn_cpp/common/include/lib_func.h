@@ -7,5 +7,5 @@
 
 D_BsnNamespace1(common)
 D_FunDef D_DllCImport I_Common::T_SPI_Common	
-Create();
+NewCommon();
 D_BsnNamespace1End

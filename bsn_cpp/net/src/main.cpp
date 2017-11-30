@@ -1,4 +1,4 @@
-#include "./net.h"
+#include "net.h"
 
 
 #include <bsn_cpp/load_lib/include/i_lib.h>
@@ -11,8 +11,8 @@ D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 
 D_FunImp C_Net* 
-CreateCNet() {
-	C_Net* imp = New<C_Net>();
+CreateCNet(asio::io_service& io) {
+	C_Net* imp = New<C_Net>(io);
 	return imp;
 }
 
@@ -24,13 +24,12 @@ ReleaseCNet(I_Net* iNet) {
 }
 
 D_FunImp D_DllExport I_Net::T_SPI_Net 
-Create(
+NewNet(
 	D_N1(load_lib)::I_Lib::T_SPI_Lib	spI_Lib
-	, D_N1(common)::T_SPI_Common 		spI_Common
+	, asio::io_service& io
 ) {
-	auto p = CreateCNet();
+	auto p = CreateCNet(io);
 	p->SetLib(spI_Lib);
-	p->SetCommon(spI_Common);	
 	return I_Net::T_SPI_Net(p, ReleaseCNet);
 }
 

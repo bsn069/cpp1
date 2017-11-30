@@ -17,23 +17,28 @@ public:
 
 
 public:
-	virtual void* 		Func(const char* strFuncName) override;
-	virtual const char* Name() override;
-	virtual void 		SetLog(T_SPI_Log iLog) override
-	{
-		m_iLog = iLog;
-	};
+	virtual void* 		
+		Func(const char* strFuncName) override;
+	virtual const char* 
+		Name() override;
+	virtual void 		
+		SetLog(T_SPI_Log iLog) override {
+			m_iLog = iLog;
+		};
 
 
 public:
-	bool   	Open(
-		const char* strLibPath
-		, const char* strDebugSuffix
-		, const char* strReleaseSuffix
-		, uint retryCount
-	);
-	void	Close();
-	void 	SetName(char const * const pstrName);
+	bool   	
+		Open(
+			const char* strLibPath
+			, const char* strDebugSuffix
+			, const char* strReleaseSuffix
+			, uint retryCount
+		);
+	void	
+		Close();
+	void 	
+		SetName(char const * const pstrName);
 
 
 public:

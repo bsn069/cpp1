@@ -1,5 +1,7 @@
 #pragma once
 
+#include "d_log.h"
+
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>
@@ -37,6 +39,9 @@ public:
 		, char const * strLog
 		, ...
 	) = 0;
+
+protected:
+	virtual ~I_Log() = default;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

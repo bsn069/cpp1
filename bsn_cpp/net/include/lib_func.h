@@ -7,5 +7,5 @@
 
 D_BsnNamespace1(net)
 D_FunDef D_DllCImport I_Net::T_SPI_Net	
-Create(D_N1(load_lib)::I_Lib::T_SPI_Lib, D_N1(common)::T_SPI_Common);
+NewNet(D_N1(load_lib)::I_Lib::T_SPI_Lib, asio::io_service&);
 D_BsnNamespace1End

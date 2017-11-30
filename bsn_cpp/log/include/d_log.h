@@ -1,8 +1,3 @@
-#pragma once
-
-#include "i_log.h"
-
-
 #define D_LogInfoF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
 { \
@@ -106,8 +101,4 @@ if (iLog != nullptr) \
 		, __FUNCTION__ \
 	); \
 } 
-
-D_BsnNamespace1(log)
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-D_BsnNamespace1End
+ 

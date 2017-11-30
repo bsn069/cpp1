@@ -25,7 +25,13 @@ if [ ! -d "protobuf" ]; then
 	git clone https://github.com/bsn069/protobuf.git
 fi
  
- 
+if [ ! -d "boost_1_65_1" ]; then
+	if [ ! -f "boost_1_65_1.tar.bz2" ]; then
+		curl https://ncu.dl.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.bz2 -o boost_1_65_1.tar.bz2
+	fi
+	tar -jxvf boost_1_65_1.tar.bz2
+	# mv boost_1_65_1 boost_1_65_1
+fi
 # if [ ! -d "protobuf-cpp" ]; then
 # 	if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then
 # 		curl https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz -o protobuf-cpp-3.4.1.tar.gz

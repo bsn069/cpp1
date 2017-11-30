@@ -19,6 +19,18 @@ C_Net::~C_Net() {
 	m_spI_Log		= nullptr;
 }
  
+D_FunImp I_Buffer* 
+CreateCSession(asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common) {
+	C_Session* imp = New<C_Session>(io, spI_Common);
+	return imp;
+}
+
+D_FunImp void 
+ReleaseCSession(I_Session* iSession) {
+	C_Session* pImp = static_cast<C_Session*>(iSession);
+	Delete(pImp);
+}
+
 bool
 C_Net::Connect(
 	std::string const& strIp
@@ -28,14 +40,17 @@ C_Net::Connect(
 	auto Address = asio::ip::address_v4::from_string(strIp);
 	asio::ip::tcp::endpoint EndPoint(Address, htons(u16Port));
 
-	auto p = new C_Session(m_IO);
-	auto spC_Session = C_Session::T_SPC_Session(p);
+	auto spI_Session = C_Session::T_SPC_Session(
+		CreateCSession(m_IO, m_spI_Common)
+		, ReleaseCSession
+	);
+ 	auto spC_Session = std::dynamic_pointer_cast<C_Session>(spI_Session);
 	spC_Session->GetSocket().async_connect(
 		EndPoint
 		, boost::bind(
 			&C_Net::OnConnect
 			, this
-			, spC_Session
+			, spI_Session
 			, asio::placeholders::error
 			, func
 		)
@@ -46,17 +61,18 @@ C_Net::Connect(
 
 void 
 C_Net::OnConnect(
-	C_Session::T_SPC_Session 	spC_Session
+	C_Session::T_SPI_Session 	spI_Session
 	, const error_code& 		errorCode
 	, T_FuncOnConnect 			func
 ) {
 	if (errorCode) {
-		spC_Session->Close();
+		spI_Session->Close();
 		func(nullptr);
 		return;
 	}
 
 	{
+		auto spC_Session = std::dynamic_pointer_cast<C_Session>(spI_Session);
 		asio::error_code ec;
 		{
 			asio::ip::tcp::no_delay Option(false);
@@ -72,8 +88,11 @@ C_Net::OnConnect(
 		}
 	}
  
- 	auto spI_Session = std::dynamic_pointer_cast<I_Session>(spC_Session);
 	func(spI_Session);
+}
+
+void	
+C_Net::WaitQuit() {
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

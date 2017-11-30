@@ -27,7 +27,7 @@ public:
 	virtual bool 
 		Send(uint8_t const* pData, uint32_t u32Len) = 0;
 
-public:
+protected:
 	virtual ~I_Session() = default;
 };
 //////////////////////////////////////////////////////////////////////

@@ -12,9 +12,10 @@ FILE(GLOB_RECURSE SRC_LIST_H "*.h")
 set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
 # 头文件搜索路径 
-INCLUDE_DIRECTORIES( ${ROOT_DIR}/third_part/asio-1.10.6/include )
+# INCLUDE_DIRECTORIES( ${ROOT_DIR}/third_part/asio-1.10.6/include )
 # 添加定义
 add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
+add_definitions( -DBOOST_SYSTEM_NO_DEPRECATED)
 
 # 生成lib
 SET( OUT_NAME ${LIB_PREFIX_D}${PROJECT_NAME}${OUTPUT_SUFFIX} )
@@ -25,7 +26,7 @@ target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic")
 
 MESSAGE(STATUS "")

@@ -2,10 +2,9 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 #include <boost/bind.hpp>
-using namespace boost::asio;
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
-C_Session::C_Session(asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common)
+C_Session::C_Session(boost::asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common)
 	: m_Socket(io)
 	, m_eState(E_State_Connecting)
 	, m_bCanCommitSendData(true)
@@ -15,12 +14,10 @@ C_Session::C_Session(asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common
 	m_spI_BufferSending		= spI_Common->NewBuffer(pAlloc, 4096);
 }
 
-
 C_Session::~C_Session() {
 	m_spI_BufferWaitSend 	= nullptr;
 	m_spI_BufferSending 	= nullptr;
 }
-
 
 void 
 C_Session::Close() 
@@ -58,14 +55,14 @@ C_Session::CommitSendData() {
 	auto pData = m_spI_BufferSending->GetReadPtr();
 	auto pSelfI = shared_from_this();
 	auto pSelf = std::dynamic_pointer_cast<C_Session>(pSelfI);
-	asio::async_write(
+	boost::asio::async_write(
 		GetSocket()
-		, asio::buffer(pData, waitSendByte)
+		, boost::asio::buffer(pData, waitSendByte)
 		, boost::bind(
 			&C_Session::OnSend
 			, pSelf
-			, asio::placeholders::error
-			, asio::placeholders::bytes_transferred
+			, boost::asio::placeholders::error
+			, boost::asio::placeholders::bytes_transferred
 		)
 	);
 	m_bCanCommitSendData = false;
@@ -83,7 +80,7 @@ C_Session::Send(uint8_t const* pData, uint32_t u32Len) {
 }
 
 void 
-C_Session::OnSend(asio::error_code const& error, size_t const bytes) {
+C_Session::OnSend(boost::asio::error_code const& error, size_t const bytes) {
 	D_Assert(!m_bCanCommitSendData);
 	m_bCanCommitSendData = true;
 

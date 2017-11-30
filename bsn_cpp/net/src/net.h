@@ -4,9 +4,8 @@
 #include <bsn_cpp/log/include/i_Log.h>
 #include <bsn_cpp/include/i_init.h>
 
-#include <bsn_cpp/include/buffer.hpp>
-#include <bsn_cpp/include/ring_buffer.hpp>
-#include <asio.hpp>
+#include <boost/asio.hpp>
+
 #include <atomic>
 #include <thread>
 D_BsnNamespace1(net)
@@ -21,11 +20,11 @@ public:
 	virtual void 
 		SetLog(D_N1(log)::I_Log::T_SPI_Log) override {
 			m_pLog = pLog;
-		};
+		} override;
 	virtual void 
-		SetCommon(D_N1(common)::T_SPI_Common) override {
+		SetCommon(D_N1(common)::I_Common::T_SPI_Common) override {
 			m_spI_Common = spI_Common;
-		};
+		} override;
 
 	virtual bool 
 		Connect(
@@ -33,6 +32,8 @@ public:
 			, uint16_t u16Port
 			, T_FuncOnConnect 
 		) override;
+	void	
+		WaitQuit() override;
 
 public:
 	C_Net(asio::io_service&);
@@ -41,7 +42,7 @@ public:
 private:
 	asio::io_service&		m_IO;
 
-	D_N1(common)::T_SPI_Common 	m_spI_Common;
+	D_N1(common)::I_Common::T_SPI_Common 	m_spI_Common;
 	D_N1(log)::I_Log::T_SPI_Log m_spI_Log;
 };
 //////////////////////////////////////////////////////////////////////

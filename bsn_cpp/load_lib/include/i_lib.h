@@ -15,9 +15,15 @@ public:
 	typedef D_N1(log)::I_Log::T_SPI_Log 	T_SPI_Log;
 
 public:
-	virtual void* 		Func(const char* strFuncName) = 0;
-	virtual const char* Name() = 0;
-	virtual void 		SetLog(T_SPI_Log iLog) = 0;
+	virtual void* 		
+		Func(const char* strFuncName) = 0;
+	virtual const char* 
+		Name() = 0;
+	virtual void 		
+		SetLog(T_SPI_Log iLog) = 0;
+
+protected:
+	virtual ~I_Lib() = default;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -30,7 +30,7 @@ if [ ! -d "boost_1_65_1" ]; then
 		curl https://ncu.dl.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.bz2 -o boost_1_65_1.tar.bz2
 	fi
 	tar -jxvf boost_1_65_1.tar.bz2
-	# mv boost_1_65_1 boost_1_65_1
+	mv boost_1_65_1 boost
 fi
 # if [ ! -d "protobuf-cpp" ]; then
 # 	if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then

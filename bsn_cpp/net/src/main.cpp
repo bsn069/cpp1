@@ -11,7 +11,7 @@ D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
 
 D_FunImp C_Net* 
-CreateCNet(asio::io_service& io) {
+CreateCNet(boost::asio::io_service& io) {
 	C_Net* imp = New<C_Net>(io);
 	return imp;
 }
@@ -26,7 +26,7 @@ ReleaseCNet(I_Net* iNet) {
 D_FunImp D_DllExport I_Net::T_SPI_Net 
 NewNet(
 	D_N1(load_lib)::I_Lib::T_SPI_Lib	spI_Lib
-	, asio::io_service& io
+	, boost::asio::io_service& io
 ) {
 	auto p = CreateCNet(io);
 	p->SetLib(spI_Lib);

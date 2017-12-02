@@ -5,7 +5,7 @@
 
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
-C_Net::C_Net(asio::io_service& io)
+C_Net::C_Net(boost::asio::io_service& io)
 	: m_IO(io)
 	, m_spI_Common(nullptr)
 	, m_spI_Log(nullptr)
@@ -19,8 +19,8 @@ C_Net::~C_Net() {
 	m_spI_Log		= nullptr;
 }
  
-D_FunImp I_Buffer* 
-CreateCSession(asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common) {
+D_FunImp C_Session* 
+CreateCSession(boost::asio::io_service& io, D_N1(common)::I_Common::T_SPI_Common spI_Common) {
 	C_Session* imp = New<C_Session>(io, spI_Common);
 	return imp;
 }
@@ -37,10 +37,10 @@ C_Net::Connect(
 	, uint16_t u16Port
 	, T_FuncOnConnect func
 ) {	
-	auto Address = asio::ip::address_v4::from_string(strIp);
-	asio::ip::tcp::endpoint EndPoint(Address, htons(u16Port));
+	auto Address = boost::asio::ip::address_v4::from_string(strIp);
+	boost::asio::ip::tcp::endpoint EndPoint(Address, htons(u16Port));
 
-	auto spI_Session = C_Session::T_SPC_Session(
+	auto spI_Session = I_Session::T_SPI_Session(
 		CreateCSession(m_IO, m_spI_Common)
 		, ReleaseCSession
 	);
@@ -51,7 +51,7 @@ C_Net::Connect(
 			&C_Net::OnConnect
 			, this
 			, spI_Session
-			, asio::placeholders::error
+			, boost::asio::placeholders::error
 			, func
 		)
 	);
@@ -61,8 +61,8 @@ C_Net::Connect(
 
 void 
 C_Net::OnConnect(
-	C_Session::T_SPI_Session 	spI_Session
-	, const error_code& 		errorCode
+	I_Session::T_SPI_Session 	spI_Session
+	, const boost::system::error_code& 		errorCode
 	, T_FuncOnConnect 			func
 ) {
 	if (errorCode) {
@@ -73,17 +73,17 @@ C_Net::OnConnect(
 
 	{
 		auto spC_Session = std::dynamic_pointer_cast<C_Session>(spI_Session);
-		asio::error_code ec;
+		boost::system::error_code ec;
 		{
-			asio::ip::tcp::no_delay Option(false);
+			boost::asio::ip::tcp::no_delay Option(false);
 			spC_Session->GetSocket().set_option(Option, ec);
 		}
 		{
-			asio::socket_base::keep_alive Option(true);
+			boost::asio::socket_base::keep_alive Option(true);
 			spC_Session->GetSocket().set_option(Option, ec);
 		}
 		{
-			asio::socket_base::linger Option(true, 10);
+			boost::asio::socket_base::linger Option(true, 10);
 			spC_Session->GetSocket().set_option(Option, ec);
 		}
 	}

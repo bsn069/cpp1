@@ -1,5 +1,8 @@
 #pragma once
 #include "./../include/i_session.h"
+
+#include <bsn_cpp/common/include/i_common.h>
+
 #include <boost/asio.hpp>
 #include <atomic>
 D_BsnNamespace1(net)
@@ -11,8 +14,8 @@ public:
 	typedef std::shared_ptr<C_Session> T_SPC_Session;
 
 public:
-	virtual E_State 
-		State() const override {
+	virtual I_Session::E_State 
+		GetState() const override {
 			return m_eState;
 		};
 	virtual bool 
@@ -27,19 +30,19 @@ public:
 		};
 	
 	void 
-		OnSend(boost::asio::error_code const&, size_t const);
+		OnSend(boost::system::error_code const&, size_t const);
 	bool 
 		IsWork(); 
 	bool 
 		CommitSendData();
 
 public:
-	C_Session(boost::asio::io_service&, D_N1(common)::T_SPI_Common);
+	C_Session(boost::asio::io_service&, D_N1(common)::I_Common::T_SPI_Common);
 	virtual ~C_Session();
 
 protected:
 	boost::asio::ip::tcp::socket 	m_Socket;
-	E_State 				m_eState;
+	I_Session::E_State 				m_eState;
 	D_N1(common)::I_Buffer::T_SPI_Buffer 	m_spI_BufferWaitSend;
 	D_N1(common)::I_Buffer::T_SPI_Buffer 	m_spI_BufferSending;
 	bool m_bCanCommitSendData;

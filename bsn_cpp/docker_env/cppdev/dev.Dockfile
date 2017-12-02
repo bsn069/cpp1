@@ -6,15 +6,39 @@ MAINTAINER BSN 513026809@qq.com
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
 	echo 'Asia/Shanghai' >/etc/timezone
 
-RUN yum -y install gcc gcc-c++ make tar wget bzip2 cmake gdb ; yum clean all
-ADD ./CentOS-Debuginfo.repo /etc/yum.repos.d/
-RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64 
-RUN debuginfo-install -y libgcc-4.8.5-11.el7.x86_64 
-RUN debuginfo-install -y  libstdc++-4.8.5-11.el7.x86_64
+RUN yum -y install gcc gcc-c++ make tar wget bzip2 cmake gdb git automake libtool zlib-devel python-devel; yum clean all
  
-WORKDIR /media/sf_F_DRIVE/github/cpp1/bsn_cpp
-RUN yum -y install git; yum clean all
-RUN yum -y install automake libtool zlib-devel; yum clean all
+RUN cd /root && \ 
+	curl https://ncu.dl.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.bz2 -o boost_1_65_1.tar.bz2 && \
+	tar -jxvf boost_1_65_1.tar.bz2 && \
+	cd boost_1_65_1 && \
+	./bootstrap.sh && \
+	./b2 install && \
+	cd /root && \
+	rm -f boost_1_65_1.tar.bz2 && \
+	rm -fr boost_1_65_1
+
+#ADD ./CentOS-Debuginfo.repo /etc/yum.repos.d/
+#RUN debuginfo-install -y libstdc++-4.8.5-11.el7.x86_64
+#RUN debuginfo-install -y glibc-2.17-157.el7_3.2.x86_64 
+#RUN debuginfo-install -y libgcc-4.8.5-11.el7.x86_64 
+RUN yum -y install unzip; yum clean all
+
+RUN cd /root && \ 
+	curl https://www.sqlite.org/2017/sqlite-autoconf-3210000.tar.gz -o sqlite-autoconf-3210000.tar.gz && \
+	tar -zxvf sqlite-autoconf-3210000.tar.gz && \
+	cd sqlite-autoconf-3210000 && \
+	autoreconf -f -i && \
+	./configure && \
+	make && \
+	make install && \
+	cd /root && \
+	rm -f sqlite-autoconf-3210000.tar.gz && \
+	rm -fr sqlite-autoconf-3210000
+
 ENV BSN_DIR  /media/sf_F_DRIVE/github/cpp1/bsn_cpp
+WORKDIR /media/sf_F_DRIVE/github/cpp1/bsn_cpp
+
+
 
  

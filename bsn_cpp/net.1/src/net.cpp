@@ -13,13 +13,11 @@ C_Net::C_Net()
 }
 
 
-C_Net::~C_Net()
-{
+C_Net::~C_Net() {
 	
 }
  
-void C_Net::Run()
-{
+void C_Net::Run() {
 	m_IO.run();
 }
 

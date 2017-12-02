@@ -18,32 +18,43 @@ public:
 
 public:
 	virtual void 
-		SetLog(D_N1(log)::I_Log::T_SPI_Log) override {
-			m_pLog = pLog;
-		} override;
+		SetLog(D_N1(log)::I_Log::T_SPI_Log spI_Log) override {
+			m_spI_Log = spI_Log;
+		};
 	virtual void 
-		SetCommon(D_N1(common)::I_Common::T_SPI_Common) override {
+		SetCommon(D_N1(common)::I_Common::T_SPI_Common spI_Common) override {
 			m_spI_Common = spI_Common;
-		} override;
-
+		};
+	virtual void 
+		SetLib(D_N1(load_lib)::I_Lib::T_SPI_Lib spI_Lib) override {
+			m_spI_Lib = spI_Lib;
+		};
 	virtual bool 
 		Connect(
 			std::string const& strIp
 			, uint16_t u16Port
 			, T_FuncOnConnect 
 		) override;
-	void	
+	virtual void	
 		WaitQuit() override;
 
 public:
-	C_Net(asio::io_service&);
+	void 
+		OnConnect(
+			I_Session::T_SPI_Session 	
+			, const boost::system::error_code& 		
+			, T_FuncOnConnect 			
+		);
+public:
+	C_Net(boost::asio::io_service&);
 	virtual ~C_Net();
 
 private:
-	asio::io_service&		m_IO;
+	boost::asio::io_service&		m_IO;
 
 	D_N1(common)::I_Common::T_SPI_Common 	m_spI_Common;
 	D_N1(log)::I_Log::T_SPI_Log m_spI_Log;
+	D_N1(load_lib)::I_Lib::T_SPI_Lib m_spI_Lib;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

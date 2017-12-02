@@ -4,7 +4,7 @@
 #include <boost/bind.hpp>
 D_BsnNamespace1(net)
 //////////////////////////////////////////////////////////////////////
-C_Session::C_Session(boost::asio::io_service& io, D_N1(common)::T_SPI_Common spI_Common)
+C_Session::C_Session(boost::asio::io_service& io, D_N1(common)::I_Common::T_SPI_Common spI_Common)
 	: m_Socket(io)
 	, m_eState(E_State_Connecting)
 	, m_bCanCommitSendData(true)
@@ -80,7 +80,7 @@ C_Session::Send(uint8_t const* pData, uint32_t u32Len) {
 }
 
 void 
-C_Session::OnSend(boost::asio::error_code const& error, size_t const bytes) {
+C_Session::OnSend(boost::system::error_code const& error, size_t const bytes) {
 	D_Assert(!m_bCanCommitSendData);
 	m_bCanCommitSendData = true;
 

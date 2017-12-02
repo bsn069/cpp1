@@ -1,9 +1,9 @@
 #!/bin/sh
 # run in docker
 
-if [ ! -d "boost" ]; then
-	cp /usr/include/boost boost -R
-fi
+#if [ ! -d "boost" ]; then
+#	cp /usr/include/boost boost -R
+#fi
  
 if [ ! -d "LuaJIT" ]; then
 	if [ ! -f "LuaJIT-2.0.5.tar.gz" ]; then
@@ -30,7 +30,13 @@ if [ ! -d "boost_1_65_1" ]; then
 		curl https://ncu.dl.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.bz2 -o boost_1_65_1.tar.bz2
 	fi
 	tar -jxvf boost_1_65_1.tar.bz2
-	mv boost_1_65_1 boost
+fi
+
+if [ ! -d "sqlite-autoconf-3210000" ]; then
+	if [ ! -f "sqlite-autoconf-3210000.tar.gz" ]; then
+		curl https://www.sqlite.org/2017/sqlite-autoconf-3210000.tar.gz -o sqlite-autoconf-3210000.tar.gz
+	fi
+	tar -zxvf sqlite-autoconf-3210000.tar.gz
 fi
 # if [ ! -d "protobuf-cpp" ]; then
 # 	if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then

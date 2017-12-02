@@ -19,7 +19,7 @@ public:
 	};
 	
 public:
-	virtual E_State 
+	virtual I_Session::E_State 
 		GetState() const = 0;
 	virtual void 
 		Close() = 0;

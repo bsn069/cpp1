@@ -8,6 +8,7 @@
 #include <bsn_cpp/include/delete.hpp>
 
 #include <boost/asio.hpp>
+#include <boost>
 
 #include <iostream>
 #include <thread>
@@ -48,6 +49,8 @@ int main(int argc, char* argv[])
 	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(5));
+
+
 	ioService.run();
 	
 	iNet.WaitQuit();

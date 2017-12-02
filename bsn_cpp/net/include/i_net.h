@@ -3,6 +3,7 @@
 
 #include <bsn_cpp/log/include/i_log.h>
 #include <bsn_cpp/common/include/i_common.h>
+#include <bsn_cpp/load_lib/include/i_load_lib.h>
 
 #include <bsn_cpp/include/name_space.h>
 #include <bsn_cpp/include/define.h>
@@ -22,6 +23,8 @@ public:
 		SetLog(D_N1(log)::I_Log::T_SPI_Log) = 0;
 	virtual void 
 		SetCommon(D_N1(common)::I_Common::T_SPI_Common) = 0;
+	virtual void 
+		SetLib(D_N1(load_lib)::I_Lib::T_SPI_Lib) = 0;
 
 	virtual bool 
 		Connect(

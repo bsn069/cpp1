@@ -9,13 +9,17 @@
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 
-class I_Query {
+class I_Stmt {
 public:
- 	typedef std::shared_ptr<I_Query> T_SPI_Query;
+ 	typedef std::shared_ptr<I_Stmt> T_SPI_Stmt;
 
+
+public:
+	virtual bool 
+		BindText(int iIndex, char* pData);
 
 protected:
-	virtual ~I_Query() = default;
+	virtual ~I_Stmt() = default;
 };
 
 //////////////////////////////////////////////////////////////////////

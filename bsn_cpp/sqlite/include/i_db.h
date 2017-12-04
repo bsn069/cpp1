@@ -1,5 +1,7 @@
 #pragma once
 
+#include "i_query.h"
+
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>
@@ -9,54 +11,23 @@
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 
-class I_DB 
-{
+class I_DB {
 public:
-	virtual bool Open(std::string& strDBFile) = 0;
-	virtual bool Close() = 0;
+	typedef std::shared_ptr<I_DB> T_SPI_DB;
 
-	virtual bool ExecDML(std::string& strSql) = 0;
+public:
+	virtual bool 
+		Open(std::string const& strDBFile) = 0;
+	virtual bool 
+		Close() = 0;
+
+	virtual string const& 
+		GetName() const = 0;
+	// virtual bool ExecDML(std::string const& strSql) = 0;
+	// virtual I_Query Query(std::string const& strSql);
 
 protected:
-	virtual ~I_Log() = default;
-
-// Operations
-public:
-
-    virtual ~CppSQLite3DB();
-
-    void open(LPCTSTR szFile);
-
-    void close();
-    bool tableExists(LPCTSTR szTable);
-    int execDML(LPCTSTR szSQL);
-
-    CppSQLite3Query execQuery(LPCTSTR szSQL);
-
-    int execScalar(LPCTSTR szSQL);
-	CString execScalarStr(LPCTSTR szSQL);
-
-    CppSQLite3Statement compileStatement(LPCTSTR szSQL);
-
-    sqlite_int64 lastRowId();
-
-    void interrupt() { sqlite3_interrupt(mpDB); }
-
-    void setBusyTimeout(int nMillisecs);
-
-    static const char* SQLiteVersion() { return SQLITE_VERSION; }
-
-private:
-
-    CppSQLite3DB(const CppSQLite3DB& db);
-    CppSQLite3DB& operator=(const CppSQLite3DB& db);
-
-    sqlite3_stmt* compile(LPCTSTR szSQL);
-
-    void checkDB();
-public:
-    sqlite3* mpDB;
-    int mnBusyTimeoutMs;
+	virtual ~I_DB() = default;
 };
 
 //////////////////////////////////////////////////////////////////////

@@ -43,6 +43,10 @@
 		"stdexcept": "cpp",
 		"vector": "cpp",
 		"xhash": "cpp",
-		"xxatomic": "cpp"
+		"xxatomic": "cpp",
+		"random": "cpp",
+		"iostream": "cpp",
+		"ostream": "cpp",
+		"xlocale": "cpp"
 	}
 }

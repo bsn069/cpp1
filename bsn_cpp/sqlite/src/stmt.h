@@ -16,6 +16,12 @@ public:
 	typedef std::shared_ptr<C_Stmt> T_SPC_Stmt;	
 
 public:
+	virtual bool
+		Compile(char const* strSql) override;
+
+	virtual bool
+		Reset() override;
+
 	virtual bool 
 		BindNull(int iIndex);	
 	virtual bool 
@@ -26,24 +32,27 @@ public:
 		BindDouble(int iIndex, double value) override;
 	virtual bool 
 		BindInt(int iIndex, int value) override;
-
- 	virtual bool 
-		Reset() override;
-	virtual bool
-		Compile() override;
+		
+	virtual I_Query* 
+		Query() override;
 
 public:
-	C_Stmt();
+	C_Stmt(C_DB::T_SPC_DB spC_DB);
 	virtual ~C_Stmt();
 
 public:
-	string 			m_strSql;
 	C_DB::T_SPC_DB 	m_spC_DB;
+	C_Query 		m_Query;
 	sqlite3_stmt* 	m_pStmt;
+	string 			m_strSql;
 
-private:
+public:
 	bool 
 		Finalize();
+	bool
+		Compile();
+	bool
+		Step();
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

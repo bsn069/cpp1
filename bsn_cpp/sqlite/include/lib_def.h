@@ -1,15 +1,15 @@
 #pragma once
 
-#ifdef D_BSN_IS_DLL_log
-	#define D_BSN_log_DLL D_DllExport
+#ifdef D_BSN_IS_DLL_sqlite
+	#define D_BSN_sqlite_DLL D_DllExport
 #else
-	#define D_BSN_log_DLL D_DllImport
+	#define D_BSN_sqlite_DLL D_DllImport
 
 	#if (defined WIN32)
 		#ifdef _DEBUG
-			#pragma comment(lib, "bsn_dlib_log_d.lib")
+			#pragma comment(lib, "bsn_dlib_sqlite_d.lib")
 		#else
-			#pragma comment(lib, "bsn_dlib_log.lib")
+			#pragma comment(lib, "bsn_dlib_sqlite.lib")
 		#endif
 	#endif
 #endif

@@ -98,6 +98,7 @@ ADD_SUBDIRECTORY( common )
 ADD_SUBDIRECTORY( net )
 ADD_SUBDIRECTORY( load_lib )
 ADD_SUBDIRECTORY( log )
+ADD_SUBDIRECTORY( sqlite )
 #ADD_SUBDIRECTORY( loader )
 #-------------------------------------------------------------------------------
 

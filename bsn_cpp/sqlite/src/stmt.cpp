@@ -5,12 +5,19 @@
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 
-C_Stmt::C_Stmt() {
+C_Stmt::C_Stmt(C_DB::T_SPC_DB spC_DB)
+	: m_spC_DB(spC_DB)
+	, m_Query(*this) 
+	, m_pStmt(nullptr)
+{
 
 }
 
 C_Stmt::~C_Stmt() {
-	Finalize();
+	if (m_pStmt != nullptr) {
+		Finalize();
+		m_pStmt = nullptr;
+	}
 }
 
 bool 
@@ -172,7 +179,53 @@ C_Stmt::BindInt(int iIndex, int value) {
 	return true;
 }
 
-bool 
+
+bool
+C_Stmt::Step() {
+	int nRet = -1;
+	uint32_t u32RetryCount = 0;
+	do { 
+		if (nRet == SQLITE_SCHEMA) {
+			Finalize();
+			Compile();
+		}
+
+		nRet = sqlite3_step(m_pStmt);
+		if (nRet != SQLITE_OK) {
+			D_LogErrorF(
+				m_spI_Log
+				, "db=%s sql=%s nRet=%d err=%s"
+				, m_spC_DB->m_strName.c_str()
+				, m_strSql.c_str()
+				, nRet
+				, sqlite3_errmsg(m_spC_DB->m_pDB)
+			);
+			return false;
+		}
+
+		if (nRet == SQLITE_DONE) {
+			m_Query.m_bEof = true;
+			return true;
+		} else if (nRet == SQLITE_ROW) {
+			m_Query.m_bEof = false;			
+			return true;
+		} else {
+			D_LogErrorF(
+				m_spI_Log
+				, "db=%s sql=%s nRet=%d err=%s"
+				, m_spC_DB->m_strName.c_str()
+				, m_strSql.c_str()
+				, nRet
+				, sqlite3_errmsg(m_spC_DB->m_pDB)
+			);
+		}
+		++u32RetryCount;
+	} while(nRet == SQLITE_SCHEMA && u32RetryCount < 10); 
+
+	return false;
+}
+
+bool
 C_Stmt::Reset() {
 	auto nRet = sqlite3_reset(m_pStmt);
 	if (nRet != SQLITE_OK) {
@@ -186,8 +239,15 @@ C_Stmt::Reset() {
 		);
 		return false;
 	}
-
+	m_Query.OnReset();
 	return true;
+}
+
+bool
+C_Stmt::Compile(char const* strSql) {
+	Finalize(m_pStmt);
+	m_strSql = strSql;
+	return Compile();
 }
 
 bool 
@@ -204,38 +264,14 @@ C_Stmt::Finalize() {
 		);
 		return false;
 	}
-
+	m_pStmt = nullptr;
+	m_Query.OnFinalize();
 	return true;
 }
 
-int
-C_Stmt::Exec() {
-	auto nRet = sqlite3_step(m_pStmt);
-	if (nRet != SQLITE_OK) {
-		D_LogErrorF(
-			m_spI_Log
-			, "db=%s sql=%s nRet=%d err=%s"
-			, m_spC_DB->m_strName.c_str()
-			, m_strSql.c_str()
-			, nRet
-			, sqlite3_errmsg(m_spC_DB->m_pDB)
-		);
-		return -1;
-	}
-
-	if (nRet == SQLITE_DONE) {
-		int nRowsChanged = sqlite3_changes(m_pStmt);
-		Reset();
-		return nRowsChanged;
-	}
-
-
-}
-
-
 bool
 C_Stmt::Compile() {	
-	auto nRet = sqlite3_prepare(
+	auto nRet = sqlite3_prepare_v3(
 		m_spC_DB->m_pDB
 		, m_strSql.c_str()
 		, -1
@@ -253,8 +289,13 @@ C_Stmt::Compile() {
 		);
 		return false;
 	}
- 
+	m_Query.OnCompile();
 	return true;
+}
+
+I_Query* 
+C_Stmt::Query() {
+	return &m_Query;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

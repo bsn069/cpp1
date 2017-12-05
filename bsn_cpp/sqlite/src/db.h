@@ -21,8 +21,16 @@ public:
 	virtual bool 
 		Close() override;
 
+	virtual I_Stmt::T_SPI_Stmt
+		NewStmt() override;
+	virtual bool 
+		Exec(char const* szSql) override;
+
 	virtual string const& 
 		GetName() const override;
+
+	virtual sqlite_int64 
+		LastInsertRowId() override;
 
 public:
 	void 

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "./../include/i_stmt.h"
- 
-#include <bsn_cpp/load_lib/include/i_lib.h>
-#include <bsn_cpp/log/include/i_log.h>
+#include "db.h"
+#include "query.h"
 
 #include <sqlite3.h>
 
@@ -37,14 +36,14 @@ public:
 		Query() override;
 
 public:
-	C_Stmt(C_DB::T_SPC_DB spC_DB);
+	C_Stmt(C_DB::T_SPC_DB& spC_DB);
 	virtual ~C_Stmt();
 
 public:
 	C_DB::T_SPC_DB 	m_spC_DB;
 	C_Query 		m_Query;
 	sqlite3_stmt* 	m_pStmt;
-	string 			m_strSql;
+	std::string 			m_strSql;
 
 public:
 	bool 

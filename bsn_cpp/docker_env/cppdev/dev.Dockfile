@@ -39,6 +39,9 @@ RUN cd /root && \
 ENV BSN_DIR  /media/sf_F_DRIVE/github/cpp1/bsn_cpp
 WORKDIR /media/sf_F_DRIVE/github/cpp1/bsn_cpp
 
+ADD ./bsn_lib_path.conf /etc/ld.so.conf.d/
+RUN ldconfig
+
 
 
  

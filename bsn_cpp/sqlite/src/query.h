@@ -1,17 +1,13 @@
 #pragma once
 
-#include "stmt.h"
 #include "./../include/i_query.h"
-
-#include <bsn_cpp/load_lib/include/i_lib.h>
-#include <bsn_cpp/log/include/i_log.h>
-
-#include <sqlite3.h>
-
+ 
 #include <stdarg.h>
 
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
+class C_Stmt;
+
 class C_Query : public I_Query {
 public:
 	virtual int 
@@ -54,18 +50,15 @@ public:
 	virtual bool 
 		FetchRow() override;
 	virtual int 
-		EffectRow() override;
-	virtual int 
 		ColumnCount() override;
 
 public:
-	C_Query(C_Stmt& stmt);
+	C_Query(C_Stmt* pC_Stmt);
 	virtual ~C_Query();
 
 public:
-	C_Stmt& m_Stmt;
+	C_Stmt* m_pC_Stmt;
 	bool 	m_bEof;
-	int		m_nEffectRow;
 
 public:
 	void

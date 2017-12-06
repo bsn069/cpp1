@@ -57,11 +57,13 @@ C_LoadLib::Load(
 		return nullptr;
 	}
 
-	auto pOldLib = this->Get(strLibName);
-	if (pOldLib && pOldLib.use_count() > 1)
-	{
-		D_LogWarn(m_iLog, "pOldLib using, wait del");
-		m_WaitDelLibs.push_back(pOldLib);
+	if (m_Libs.find(strLibName) != m_Libs.end()) {
+		auto pOldLib = this->Get(strLibName);
+		if (pOldLib && pOldLib.use_count() > 1)
+		{
+			D_LogWarn(m_iLog, "pOldLib using, wait del");
+			m_WaitDelLibs.push_back(pOldLib);
+		}
 	}
 
 	m_Libs[strLibName] = pLibC;
@@ -80,9 +82,8 @@ C_LoadLib::Get(const char* strLibName) {
 	);
 
 	auto itor = m_Libs.find(strLibName);
-	if (itor == m_Libs.end())
-	{
-		D_LogWarn(m_iLog, "not found");
+	if (itor == m_Libs.end()) {
+		D_LogWarnF(m_iLog, "not found %s", strLibName);
 		return nullptr;
 	}
 	return itor->second;

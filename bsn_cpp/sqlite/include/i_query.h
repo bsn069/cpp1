@@ -54,8 +54,6 @@ public:
 	virtual bool 
 		FetchRow() = 0;
 	virtual int 
-		EffectRow() = 0;
-	virtual int 
 		ColumnCount() = 0;
 
 protected:

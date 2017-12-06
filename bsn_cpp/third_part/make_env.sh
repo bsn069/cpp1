@@ -38,6 +38,12 @@ if [ ! -d "sqlite-autoconf-3210000" ]; then
 	fi
 	tar -zxvf sqlite-autoconf-3210000.tar.gz
 fi
+
+if [ ! -d "SQLiteCpp" ]; then
+	git clone https://github.com/bsn069/SQLiteCpp.git
+fi
+
+
 # if [ ! -d "protobuf-cpp" ]; then
 # 	if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then
 # 		curl https://github.com/google/protobuf/releases/download/v3.4.1/protobuf-cpp-3.4.1.tar.gz -o protobuf-cpp-3.4.1.tar.gz

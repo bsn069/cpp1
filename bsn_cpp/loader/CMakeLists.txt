@@ -27,6 +27,9 @@ target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}load_lib${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
+target_link_libraries(${OUT_NAME} boost_system)
+target_link_libraries(${OUT_NAME} boost_filesystem)
+target_link_libraries(${OUT_NAME} sqlite3)
 
 MESSAGE(STATUS "")
 MESSAGE(STATUS "------------------------------------------------------------- ")

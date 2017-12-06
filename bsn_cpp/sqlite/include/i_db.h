@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <memory>
 #include <iostream>
+#include <string>
 
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
@@ -27,11 +28,13 @@ public:
 	virtual bool 
 		Exec(char const* szSql) = 0;
 
-	virtual string const& 
+	virtual std::string const& 
 		GetName() const = 0;
-	virtual sqlite_int64 
+	virtual uint64_t 
 		LastInsertRowId() = 0;
-
+	virtual int 
+		EffectRow() = 0;
+		
 protected:
 	virtual ~I_DB() = default;
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "i_query.h"
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>

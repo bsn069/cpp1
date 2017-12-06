@@ -3,13 +3,14 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
-#include <boost/bind>
+#include <boost/bind.hpp>
 
 #include <iostream>
 #include <thread>
 
 C_Global::C_Global()
-	: m_u32FrameMS(1000) {
+	: m_u32FrameMS(1000)
+	, m_updateTimer(m_ioService, boost::posix_time::millisec(m_u32FrameMS)) {
 
 }
 
@@ -30,7 +31,8 @@ void C_Global::Init() {
 
 	{
 		auto pLib = m_spI_LoadLib->Load("log", "bsn_dlib_log", "_d", "");
-		auto pFuncNewLog = (D_N1(log)::NewLog)(pLib->Func("NewLog"));
+		auto pFunc = pLib->Func("NewLog");
+		auto pFuncNewLog = (D_N1(log)::T_NewLog)pFunc;
 		m_spI_Log = pFuncNewLog(pLib);
 		std::cout << "m_spI_Log=" << m_spI_Log << std::endl;
 
@@ -38,9 +40,17 @@ void C_Global::Init() {
 	}
 
 	{
+		auto pLib = m_spI_LoadLib->Load("sqlite", "bsn_dlib_sqlite", "_d", "");
+		auto pFunc = pLib->Func("NewDB");
+		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
+		m_spI_DB = pFuncNewDB(pLib, m_spI_Log);
+		std::cout << "m_spI_DB=" << m_spI_DB << std::endl;
+	}
+
+	{
 		auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
-		auto pFuncNewNet = (D_N1(net)::NewNet)(pLib->Func("NewNet"));
-		m_spI_Net = pFuncNewNet(pLib, ioService);
+		auto pFuncNewNet = (D_N1(net)::T_NewNet)(pLib->Func("NewNet"));
+		m_spI_Net = pFuncNewNet(pLib, m_ioService);
 		std::cout << "m_spI_Net=" << m_spI_Net << std::endl;
 
 		m_spI_Net->SetLog(m_spI_Log);
@@ -49,11 +59,13 @@ void C_Global::Init() {
 }
 
 void C_Global::UnInit() {
-	m_spI_Net.WaitQuit();
+	m_spI_Net->WaitQuit();
 	m_spI_Net = nullptr;
 
+	m_spI_DB = nullptr;
+
 	m_spI_Log = nullptr;
-	m_spI_LoadLib.WaitQuit();
+	m_spI_LoadLib->WaitQuit();
 	m_spI_LoadLib = nullptr;
 
 	m_spI_AllocRaw = nullptr;
@@ -63,10 +75,6 @@ void C_Global::UnInit() {
 void C_Global::Run() {
 	Init();
 
-	m_updateTimer = boost::asio::deadline_timer(
-		m_ioService
-		, boost::posix_time::millisec(1)
-	);
 	WaitUpdate();
 	m_ioService.run();
 	
@@ -74,7 +82,7 @@ void C_Global::Run() {
 }
 
 void C_Global::Update(const boost::system::error_code& ec) {	
-	m_updateTimer->expires_at(m_updateTimer->expires_at() + boost::posix_time::millisec(m_u32FrameMS));
+	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
 	WaitUpdate();
 }
 

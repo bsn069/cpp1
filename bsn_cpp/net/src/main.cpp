@@ -23,7 +23,7 @@ ReleaseCNet(I_Net* iNet) {
 	Delete(pImp);
 }
 
-D_FunImp D_DllExport I_Net::T_SPI_Net 
+D_FunImp D_DllCExport I_Net::T_SPI_Net 
 NewNet(
 	D_N1(load_lib)::I_Lib::T_SPI_Lib	spI_Lib
 	, boost::asio::io_service& io

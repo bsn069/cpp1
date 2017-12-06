@@ -20,7 +20,7 @@ ReleaseCCommon(I_Common* iCommon) {
 }
 
 
-D_FunImp D_DllExport I_Common::T_SPI_Common 
+D_FunImp D_DllCExport I_Common::T_SPI_Common 
 NewCommon() {
 	auto p = I_Common::T_SPI_Common(CreateCCommon(), ReleaseCCommon);
 	return p;

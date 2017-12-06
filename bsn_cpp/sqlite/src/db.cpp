@@ -1,4 +1,5 @@
 #include "db.h"
+#include "stmt.h"
 
 #include <bsn_cpp/log/include/d_log.h>
 
@@ -23,36 +24,36 @@ C_DB::~C_DB() {
 
 
 bool 
-C_DB::Open(std::string const& strDBFile) {
+C_DB::Open(std::string const& strDBFileName) {
 	D_LogInfoF(
 		m_spI_Log
-		, "strDBFile=%s"
-		, strDBFile.c_str()
+		, "strDBFileName=%s"
+		, strDBFileName.c_str()
 	);
 
 	if (m_pDB) {
 		D_LogErrorF(
 			m_spI_Log
-			, "m_strName=%s "
-			, m_strName.c_str()
+			, "m_strDBFileName=%s "
+			, m_strDBFileName.c_str()
 		);
 		return false;
 	}
 
-	auto nRet = sqlite3_open(strDBFile, &m_pDB);
+	auto nRet = sqlite3_open(strDBFileName.c_str(), &m_pDB);
 	if (nRet != SQLITE_OK) {
 		D_LogErrorF(
 			m_spI_Log
-			, "strDBFile=%s nRet=%d err=%s"
-			, strDBFile.c_str()
+			, "strDBFileName=%s nRet=%d err=%s"
+			, strDBFileName.c_str()
 			, nRet
-			, sqlite3_errmsg(mpDB)
+			, sqlite3_errmsg(m_pDB)
 		);
 		return false;
 	}
 
-	m_strName = strDBFile;
-	setBusyTimeout(60000);
+	m_strDBFileName = strDBFileName;
+    sqlite3_busy_timeout(m_pDB, 6000);
 	return true;
 }
 
@@ -71,26 +72,26 @@ C_DB::Close() {
 		D_LogErrorF(
 			m_spI_Log
 			, "strDBFile=%s nRet=%d err=%s"
-			, strDBFile.c_str()
+			, m_strDBFileName.c_str()
 			, nRet
-			, sqlite3_errmsg(mpDB)
+			, sqlite3_errmsg(m_pDB)
 		);
 		return false;
 	}
 	m_pDB = nullptr;
-	m_strName.clear();
+	m_strDBFileName.clear();
  
 	return true;
 }
 
-string const& 
+std::string const& 
 C_DB::GetName() const {
-	return m_strName;
+	return m_strDBFileName;
 }
 
-sqlite_int64 
+uint64_t 
 C_DB::LastInsertRowId() {
-	return sqlite3_last_insert_rowid(m_pDB);
+	return (uint64_t)sqlite3_last_insert_rowid(m_pDB);
 }
 
 C_Stmt* 
@@ -122,14 +123,19 @@ C_DB::Exec(char const* szSql) {
 	if (nRet != SQLITE_OK) {
 		D_LogErrorF(
 			m_spI_Log
-			, "strDBFile=%s nRet=%d err=%s"
-			, strDBFile.c_str()
+			, "m_strDBFileName=%s nRet=%d err=%s"
+			, m_strDBFileName.c_str()
 			, nRet
-			, sqlite3_errmsg(mpDB)
+			, sqlite3_errmsg(m_pDB)
 		);
 		return false;
 	}
 	return true;
+}
+
+int 
+C_DB::EffectRow() {
+	return sqlite3_changes(m_pDB);
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

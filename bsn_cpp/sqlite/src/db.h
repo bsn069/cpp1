@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./../include/i_db.h"
+#include "./../include/i_stmt.h"
  
 #include <bsn_cpp/load_lib/include/i_lib.h>
 #include <bsn_cpp/log/include/i_log.h>
@@ -8,8 +9,9 @@
 #include <sqlite3.h>
 
 #include <stdarg.h>
+#include <string>
 
-D_BsnNamespace1(db)
+D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 class C_DB : public I_DB {
 public:
@@ -26,12 +28,14 @@ public:
 	virtual bool 
 		Exec(char const* szSql) override;
 
-	virtual string const& 
+	virtual std::string const& 
 		GetName() const override;
 
-	virtual sqlite_int64 
+	virtual uint64_t 
 		LastInsertRowId() override;
-
+ 	virtual int 
+		EffectRow() override;
+		
 public:
 	void 
 		SetLog(D_N1(log)::I_Log::T_SPI_Log spI_Log) {
@@ -50,7 +54,7 @@ public:
 	D_N1(log)::I_Log::T_SPI_Log m_spI_Log;
 	D_N1(load_lib)::I_Lib::T_SPI_Lib 	m_spI_Lib;
 	sqlite3* 	m_pDB;
-	string 		m_strName;
+	std::string 		m_strDBFileName;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

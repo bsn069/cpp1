@@ -1,6 +1,7 @@
 #include <bsn_cpp/common/include/port.h>
 #include <bsn_cpp/load_lib/include/port.h>
 #include <bsn_cpp/log/include/port.h>
+#include <bsn_cpp/sqlite/include/port.h>
 #include <bsn_cpp/net/include/port.h>
 
 #include <boost/asio.hpp>
@@ -15,6 +16,7 @@ public:
 	D_N1(load_lib)::I_LoadLib::T_SPI_LoadLib	m_spI_LoadLib;
 	D_N1(log)::I_Log::T_SPI_Log 				m_spI_Log;
 	D_N1(net)::I_Net::T_SPI_Net 				m_spI_Net;
+	D_N1(sqlite)::I_DB::T_SPI_DB				m_spI_DB;
 
 public:
 	void Run();
@@ -27,5 +29,5 @@ private:
 	void Init();
 	void UnInit();
 	void WaitUpdate();
-	void Update();
-}
+	void Update(const boost::system::error_code& ec);
+};

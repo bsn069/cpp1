@@ -24,36 +24,47 @@ C_DB::~C_DB() {
 
 
 bool 
-C_DB::Open(std::string const& strDBFileName) {
+C_DB::Open(
+	char const* szDBFile
+	, E_OpenType eOpenType
+) {
+	auto sqliteOpenType = GetSqliteOpenType(eOpenType);
 	D_LogInfoF(
 		m_spI_Log
-		, "strDBFileName=%s"
-		, strDBFileName.c_str()
+		, "szDBFile=%s eOpenType=%d sqliteOpenType=%d"
+		, szDBFile
+		, eOpenType
+		, sqliteOpenType
 	);
 
 	if (m_pDB) {
 		D_LogErrorF(
 			m_spI_Log
-			, "m_strDBFileName=%s "
+			, "had open m_strDBFileName=%s "
 			, m_strDBFileName.c_str()
 		);
 		return false;
 	}
 
-	auto nRet = sqlite3_open(strDBFileName.c_str(), &m_pDB);
+	auto nRet = sqlite3_open_v2(
+		szDBFile
+		, &m_pDB
+		, sqliteOpenType
+		, nullptr
+	);
 	if (nRet != SQLITE_OK) {
 		D_LogErrorF(
 			m_spI_Log
-			, "strDBFileName=%s nRet=%d err=%s"
-			, strDBFileName.c_str()
+			, "szDBFile=%s nRet=%d err=%s"
+			, szDBFile
 			, nRet
 			, sqlite3_errmsg(m_pDB)
 		);
+		sqlite3_close(m_pDB); 
 		return false;
 	}
 
-	m_strDBFileName = strDBFileName;
-    sqlite3_busy_timeout(m_pDB, 6000);
+	m_strDBFileName = szDBFile;
 	return true;
 }
 
@@ -117,9 +128,15 @@ C_DB::NewStmt() {
 	return p;
 }
 
-bool 
+int 
 C_DB::Exec(char const* szSql) {
-	auto nRet = sqlite3_exec(m_pDB, szSql, nullptr, nullptr, nullptr);
+	auto nRet = sqlite3_exec(
+		m_pDB
+		, szSql
+		, nullptr
+		, nullptr
+		, nullptr
+	);
 	if (nRet != SQLITE_OK) {
 		D_LogErrorF(
 			m_spI_Log
@@ -128,14 +145,77 @@ C_DB::Exec(char const* szSql) {
 			, nRet
 			, sqlite3_errmsg(m_pDB)
 		);
-		return false;
+		return -1;
 	}
-	return true;
+	return EffectRow();
 }
 
 int 
 C_DB::EffectRow() {
 	return sqlite3_changes(m_pDB);
+}
+
+uint64_t 
+C_DB::TotalEffectRow() {
+	return sqlite3_total_changes(m_pDB);
+}	
+
+int 
+C_DB::GetErrCode() {
+	return sqlite3_errcode(m_pDB);
+}
+
+int 
+C_DB::GetExErrCode() {
+	return sqlite3_extended_errcode(m_pDB);
+}
+
+char const* 
+C_DB::GetErrMsg() {
+	return sqlite3_errmsg(m_pDB);
+}
+
+
+int
+C_DB::GetSqliteOpenType(E_OpenType eOpenType) {
+	static int sOpenType[E_OpenType_Count] = {
+		SQLITE_OPEN_READONLY,
+		SQLITE_OPEN_READWRITE,
+		SQLITE_OPEN_CREATE,
+		SQLITE_OPEN_URI,
+		SQLITE_OPEN_MEMORY,
+	};
+	return sOpenType[eOpenType];
+}
+
+char const*
+C_DB::Ver() const {
+	return SQLITE_VERSION;
+}
+
+int
+C_DB::VerNum() const {
+	return SQLITE_VERSION_NUMBER;
+}
+
+char const*
+C_DB::SourceId() const {
+	return SQLITE_SOURCE_ID;
+}
+
+char const*
+C_DB::LibVer() const {
+	return sqlite3_libversion();
+}
+
+int
+C_DB::LibVerNum() const {
+	return sqlite3_libversion_number();
+}
+
+char const*
+C_DB::LibSourceId() const {
+	return sqlite3_sourceid();
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

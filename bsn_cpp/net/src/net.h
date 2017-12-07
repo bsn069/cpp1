@@ -37,7 +37,10 @@ public:
 		) override;
 	virtual void	
 		WaitQuit() override;
-
+	virtual I_Session::T_SPI_Session
+		Test() override {
+			return nullptr;
+		};
 public:
 	void 
 		OnConnect(

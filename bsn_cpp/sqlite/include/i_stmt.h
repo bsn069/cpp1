@@ -10,10 +10,9 @@
 D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 
-class I_Stmt : public std::enable_shared_from_this<I_Stmt> {
+class I_Stmt {
 public:
  	typedef std::shared_ptr<I_Stmt> T_SPI_Stmt;
-
 
 public:
 	virtual bool
@@ -23,7 +22,7 @@ public:
 		Reset() = 0;
 
 	virtual bool 
-		BindNull(int iIndex);	
+		BindNull(int iIndex) = 0;	
 	virtual bool 
 		BindText(int iIndex, char const* value) = 0;
 	virtual bool 

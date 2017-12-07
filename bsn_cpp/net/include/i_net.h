@@ -35,6 +35,9 @@ public:
 	virtual void		
 		WaitQuit() = 0;
 
+	virtual I_Session::T_SPI_Session
+		Test() = 0;
+
 protected:
 	virtual ~I_Net() = default;
 };

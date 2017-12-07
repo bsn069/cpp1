@@ -97,8 +97,8 @@ if (iLog != nullptr) \
 		D_N1(log)::I_Log::E_Level::Error \
 		, __FILE__ \
 		, __LINE__ \
-		, strLog \
 		, __FUNCTION__ \
+		, strLog \
 	); \
 } 
  

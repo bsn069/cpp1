@@ -1,5 +1,8 @@
 #pragma once
 
+#include <bsn_cpp/include/define.h>
+
+
 #ifdef D_BSN_IS_DLL_sqlite
 	#define D_BSN_sqlite_DLL D_DllExport
 #else

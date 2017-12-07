@@ -115,6 +115,16 @@ C_Lib::Open(
 	if (m_dllHandle != nullptr) {
 		return true;
 	}
+	{
+		char* error = dlerror();
+		if (error != nullptr) {
+			D_LogErrorF(
+				m_iLog
+				, "dlopen error=%s"
+				, error
+			);
+		}
+	}
 
 	return this->Open(strLibPath, strDebugSuffix, strReleaseSuffix, retryCount+1);
 }

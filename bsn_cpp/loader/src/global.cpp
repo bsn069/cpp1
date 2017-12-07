@@ -39,13 +39,6 @@ void C_Global::Init() {
 		m_spI_LoadLib->SetLog(m_spI_Log);
 	}
 
-	{
-		auto pLib = m_spI_LoadLib->Load("sqlite", "bsn_dlib_sqlite", "_d", "");
-		auto pFunc = pLib->Func("NewDB");
-		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
-		m_spI_DB = pFuncNewDB(pLib, m_spI_Log);
-		std::cout << "m_spI_DB=" << m_spI_DB << std::endl;
-	}
 
 	{
 		auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
@@ -55,6 +48,13 @@ void C_Global::Init() {
 
 		m_spI_Net->SetLog(m_spI_Log);
 		m_spI_Net->SetCommon(m_spI_Common);
+	}
+	{
+		auto pLib = m_spI_LoadLib->Load("sqlite3", "bsn_dlib_sqlite", "_d", "");
+		auto pFunc = pLib->Func("NewDB");
+		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
+		m_spI_DB = pFuncNewDB(pLib, m_spI_Log);
+		std::cout << "m_spI_DB=" << m_spI_DB << std::endl;
 	}
 }
 

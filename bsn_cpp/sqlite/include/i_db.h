@@ -1,13 +1,11 @@
 #pragma once
 
-#include "i_query.h"
 #include "i_stmt.h"
 
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>
 #include <memory>
-#include <iostream>
 #include <string>
 
 D_BsnNamespace1(sqlite)

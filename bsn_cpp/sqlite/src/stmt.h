@@ -21,16 +21,35 @@ public:
 	virtual bool
 		Reset() override;
 
+    virtual bool 
+		Bind(int iIndex, int value) override;
+    virtual bool 
+		Bind(int iIndex, int64_t value) override;
+    virtual bool 
+		Bind(int iIndex, double value) override;
+    virtual bool 
+		Bind(int iIndex) override;
+    virtual bool 
+		Bind(int iIndex, std::string& value) override;
+    virtual bool 
+		Bind(int iIndex, char const* value) override;
+    virtual bool 
+		Bind(int iIndex, uint8_t const* value, uint32_t u32Len) override;
+
 	virtual bool 
 		BindNull(int iIndex);	
 	virtual bool 
 		BindText(int iIndex, char const* value) override;
+	virtual bool 
+		BindString(int iIndex, std::string& value) override;
 	virtual bool 
 		BindBlob(int iIndex, uint8_t const* value, uint32_t u32Len) override;
 	virtual bool 
 		BindDouble(int iIndex, double value) override;
 	virtual bool 
 		BindInt(int iIndex, int value) override;
+	virtual bool 
+		BindInt64(int iIndex, int64_t value) override;
 		
 	virtual I_Query* 
 		Query() override;

@@ -100,6 +100,7 @@ ADD_SUBDIRECTORY( load_lib )
 ADD_SUBDIRECTORY( log )
 ADD_SUBDIRECTORY( sqlite )
 ADD_SUBDIRECTORY( loader )
+ADD_SUBDIRECTORY( global )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

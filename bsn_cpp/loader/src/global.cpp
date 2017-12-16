@@ -38,8 +38,6 @@ void C_Global::Init() {
 
 		m_spI_LoadLib->SetLog(m_spI_Log);
 	}
-
-
 	{
 		auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
 		auto pFuncNewNet = (D_N1(net)::T_NewNet)(pLib->Func("NewNet"));
@@ -81,7 +79,10 @@ void C_Global::Run() {
 	UnInit();
 }
 
-void C_Global::Update(const boost::system::error_code& ec) {	
+void C_Global::Update(const boost::system::error_code& ec) {
+	std::cout << "C_Global::Update=" << ec << std::endl;
+
+
 	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
 	WaitUpdate();
 }

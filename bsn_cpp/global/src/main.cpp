@@ -1,29 +1,43 @@
+#include "db.h"
+
+#include <bsn_cpp/load_lib/include/i_lib.h>
+#include <bsn_cpp/log/include/i_log.h>
+
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
-#include "./interface.h"
-#include <bsn_cpp/lib_loader/include/port.h>
-#include <bsn_cpp/log/include/i_interface.h>
-#include <bsn_cpp/console_input/include/i_interface.h>
 
-#include <boost/program_options.hpp>
-#include <stdint.h>
-#include <locale.h>
-#include <iostream>
-#include <vector>
-#include <thread>
-#include <chrono>
-
-D_BsnNamespace1(global)
+D_BsnNamespace1(sqlite)
 //////////////////////////////////////////////////////////////////////
 
-
-D_FunImp D_DllCExport int Run(int argc, char* argv[])
-{
-	// setlocale(LC_ALL, "chs"); 
-
-	C_Interface::T_SharePtr pGlobal(New<C_Interface>(), Delete<C_Interface>);
-	pGlobal->Start(argc, argv);	
-	return 0;
+C_DB* 
+CreateCDB() {
+	C_DB* imp = New<C_DB>();
+	return imp;
 }
+
+
+void 
+ReleaseCDB(I_DB* iDB) {
+	C_DB* pImp = static_cast<C_DB*>(iDB);
+	Delete(pImp);
+}
+
+D_DllCExport I_DB::T_SPI_DB 
+NewDB(
+	D_N1(load_lib)::I_Lib::T_SPI_Lib spI_Lib
+	, D_N1(log)::I_Log::T_SPI_Log spI_Log
+) {
+	auto pSelfI = I_DB::T_SPI_DB(
+		CreateCDB()
+		, ReleaseCDB
+	);
+	auto pSelfC = std::dynamic_pointer_cast<C_DB>(pSelfI);
+	pSelfC->SetLib(spI_Lib);
+	pSelfC->SetLog(spI_Log);
+	
+	return pSelfI;
+}
+
+
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

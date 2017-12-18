@@ -4,6 +4,8 @@
  
 #include <bsn_cpp/include/name_space.h>
 
+#include <boost/asio.hpp>
+
 #include <stdarg.h>
 #include <string>
 
@@ -17,6 +19,8 @@ public:
 		NewI_Global();
 
 public:
+	virtual void Run() override;
+
 	virtual D_N1(common)::I_Common::T_SPI_Common
 		GetCommon() override;
 	virtual D_N1(common)::I_Alloc::T_SPI_Alloc
@@ -41,9 +45,16 @@ public:
 	uint32_t 									m_u32FrameMS;
 	boost::asio::io_service 					m_ioService;
 	boost::asio::deadline_timer 				m_updateTimer;
+
 public:
 	C_Global();
 	virtual ~C_Global();
+
+private:
+	void Init();
+	void UnInit();
+	void WaitUpdate();
+	void Update(const boost::system::error_code& ec);
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

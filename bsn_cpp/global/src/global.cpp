@@ -10,6 +10,8 @@
 #include <bsn_cpp/include/delete.hpp>
 #include <bsn_cpp/include/name_space.h>
 
+#include <boost/bind.hpp>
+
 D_BsnNamespace1(global)
 //////////////////////////////////////////////////////////////////////
 
@@ -17,6 +19,14 @@ C_Global::C_Global()
 	: m_u32FrameMS(1000)
 	, m_updateTimer(m_ioService, boost::posix_time::millisec(m_u32FrameMS)) 
 {
+	
+}
+
+C_Global::~C_Global() {
+ 
+}
+
+void C_Global::Init() {
 	m_spI_Common = D_N1(common)::NewCommon();
 	std::cout << "m_spI_Common=" << m_spI_Common << std::endl;
 
@@ -54,7 +64,7 @@ C_Global::C_Global()
 	}
 }
 
-C_Global::~C_Global() {
+void C_Global::UnInit() {
  	m_spI_Net->WaitQuit();
 	m_spI_Net = nullptr;
 
@@ -122,6 +132,31 @@ C_Global::NewI_Global() {
 		, ReleaseCGlobal
 	);
 	return p;
+}
+
+void C_Global::Run() {
+	Init();
+
+	WaitUpdate();
+	m_ioService.run();
+	
+	UnInit();
+}
+
+void C_Global::Update(const boost::system::error_code& ec) {
+	std::cout << "C_Global::Update=" << ec << std::endl;
+
+	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
+	WaitUpdate();
+}
+
+void C_Global::WaitUpdate() {
+	static auto s_updateFunc = boost::bind(
+		&C_Global::Update
+		, this
+		, boost::asio::placeholders::error
+	);
+	m_updateTimer.async_wait(s_updateFunc);
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

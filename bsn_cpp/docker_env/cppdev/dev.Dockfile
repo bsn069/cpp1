@@ -39,7 +39,7 @@ RUN cd /root && \
 ADD ./bsn_lib_path.conf /etc/ld.so.conf.d/
 RUN ldconfig
 
-WORKDIR /b
+WORKDIR /bsn_cpp
 
 
 

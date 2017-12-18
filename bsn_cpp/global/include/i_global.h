@@ -23,6 +23,8 @@ public:
 	typedef std::shared_ptr<I_Global> T_SPI_Global;
 
 public:
+	virtual void Run() = 0;
+
 	virtual D_N1(common)::I_Common::T_SPI_Common
 		GetCommon() = 0;
 	virtual D_N1(common)::I_Alloc::T_SPI_Alloc

@@ -1,31 +1,26 @@
 #pragma once
 
 #include <bsn_cpp/include/name_space.h>
+#include <bsn_cpp/include/define.h>
+#include <bsn_cpp/log/include/i_log.h>
 
-#include <stdint.h>
 #include <memory>
-
-namespace N_Bsn {
-	namespace N_global {
-		class I_Global;
-	}
-}
-
+ 
 D_BsnNamespace1(load_lib)
 //////////////////////////////////////////////////////////////////////
-
-
-class I_Lib : public std::enable_shared_from_this<I_Lib> {
+class I_Lib
+{
 public:
 	typedef std::shared_ptr<I_Lib> T_SPI_Lib;
-	
+	typedef D_N1(log)::I_Log::T_SPI_Log 	T_SPI_Log;
+
 public:
 	virtual void* 		
 		Func(const char* strFuncName) = 0;
 	virtual const char* 
 		Name() = 0;
-	virtual D_N1(global)::I_Global* 	
-		GetGlobal() = 0;
+	virtual void 		
+		SetLog(T_SPI_Log iLog) = 0;
 
 protected:
 	virtual ~I_Lib() = default;

@@ -26,8 +26,8 @@ ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic -ldl")
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic -ldl")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic")
 
 MESSAGE(STATUS "")
 MESSAGE(STATUS "------------------------------------------------------------- ")

@@ -5,6 +5,8 @@
 #include <bsn_cpp/log/include/lib_func.h>
 #include <bsn_cpp/sqlite/include/lib_func.h>
 #include <bsn_cpp/net/include/lib_func.h>
+#include <bsn_cpp/input/include/lib_func.h>
+#include <bsn_cpp/log/include/d_log.h>
 
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
@@ -26,6 +28,11 @@ C_Global::~C_Global() {
  
 }
 
+I_Global::T_SPI_Global
+C_Global::GetSPI_Global() {
+	return shared_from_this();
+}
+
 void C_Global::Init() {
 	m_spI_Common = D_N1(common)::NewCommon();
 	std::cout << "m_spI_Common=" << m_spI_Common << std::endl;
@@ -34,7 +41,7 @@ void C_Global::Init() {
 	std::cout << "m_spI_AllocRaw=" << m_spI_AllocRaw << std::endl;
 	m_spI_Common->SetGlobalAlloc(m_spI_AllocRaw);
 
-	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib();
+	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(shared_from_this());
 	std::cout << "m_spI_LoadLib=" << m_spI_LoadLib << std::endl;
 
 	{
@@ -42,10 +49,23 @@ void C_Global::Init() {
 		auto pFunc = pLib->Func("NewLog");
 		auto pFuncNewLog = (D_N1(log)::T_NewLog)pFunc;
 		m_spI_Log = pFuncNewLog(pLib);
-		std::cout << "m_spI_Log=" << m_spI_Log << std::endl;
-
-		m_spI_LoadLib->SetLog(m_spI_Log);
+		D_LogInfoF(m_spI_Log, "m_spI_Log=%p", m_spI_Log.get())
 	}
+	{
+		auto pLib = m_spI_LoadLib->Load("input", "bsn_dlib_input", "_d", "");
+		auto pFunc = pLib->Func("NewInput");
+		auto pFuncNewInput = (D_N1(input)::T_NewInput)pFunc;
+		m_spI_Input = pFuncNewInput(pLib);
+		D_LogInfoF(m_spI_Log, "m_spI_Input=%p", m_spI_Input.get())
+	}
+	{
+		auto pLib = m_spI_LoadLib->Load("sqlite3", "bsn_dlib_sqlite", "_d", "");
+		auto pFunc = pLib->Func("NewDB");
+		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
+		m_spI_Sqlite = pFuncNewDB(pLib, m_spI_Log);
+		D_LogInfoF(m_spI_Log, "m_spI_Sqlite=%p", m_spI_Sqlite.get())
+	}
+
 	{
 		auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
 		auto pFuncNewNet = (D_N1(net)::T_NewNet)(pLib->Func("NewNet"));
@@ -55,18 +75,13 @@ void C_Global::Init() {
 		m_spI_Net->SetLog(m_spI_Log);
 		m_spI_Net->SetCommon(m_spI_Common);
 	}
-	{
-		auto pLib = m_spI_LoadLib->Load("sqlite3", "bsn_dlib_sqlite", "_d", "");
-		auto pFunc = pLib->Func("NewDB");
-		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
-		m_spI_Sqlite = pFuncNewDB(pLib, m_spI_Log);
-		std::cout << "m_spI_Sqlite=" << m_spI_Sqlite << std::endl;
-	}
 }
 
 void C_Global::UnInit() {
  	m_spI_Net->WaitQuit();
 	m_spI_Net = nullptr;
+
+	m_spI_Input = nullptr;
 
 	m_spI_Sqlite = nullptr;
 
@@ -99,6 +114,11 @@ C_Global::GetLog() {
 	return m_spI_Log;
 }
 
+D_N1(input)::I_Input::T_SPI_Input
+C_Global::GetInput() {
+	return m_spI_Input;
+}
+
 D_N1(net)::I_Net::T_SPI_Net
 C_Global::GetNet() {
 	return m_spI_Net;
@@ -127,11 +147,11 @@ ReleaseCGlobal(I_Global* iGlobal) {
 
 I_Global::T_SPI_Global 
 C_Global::NewI_Global() {
-	auto p = I_Global::T_SPI_Global(
+	auto spI_Global = I_Global::T_SPI_Global(
 		CreateCGlobal()
 		, ReleaseCGlobal
 	);
-	return p;
+	return spI_Global;
 }
 
 void C_Global::Run() {
@@ -144,7 +164,11 @@ void C_Global::Run() {
 }
 
 void C_Global::Update(const boost::system::error_code& ec) {
-	std::cout << "C_Global::Update=" << ec << std::endl;
+	D_LogInfoF(
+		m_spI_Log
+		, "C_Global::Update ec=%s"
+		, ec.message().c_str()
+	);
 
 	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
 	WaitUpdate();

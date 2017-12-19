@@ -9,7 +9,7 @@
 D_BsnNamespace1(global)
 //////////////////////////////////////////////////////////////////////
 
-D_DllCExport I_Global::T_SPI_Global 
+D_DllCExport I_Global::T_SPI_Global
 NewGlobal() {
 	return C_Global::NewI_Global();
 }

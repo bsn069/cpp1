@@ -6,7 +6,7 @@ D_BsnNamespace1(load_lib)
 void 
 C_Lib::Close() {
 	D_LogInfoF(
-		m_iLog
+		m_spI_Log
 		, "lib_%p name=%s"
 		, this
 		, Name()
@@ -16,7 +16,6 @@ C_Lib::Close() {
 		dlclose(m_dllHandle);
 		m_dllHandle = nullptr;
 	}
-	m_iLog = nullptr;
 }
 
 bool 
@@ -27,7 +26,7 @@ C_Lib::Open(
 	, uint retryCount
 ) {
 	D_LogInfoF(
-		m_iLog
+		m_spI_Log
 		, "lib_%p name=%s strLibPath=%s,strDebugSuffix=%s,strReleaseSuffix=%s,retryCount%u)"
 		, this
 		, Name()
@@ -38,7 +37,7 @@ C_Lib::Open(
 	);
 
 	if (m_dllHandle != nullptr) {
-		D_LogError(m_iLog, "had open");
+		D_LogError(m_spI_Log, "had open");
 		return false;
 	}
 
@@ -80,12 +79,12 @@ C_Lib::Open(
 				char* error = dlerror();
 				if (error != nullptr) {
 					D_LogErrorF(
-						m_iLog
+						m_spI_Log
 						, "error=%s"
 						, error
 					);
 				}
-				D_LogError(m_iLog, "not found");
+				D_LogError(m_spI_Log, "not found");
 				return false;
 			}
 			break;
@@ -106,7 +105,7 @@ C_Lib::Open(
 		, strSuffix
 	);
 	D_LogInfoF(
-		m_iLog
+		m_spI_Log
 		, "FullName=%s"
 		, szFullName
 	);
@@ -119,7 +118,7 @@ C_Lib::Open(
 		char* error = dlerror();
 		if (error != nullptr) {
 			D_LogErrorF(
-				m_iLog
+				m_spI_Log
 				, "dlopen error=%s"
 				, error
 			);
@@ -132,7 +131,7 @@ C_Lib::Open(
 void* 
 C_Lib::Func(char const * strFuncName) {
 	D_LogInfoF(
-		m_iLog
+		m_spI_Log
 		, "lib_%p name=%s strFuncName=%s"
 		, this
 		, Name()
@@ -140,7 +139,7 @@ C_Lib::Func(char const * strFuncName) {
 	);
 
 	if (m_dllHandle == nullptr) {
-		D_LogError(m_iLog, "not found");
+		D_LogError(m_spI_Log, "not found");
 		return nullptr;
 	}
 	dlerror();  /* Clear any existing error */
@@ -149,7 +148,7 @@ C_Lib::Func(char const * strFuncName) {
 	char* error = dlerror();
 	if (error != nullptr) {
 		D_LogErrorF(
-			m_iLog
+			m_spI_Log
 			, "error=%s"
 			, error
 		);

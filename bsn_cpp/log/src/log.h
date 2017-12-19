@@ -38,8 +38,22 @@ public:
 	{
 		m_iLib = iLib;
 	};
-	void FmtPrint(I_Log::E_Level eLevel,const char * strFormat, va_list args);
-	void Print(I_Log::E_Level eLevel, const char * strInfo);
+	void FmtPrint(
+			I_Log::E_Level eLevel
+			, char const * strFile
+			, uint32_t u32Line
+			, char const * strFunc
+			,const char * strFormat
+			, va_list args
+		);
+	void Print(
+			I_Log::E_Level eLevel
+			, char const * strFile
+			, uint32_t u32Line
+			, char const * strFunc
+			, char const * strInfo
+		);
+	void UpdateTime();
 
 public:
 	C_Log();
@@ -47,6 +61,7 @@ public:
 
 private:
 	T_SPI_Lib m_iLib;
+	char m_pszTime[128];
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

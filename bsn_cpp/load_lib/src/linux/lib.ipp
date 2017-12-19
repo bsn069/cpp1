@@ -7,7 +7,7 @@ void
 C_Lib::Close() {
 	D_LogInfoF(
 		m_spI_Log
-		, "lib_%p name=%s"
+		, "close lib_%p name=%s"
 		, this
 		, Name()
 	);

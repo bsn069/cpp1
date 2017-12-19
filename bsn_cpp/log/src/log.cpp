@@ -18,7 +18,7 @@ void C_Log::Push(
 	, char const * strLog
 )
 {
-	Print(eLevel, strLog);
+	Print(eLevel, strFile, u32Line, strFunc, strLog);
 }
 
 void C_Log::PushF(
@@ -32,7 +32,7 @@ void C_Log::PushF(
 {
 	va_list args;
 	va_start(args, strLog);
-	FmtPrint(eLevel, strLog, args);	
+	FmtPrint(eLevel, strFile, u32Line, strFunc, strLog, args);	
 	va_end(args);
 }
 

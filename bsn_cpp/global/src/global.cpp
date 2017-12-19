@@ -20,8 +20,9 @@ D_BsnNamespace1(global)
 C_Global::C_Global() 
 	: m_u32FrameMS(1000)
 	, m_updateTimer(m_ioService, boost::posix_time::millisec(1)) 
+	, m_bQuit(false)
 {
-	m_bQuit = false;
+ 
 }
 
 C_Global::~C_Global() {
@@ -34,6 +35,8 @@ C_Global::GetSPI_Global() {
 }
 
 void C_Global::Init() {
+	D_LogInfo(m_spI_Log, "begin global Init");
+	
 	m_spI_Common = D_N1(common)::NewCommon();
 	std::cout << "m_spI_Common=" << m_spI_Common << std::endl;
 
@@ -75,37 +78,70 @@ void C_Global::Init() {
 		m_spI_Net->SetLog(m_spI_Log);
 		m_spI_Net->SetCommon(m_spI_Common);
 	}
+
+	D_LogInfo(m_spI_Log, "begin input Init");
+	m_spI_Input->Init();
+	D_LogInfo(m_spI_Log, "begin input Init");
+
+	D_LogInfo(m_spI_Log, "end global Init");
 }
 
 void 
 C_Global::Start() {
-	GetInput()->Start();
+	D_LogInfo(m_spI_Log, "begin global start");
+	
+	D_LogInfo(m_spI_Log, "begin input start");
+	m_spI_Input->Start();
+	D_LogInfo(m_spI_Log, "end input start");
+
+	D_LogInfo(m_spI_Log, "end global start");
 }
 
 void 
 C_Global::Quit() {
-	GetInput()->Quit();
+	D_LogInfo(m_spI_Log, "begin global quit");
+
+	D_LogInfo(m_spI_Log, "begin input quit");
+	m_spI_Input->Quit();
+	D_LogInfo(m_spI_Log, "end input quit");
+
+	D_LogInfo(m_spI_Log, "end global quit");
 }
 
 void C_Global::UnInit() {
- 	m_spI_Net->WaitQuit();
-	m_spI_Net = nullptr;
+	D_LogInfo(m_spI_Log, "begin global UnInit");
 
+	D_LogInfo(m_spI_Log, "begin input UnInit");
+	m_spI_Input->UnInit();
+	D_LogInfo(m_spI_Log, "end input UnInit");
 	m_spI_Input = nullptr;
 
-	m_spI_Sqlite = nullptr;
+	D_LogInfo(m_spI_Log, "begin net UnInit");
+ 	m_spI_Net->WaitQuit();
+	m_spI_Net = nullptr;
+	D_LogInfo(m_spI_Log, "end net UnInit");
 
+	D_LogInfo(m_spI_Log, "begin sqlite UnInit");
+	m_spI_Sqlite = nullptr;
+	D_LogInfo(m_spI_Log, "end sqlite UnInit");
+
+	D_LogInfo(m_spI_Log, "begin log UnInit");
 	m_spI_Log = nullptr;
+	D_LogInfo(m_spI_Log, "end log UnInit");
+
+	D_LogInfo(m_spI_Log, "begin load lib UnInit");
 	m_spI_LoadLib->WaitQuit();
+	D_LogInfo(m_spI_Log, "end load lib UnInit");
 	m_spI_LoadLib = nullptr;
 
 	m_spI_AllocRaw = nullptr;
 	m_spI_Common = nullptr;
+
+	D_LogInfo(m_spI_Log, "end global UnInit");
 }
 
 D_N1(common)::I_Common::T_SPI_Common
 C_Global::GetCommon() {
-
 	return m_spI_Common;
 }
 
@@ -214,6 +250,7 @@ void C_Global::WaitUpdate() {
 	);
 
 	if (m_bQuit) {
+		D_LogInfo(m_spI_Log, "in quit");
 		return;
 	}
 

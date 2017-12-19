@@ -20,60 +20,77 @@ static char const * const sc_logLevel2Color[] = {
 };
 static char const * const sc_endColor = "\033[0m";
 
-void C_Log::FmtPrint(I_Log::E_Level eLevel, const char * strFormat, va_list args)
-{
-	char buffer[4096];
-    int length = 0;
-    int freeSize = 0;
-
+void C_Log::UpdateTime() {
 	using std::chrono::system_clock;
 	auto nowTime = system_clock::now();
 	std::time_t tt = system_clock::to_time_t( nowTime );
 	struct tm* ptm = localtime(&tt);
-	
-	freeSize = (int)D_ArrayCount(buffer) - length;
-	length += strftime(
-        buffer + length
+ 
+	static int const freeSize = (int)D_ArrayCount(m_pszTime) - 1;
+	int length = strftime(
+        m_pszTime 
 		, freeSize
-		, "[%Y-%m-%d %H:%M:%S]"
+		, "%Y-%m-%d %H:%M:%S"
 		, ptm
 	);
 
-    freeSize = (int)D_ArrayCount(buffer) - length;
-    length += snprintf(
-        buffer + length
-		, freeSize
-		, "[%s]"
-		, sc_logLevel2Name[eLevel]
-    );
+    if (length > freeSize) {
+    	length = freeSize;
+    } else if (length < 0) {
+        length = 0;  
+    }
+    m_pszTime[length++] = '\0';
+}
 
-    freeSize = (int)D_ArrayCount(buffer) - length - 2;
-    int writeSize = vsnprintf(
-		buffer + length
+void C_Log::FmtPrint(
+	I_Log::E_Level eLevel
+	, char const * strFile
+	, uint32_t u32Line
+	, char const * strFunc
+	, const char * strFormat
+	, va_list args
+) {
+	char buffer[4096];
+
+    static int const freeSize = (int)D_ArrayCount(buffer) - 2;
+    int length = vsnprintf(
+		buffer
 		, freeSize
 		, strFormat
 		, args
 	);
 
-    if (writeSize > freeSize) 
-	{
-    	writeSize = freeSize;
+    if (length > freeSize) {
+    	length = freeSize;
+    } else if (length < 0) {
+        length = 0;  
     }
-    else if (writeSize < 0) 
-	{
-        writeSize = 0;  
-    }
-
-    length += writeSize;
     buffer[length++] = '\n';
     buffer[length]   = '\0';
 
-	Print(eLevel, buffer);	
+	Print(eLevel, strFile, u32Line, strFunc, buffer);	
 }
 
-void C_Log::Print(I_Log::E_Level eLevel, char const * strInfo)
-{
-	fprintf(stdout, "%s%s%s", sc_logLevel2Color[eLevel], strInfo, sc_endColor);
+void C_Log::Print(
+	I_Log::E_Level eLevel
+	, char const * strFile
+	, uint32_t u32Line
+	, char const * strFunc
+	, char const * strInfo
+) {
+	UpdateTime();
+
+	fprintf(
+		stdout
+		, "%s[%s|%s:%u(%s)]%s%s"
+		, sc_logLevel2Color[eLevel]
+		, m_pszTime
+		, strFile ? strFile : ""
+		, u32Line 
+		, strFunc ? strFunc : ""
+		, strInfo
+		, sc_endColor
+	);
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

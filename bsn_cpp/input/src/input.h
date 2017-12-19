@@ -24,9 +24,13 @@ public:
 
 public:
 	virtual void
+		Init() override;
+	virtual void
 		Start() override;
 	virtual void
 		Quit() override;
+	virtual void
+		UnInit() override;
 	virtual T_Cmds* 
 		GetCmds() override;
 

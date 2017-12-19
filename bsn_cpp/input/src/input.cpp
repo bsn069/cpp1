@@ -25,7 +25,13 @@ C_Input::~C_Input() {
 }
 
 void 
+C_Input::Init() {
+	D_LogInfo(m_spI_Log, "");
+}
+
+void 
 C_Input::Start() {
+	D_LogInfo(m_spI_Log, "");
  	if (m_pThread != nullptr) {
 		return;
 	}
@@ -34,13 +40,20 @@ C_Input::Start() {
 
 void
 C_Input::Quit() {
+	D_LogInfo(m_spI_Log, "begin quit");
 	if (m_pThread != nullptr) {
-		if (!m_bQuit) {
-			m_bQuit = true;
-		}
+		m_bQuit = true;
+		D_LogInfo(m_spI_Log, "wait input thread end");
 		m_pThread->join();
+		D_LogInfo(m_spI_Log, "input thread end");
 		Delete(m_pThread);
 	}
+	D_LogInfo(m_spI_Log, "end quit");
+}
+
+void 
+C_Input::UnInit() {
+	D_LogInfo(m_spI_Log, "");
 }
 
 I_Input::T_Cmds*
@@ -69,16 +82,19 @@ C_Input::GetSPC_Input() {
 
 void
 C_Input::InputThread() {
+	D_LogInfo(m_spI_Log, "enter input thread");
 	std::string strCmd;
 	char cInput;
 
 	while (!m_bQuit) {
+		D_LogInfo(m_spI_Log, "wait input");
 		strCmd.clear();
-		while ((cInput = getchar()) != L'\n') {
+		while ((cInput = getchar()) != '\n') {
 			strCmd += cInput;
 		}
 		m_InputCmd.Write(strCmd);
 	}
+	D_LogInfo(m_spI_Log, "leave input thread");
 }
 
 //////////////////////////////////////////////////////////////////////

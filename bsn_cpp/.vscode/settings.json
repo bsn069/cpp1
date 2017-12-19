@@ -85,6 +85,7 @@
 		"xlocnum": "cpp",
 		"xloctime": "cpp",
 		"xtree": "cpp",
-		"xcomplex": "cpp"
+		"xcomplex": "cpp",
+		"forward_list": "cpp"
 	}
 }

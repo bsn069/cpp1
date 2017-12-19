@@ -85,5 +85,5 @@ D_BsnNamespace1End
 #if (defined WIN32)
 
 #else
-	#include "./linux/lib.ipp"
+	#include "linux/lib.ipp"
 #endif

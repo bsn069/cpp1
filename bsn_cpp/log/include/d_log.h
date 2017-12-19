@@ -9,7 +9,9 @@ if (iLog != nullptr) \
 		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+}
 
 
 #define D_LogInfo(iLog, strLog) \
@@ -22,7 +24,9 @@ if (iLog != nullptr) \
 		, __FUNCTION__ \
 		, strLog \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+}
 
 #define D_LogDebugF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
@@ -35,8 +39,9 @@ if (iLog != nullptr) \
 		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
-} 
-
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+}
 
 #define D_LogDebug(iLog, strLog) \
 if (iLog != nullptr) \
@@ -48,7 +53,9 @@ if (iLog != nullptr) \
 		, __FUNCTION__ \
 		, strLog \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+}
 
 #define D_LogWarnF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
@@ -61,7 +68,9 @@ if (iLog != nullptr) \
 		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+}
 
 
 #define D_LogWarn(iLog, strLog) \
@@ -74,7 +83,9 @@ if (iLog != nullptr) \
 		, __FUNCTION__ \
 		, strLog \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+}
 
 #define D_LogErrorF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
@@ -87,7 +98,9 @@ if (iLog != nullptr) \
 		, strFormat \
 		, ##__VA_ARGS__ \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+}
 
 
 #define D_LogError(iLog, strLog) \
@@ -100,5 +113,7 @@ if (iLog != nullptr) \
 		, __FUNCTION__ \
 		, strLog \
 	); \
-} 
+} else { \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+}
  

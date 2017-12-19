@@ -7,16 +7,10 @@
 
 D_BsnNamespace1(input)
 //////////////////////////////////////////////////////////////////////
-class I_Input : public std::enable_shared_from_this<I_Input> {
-public:
-	typedef std::shared_ptr<I_Input> T_SPI_Input;
-	
+class I_Cmd {
 public:
 	// virtual void
 	// 	RegCmd(char const* pszCmd, ) = 0;
-
-protected:
-	virtual ~I_Input() = default;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

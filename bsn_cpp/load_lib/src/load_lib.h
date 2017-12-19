@@ -36,7 +36,7 @@ public:
 	virtual I_Lib::T_SPI_Lib	
 		Get(const char* strLibName) override;
 	virtual void		
-		WaitQuit() override;
+		UnInit() override;
 
 public:
 	void 

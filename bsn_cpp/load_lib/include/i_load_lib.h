@@ -24,7 +24,7 @@ public:
 	virtual I_Lib::T_SPI_Lib	
 		Get(const char* strLibName) = 0;
 	virtual void		
-		WaitQuit() = 0;
+		UnInit() = 0;
 
 protected:
 	virtual ~I_LoadLib() = default;

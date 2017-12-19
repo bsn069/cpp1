@@ -90,7 +90,7 @@ C_LoadLib::Get(const char* strLibName) {
 
 
 void	
-C_LoadLib::WaitQuit() {
+C_LoadLib::UnInit() {
 	D_LogInfoF(
 		m_spI_Log
 		, "m_Libs.size()=%u"
@@ -103,7 +103,8 @@ C_LoadLib::WaitQuit() {
 	m_Libs.clear();
 
 	D_LogInfo(m_spI_Log, "m_spI_Log = nullptr");
-	m_spI_Log = nullptr;
+	m_spI_Log 		= nullptr;
+	m_spI_Global 	= nullptr;
 
 	auto itor = m_WaitDelLibs.begin();
 	for (; itor != m_WaitDelLibs.end(); ) {

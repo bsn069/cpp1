@@ -44,7 +44,7 @@ void C_Global::Init() {
 	std::cout << "m_spI_AllocRaw=" << m_spI_AllocRaw << std::endl;
 	m_spI_Common->SetGlobalAlloc(m_spI_AllocRaw);
 
-	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(shared_from_this());
+	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(GetSPI_Global());
 	std::cout << "m_spI_LoadLib=" << m_spI_LoadLib << std::endl;
 
 	{
@@ -61,23 +61,23 @@ void C_Global::Init() {
 		m_spI_Input = pFuncNewInput(pLib);
 		D_LogInfoF(m_spI_Log, "m_spI_Input=%p", m_spI_Input.get())
 	}
-	{
-		auto pLib = m_spI_LoadLib->Load("sqlite3", "bsn_dlib_sqlite", "_d", "");
-		auto pFunc = pLib->Func("NewDB");
-		auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
-		m_spI_Sqlite = pFuncNewDB(pLib, m_spI_Log);
-		D_LogInfoF(m_spI_Log, "m_spI_Sqlite=%p", m_spI_Sqlite.get())
-	}
+	// {
+	// 	auto pLib = m_spI_LoadLib->Load("sqlite3", "bsn_dlib_sqlite", "_d", "");
+	// 	auto pFunc = pLib->Func("NewDB");
+	// 	auto pFuncNewDB = (D_N1(sqlite)::T_NewDB)pFunc;
+	// 	m_spI_Sqlite = pFuncNewDB(pLib, m_spI_Log);
+	// 	D_LogInfoF(m_spI_Log, "m_spI_Sqlite=%p", m_spI_Sqlite.get())
+	// }
 
-	{
-		auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
-		auto pFuncNewNet = (D_N1(net)::T_NewNet)(pLib->Func("NewNet"));
-		m_spI_Net = pFuncNewNet(pLib, m_ioService);
-		std::cout << "m_spI_Net=" << m_spI_Net << std::endl;
+	// {
+	// 	auto pLib = m_spI_LoadLib->Load("net", "bsn_dlib_net", "_d", "");
+	// 	auto pFuncNewNet = (D_N1(net)::T_NewNet)(pLib->Func("NewNet"));
+	// 	m_spI_Net = pFuncNewNet(pLib, m_ioService);
+	// 	std::cout << "m_spI_Net=" << m_spI_Net << std::endl;
 
-		m_spI_Net->SetLog(m_spI_Log);
-		m_spI_Net->SetCommon(m_spI_Common);
-	}
+	// 	m_spI_Net->SetLog(m_spI_Log);
+	// 	m_spI_Net->SetCommon(m_spI_Common);
+	// }
 
 	D_LogInfo(m_spI_Log, "begin input Init");
 	m_spI_Input->Init();
@@ -116,21 +116,21 @@ void C_Global::UnInit() {
 	D_LogInfo(m_spI_Log, "end input UnInit");
 	m_spI_Input = nullptr;
 
-	D_LogInfo(m_spI_Log, "begin net UnInit");
- 	m_spI_Net->WaitQuit();
-	m_spI_Net = nullptr;
-	D_LogInfo(m_spI_Log, "end net UnInit");
+	// D_LogInfo(m_spI_Log, "begin net UnInit");
+ 	// m_spI_Net->WaitQuit();
+	// m_spI_Net = nullptr;
+	// D_LogInfo(m_spI_Log, "end net UnInit");
 
-	D_LogInfo(m_spI_Log, "begin sqlite UnInit");
-	m_spI_Sqlite = nullptr;
-	D_LogInfo(m_spI_Log, "end sqlite UnInit");
+	// D_LogInfo(m_spI_Log, "begin sqlite UnInit");
+	// m_spI_Sqlite = nullptr;
+	// D_LogInfo(m_spI_Log, "end sqlite UnInit");
 
 	D_LogInfo(m_spI_Log, "begin log UnInit");
 	m_spI_Log = nullptr;
 	D_LogInfo(m_spI_Log, "end log UnInit");
 
 	D_LogInfo(m_spI_Log, "begin load lib UnInit");
-	m_spI_LoadLib->WaitQuit();
+	m_spI_LoadLib->UnInit();
 	D_LogInfo(m_spI_Log, "end load lib UnInit");
 	m_spI_LoadLib = nullptr;
 

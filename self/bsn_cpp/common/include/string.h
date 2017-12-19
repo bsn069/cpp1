@@ -6,37 +6,37 @@
 D_BsnNamespace2(Common, String)
 //////////////////////////////////////////////////////////////////////
 
-// pcSrcANSI NULL½áÎ²µÄANSI×Ö·û´®
-// wstrOut(Ã»ÓĞ½áÎ²µÄ0) 
+// pcSrcANSI NULLç»“å°¾çš„ANSIå­—ç¬¦ä¸²
+// wstrOut(æ²¡æœ‰ç»“å°¾çš„0) 
 D_FunDef D_BSN_common_DLL T_void ANSI2Unicode(T_char D_const * D_const pc_SrcANSI, wstring& wstr_Out);
 D_FunDef D_BSN_common_DLL T_void ANSI2Unicode(string D_const& str_Src, wstring& wstr_Out);
-// pwcSrcUnicode NULL½áÎ²µÄUnicode×Ö·û´®
-// strOut(Ã»ÓĞ½áÎ²µÄ0) 
+// pwcSrcUnicode NULLç»“å°¾çš„Unicodeå­—ç¬¦ä¸²
+// strOut(æ²¡æœ‰ç»“å°¾çš„0) 
 D_FunDef D_BSN_common_DLL T_void Unicode2ANSI(T_wchar D_const * D_const pwc_SrcUnicode, string& str_Out);
 D_FunDef D_BSN_common_DLL T_void Unicode2ANSI(wstring D_const& wstr_Src, string& str_Out);
 
-// pcSrcUTF8 NULL½áÎ²µÄANSI×Ö·û´®
-// wstrOut(Ã»ÓĞ½áÎ²µÄ0) 
+// pcSrcUTF8 NULLç»“å°¾çš„ANSIå­—ç¬¦ä¸²
+// wstrOut(æ²¡æœ‰ç»“å°¾çš„0) 
 D_FunDef D_BSN_common_DLL T_void UTF82Unicode(T_char D_const * D_const pc_SrcUTF8, wstring& wstr_Out);
 D_FunDef D_BSN_common_DLL T_void UTF82Unicode(string D_const& str_SrcUTF8, wstring& wstr_Out);
-// pwcSrcUnicode NULL½áÎ²µÄUnicode×Ö·û´®
-// strOut(Ã»ÓĞ½áÎ²µÄ0) 
+// pwcSrcUnicode NULLç»“å°¾çš„Unicodeå­—ç¬¦ä¸²
+// strOut(æ²¡æœ‰ç»“å°¾çš„0) 
 D_FunDef D_BSN_common_DLL T_void Unicode2UTF8(T_wchar D_const * D_const pwc_SrcUnicode, string& str_Out);
 D_FunDef D_BSN_common_DLL T_void Unicode2UTF8(wstring D_const& wstr_SrcUnicode, string& str_Out);
 
-// pSrc 0½áÎ²µÄ×Ö·û´®
-// pDest(ÖÁÉÙ°üº¬½áÎ²0)×î¶à¿É·ÅdwDestLen-1¸ö×Ö·û
-// ·µ»ØÊµ¼Ê¸´ÖÆµ½pDestµÄ×Ö·û¸öÊı°üÀ¨ ½áÎ²0(¼´ ×îĞ¡·µ»ØÖµ1)
+// pSrc 0ç»“å°¾çš„å­—ç¬¦ä¸²
+// pDest(è‡³å°‘åŒ…å«ç»“å°¾0)æœ€å¤šå¯æ”¾dwDestLen-1ä¸ªå­—ç¬¦
+// è¿”å›å®é™…å¤åˆ¶åˆ°pDestçš„å­—ç¬¦ä¸ªæ•°åŒ…æ‹¬ ç»“å°¾0(å³ æœ€å°è¿”å›å€¼1)
 D_FunDef D_BSN_common_DLL T_uint32 D_const Copy(T_char D_const * D_const pc_Src, T_char * D_const pc_Dest, T_uint32 D_const u32_DestLen);
 D_FunDef D_BSN_common_DLL T_uint32 D_const Copy(string D_const& str_Src, T_char * D_const pc_Dest, T_uint32 D_const u32_DestLen);
-// pSrc 0½áÎ²µÄ×Ö·û´®
-// pDest(ÖÁÉÙ°üº¬½áÎ²0)×î¶à¿É·ÅdwDestLen-1¸ö×Ö·û
-// ·µ»ØÊµ¼Ê¸´ÖÆµ½pDestµÄ×Ö·û¸öÊı°üÀ¨ ½áÎ²0(¼´ ×îĞ¡·µ»ØÖµ1)
+// pSrc 0ç»“å°¾çš„å­—ç¬¦ä¸²
+// pDest(è‡³å°‘åŒ…å«ç»“å°¾0)æœ€å¤šå¯æ”¾dwDestLen-1ä¸ªå­—ç¬¦
+// è¿”å›å®é™…å¤åˆ¶åˆ°pDestçš„å­—ç¬¦ä¸ªæ•°åŒ…æ‹¬ ç»“å°¾0(å³ æœ€å°è¿”å›å€¼1)
 D_FunDef D_BSN_common_DLL T_uint32 D_const Copy(T_wchar D_const * D_const pwc_Src, T_wchar * D_const pwc_Dest, T_uint32 D_const u32_DestLen);
 D_FunDef D_BSN_common_DLL T_uint32 D_const Copy(wstring D_const& wstr_Src, T_wchar * D_const pwc_Dest, T_uint32 D_const u32_DestLen);
 
 
-// ²ğ·Ö×Ö·û´®
+// æ‹†åˆ†å­—ç¬¦ä¸²
 template<typename T_StrType>
 D_FunTemplate D_inline T_void Split(T_StrType D_const& strIn, T_StrType D_const& Sep, vector<T_StrType>& vec_OutStr)
 {

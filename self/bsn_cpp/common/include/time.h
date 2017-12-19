@@ -5,33 +5,33 @@
 D_BsnNamespace2(Common, Time)
 
 
-// Ò»·ÖÖÓµÄÃëÊı
+// ä¸€åˆ†é’Ÿçš„ç§’æ•°
 static T_uint32 D_const msc_u32Min		= 60;
-// Ò»Ğ¡Ê±µÄÃëÊı
+// ä¸€å°æ—¶çš„ç§’æ•°
 static T_uint32 D_const msc_u32Hour	= 60 * msc_u32Min;
-// Ò»ÌìµÄÃëÊı
+// ä¸€å¤©çš„ç§’æ•°
 static T_uint32 D_const msc_u32Day		= 24 * msc_u32Hour;
-// Ò»ÖÜµÄÃëÊı
+// ä¸€å‘¨çš„ç§’æ•°
 static T_uint32 D_const msc_u32Week	= 7 * msc_u32Day;
 
-// »ñÈ¡wday¶ÔÓ¦µÄĞÇÆÚ
-// [0,6]×ª³ÉÖĞ¹úÖÜ[1,7]ÄÇÖÖ
+// è·å–wdayå¯¹åº”çš„æ˜ŸæœŸ
+// [0,6]è½¬æˆä¸­å›½å‘¨[1,7]é‚£ç§
 static T_uint32 D_const msc_u32WeekDayChina[] = {7,1,2,3,4,5,6};
 
 
-// »ñÈ¡ÖĞ¹úµÄtm 1ÔÂ¿ªÊ¼ ÖÜ1¿ªÊ¼
+// è·å–ä¸­å›½çš„tm 1æœˆå¼€å§‹ å‘¨1å¼€å§‹
 D_FunDef D_BSN_common_DLL T_void TmChina(tm& vTm);
 D_FunDef D_BSN_common_DLL T_void TmChina(time_t& vTime, tm& vTm);
-// ×ÜÈÕÊı
+// æ€»æ—¥æ•°
 D_FunDef D_BSN_common_DLL T_uint32 D_const Days(T_uint32 D_const u32Time);
-// µ±Ç°µÄu32Ê±¼ä
+// å½“å‰çš„u32æ—¶é—´
 D_FunDef D_BSN_common_DLL T_uint32 D_const U32Time( );
-// ÔÚµ±ÈÕµÄÃëÊı
+// åœ¨å½“æ—¥çš„ç§’æ•°
 D_FunDef D_BSN_common_DLL T_uint32 D_const DaySec(T_uint32 D_const u32Time);
-// Ïà²î¼¸Ìì 
-// XÈÕÓëX+1ÈÕ Ïà²î1Ìì
+// ç›¸å·®å‡ å¤© 
+// Xæ—¥ä¸X+1æ—¥ ç›¸å·®1å¤©
 D_FunDef D_BSN_common_DLL T_uint32 D_const DiffDay(T_uint32 D_const u32Time0, T_uint32 D_const u32Time1);
-/*¾àÀëÏÂ¸öÖÜÊ±¼ä²î¶àÉÙÃë
+/*è·ç¦»ä¸‹ä¸ªå‘¨æ—¶é—´å·®å¤šå°‘ç§’
 	 *dwTimeNow static_cast<DWORD>( time(NULL) )
 	 *dwWeekDay	[1,7]
 	 *dwHour	[0,23]

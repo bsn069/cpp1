@@ -50,6 +50,7 @@ public:
 	uint32_t 									m_u32FrameMS;
 	boost::asio::io_service 					m_ioService;
 	boost::asio::deadline_timer 				m_updateTimer;
+	bool m_bQuit;
 
 public:
 	C_Global();
@@ -57,9 +58,15 @@ public:
 
 private:
 	void Init();
-	void UnInit();
-	void WaitUpdate();
+	void Start();
 	void Update(const boost::system::error_code& ec);
+	void Quit();
+	void UnInit();
+
+	void WaitUpdate();
+
+	void UpdateCmds();
+	void ProcCmd(std::string& strCmd);
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

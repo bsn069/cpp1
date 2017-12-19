@@ -1,21 +1,23 @@
 #pragma once
 
-namespace N_Bsn
-{
+
+#include <boost/thread.hpp>
+// #include <vector>
+
+namespace N_Bsn {
 
 template<typename T_Type>
-class C_DoubleList
-{
+class C_DoubleList {
 public:
-	typename typedef T_Type::value_type T_ValueType;
+	typedef typename T_Type::value_type T_ValueType;
 
 
 public:
 	// 取得写入的容器
 	T_Type&	Flip( );
 	// 写入 可以多个线程调用
-	T_void	Write(T_ValueType D_const V_Value);
-	T_void	WriteRef(T_ValueType D_const& V_Value);
+	void	Write(T_ValueType const V_Value);
+	void	WriteRef(T_ValueType const& V_Value);
 
 
 public:
@@ -24,10 +26,10 @@ public:
 
 	
 private:
-	T_uint32	m_u32Read;
-	T_uint32	m_u32Write;
+	uint32_t	m_u32Read;
+	uint32_t	m_u32Write;
 
-	mutex	m_Mutex;
+	boost::mutex	m_Mutex;
 
 	T_Type	m_Value[2];
 
@@ -45,17 +47,17 @@ C_DoubleList<T_Type>::~C_DoubleList()
 
 
 template<typename T_Type>
-T_void
-C_DoubleList<T_Type>::Write(T_ValueType D_const V_Value)
+void
+C_DoubleList<T_Type>::Write(T_ValueType const V_Value)
 {
 	WriteRef(V_Value);
 }
 
 template<typename T_Type>
-T_void
-C_DoubleList<T_Type>::WriteRef(T_ValueType D_const& V_Value)
+void
+C_DoubleList<T_Type>::WriteRef(T_ValueType const& V_Value)
 {
-	lock_guard<mutex> lock_obj(m_Mutex);
+	boost::lock_guard<boost::mutex> lock_obj(m_Mutex);
 	m_Value[m_u32Write].push_back(V_Value);
 }
 
@@ -64,7 +66,7 @@ T_Type&
 C_DoubleList<T_Type>::Flip(  )
 {
 	{
-		lock_guard<mutex> lock_obj( m_Mutex );
+		boost::lock_guard<boost::mutex> lock_obj( m_Mutex );
 		swap(m_u32Write, m_u32Read);
 		m_Value[ m_u32Write ].clear();
 	}
@@ -80,40 +82,6 @@ C_DoubleList<T_Type>::C_DoubleList(  )
 	m_Value[ m_u32Read ].clear();
 	m_Value[ m_u32Write ].clear();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  
  

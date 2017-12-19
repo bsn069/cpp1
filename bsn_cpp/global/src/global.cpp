@@ -19,9 +19,9 @@ D_BsnNamespace1(global)
 
 C_Global::C_Global() 
 	: m_u32FrameMS(1000)
-	, m_updateTimer(m_ioService, boost::posix_time::millisec(m_u32FrameMS)) 
+	, m_updateTimer(m_ioService, boost::posix_time::millisec(1)) 
 {
-	
+	m_bQuit = false;
 }
 
 C_Global::~C_Global() {
@@ -77,6 +77,16 @@ void C_Global::Init() {
 	}
 }
 
+void 
+C_Global::Start() {
+	GetInput()->Start();
+}
+
+void 
+C_Global::Quit() {
+	GetInput()->Quit();
+}
+
 void C_Global::UnInit() {
  	m_spI_Net->WaitQuit();
 	m_spI_Net = nullptr;
@@ -128,8 +138,6 @@ D_N1(sqlite)::I_DB::T_SPI_DB
 C_Global::GetSqlite() {
 	return m_spI_Sqlite;
 }
-
-
 		
 D_FunImp I_Global* 
 CreateCGlobal() {
@@ -156,11 +164,34 @@ C_Global::NewI_Global() {
 
 void C_Global::Run() {
 	Init();
+	Start();
 
 	WaitUpdate();
 	m_ioService.run();
 	
+	Quit();
 	UnInit();
+}
+
+void 
+C_Global::ProcCmd(std::string& strCmd) {
+	D_LogInfoF(
+		m_spI_Log
+		, "C_Global::ProcCmd strCmd=%s"
+		, strCmd.c_str()
+	);
+
+	if (strCmd.compare("quit") == 0) {
+		m_bQuit = true;
+	}
+}
+
+void 
+C_Global::UpdateCmds() {
+	auto pCmds = GetInput()->GetCmds();
+	for (auto& strCmd : *pCmds) {
+		ProcCmd(strCmd);
+	}
 }
 
 void C_Global::Update(const boost::system::error_code& ec) {
@@ -170,7 +201,8 @@ void C_Global::Update(const boost::system::error_code& ec) {
 		, ec.message().c_str()
 	);
 
-	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
+	UpdateCmds();
+
 	WaitUpdate();
 }
 
@@ -180,6 +212,13 @@ void C_Global::WaitUpdate() {
 		, this
 		, boost::asio::placeholders::error
 	);
+
+	if (m_bQuit) {
+		return;
+	}
+
+	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
+
 	m_updateTimer.async_wait(s_updateFunc);
 }
 //////////////////////////////////////////////////////////////////////

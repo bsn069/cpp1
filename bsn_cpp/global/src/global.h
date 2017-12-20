@@ -57,6 +57,7 @@ public:
 	virtual ~C_Global();
 
 private:
+	void Awake();
 	void Init();
 	void Start();
 	void Update(const boost::system::error_code& ec);

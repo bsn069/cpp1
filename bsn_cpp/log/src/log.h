@@ -32,6 +32,14 @@ public:
 		, ...
 	) override;
 
+	virtual void 
+		Init() override;
+	virtual void 
+		Start() override;
+	virtual void 
+		Quit() override;
+	virtual void		
+		UnInit() override;
 
 public:
 	void SetLib(T_SPI_Lib iLib)

@@ -23,6 +23,13 @@ public:
 		) = 0;
 	virtual I_Lib::T_SPI_Lib	
 		Get(const char* strLibName) = 0;
+	
+	virtual void 
+		Init() = 0;
+	virtual void 
+		Start() = 0;
+	virtual void 
+		Quit() = 0;
 	virtual void		
 		UnInit() = 0;
 

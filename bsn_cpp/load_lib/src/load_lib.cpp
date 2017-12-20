@@ -89,31 +89,98 @@ C_LoadLib::Get(const char* strLibName) {
 }
 
 
-void	
-C_LoadLib::UnInit() {
+void 
+C_LoadLib::Init() {
+	D_LogInfo(
+		m_spI_Log
+		, "enter load lib Init"
+	);
+
+	D_LogInfo(
+		m_spI_Log
+		, "leave load lib Init"
+	);
+}
+
+void 
+C_LoadLib::Start() {
+	D_LogInfo(
+		m_spI_Log
+		, "enter load lib Start"
+	);
+
+	D_LogInfo(
+		m_spI_Log
+		, "leave load lib Start"
+	);
+}
+
+void 
+C_LoadLib::Quit() {
+	D_LogInfo(
+		m_spI_Log
+		, "enter load lib Quit"
+	);
+
 	D_LogInfoF(
 		m_spI_Log
 		, "m_Libs.size()=%u"
 		, m_Libs.size()
 	);
+	for (auto pair : m_Libs) {
+		m_WaitDelLibs.push_back(pair.second);
+		D_LogInfo(
+			m_spI_Log
+			, pair.first.c_str()
+		);
+	}
+
+	D_LogInfo(
+		m_spI_Log
+		, "leave load lib Quit"
+	);
+}
+
+void	
+C_LoadLib::UnInit() {
+	D_LogInfo(
+		m_spI_Log
+		, "enter load lib UnInit"
+	);
 
 	for (auto pair : m_Libs) {
+		if (pair.first == "log") {
+			continue;
+		}
 		m_WaitDelLibs.push_back(pair.second);
 	}
 	m_Libs.clear();
 
-	D_LogInfo(m_spI_Log, "m_spI_Log = nullptr");
-	m_spI_Log 		= nullptr;
-	m_spI_Global 	= nullptr;
-
 	auto itor = m_WaitDelLibs.begin();
 	for (; itor != m_WaitDelLibs.end(); ) {
-		while ((*itor).use_count() > 1) {
+		auto spI_Lib = (*itor);
+		D_LogInfo(
+			m_spI_Log
+			, "lib=%s use_count=%u"
+			, spI_Lib->Name()
+			, spI_Lib.use_count()
+		);
+
+		while (spI_Lib.use_count() > 1) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 		++itor;
 		m_WaitDelLibs.pop_front();
 	}
+
+	D_LogInfo(m_spI_Log, "m_spI_Log = nullptr");
+	m_spI_Log 		= nullptr;
+	m_spI_Global 	= nullptr;
+
+	D_LogInfo(
+		m_spI_Log
+		, "leave load lib UnInit"
+	);
 }
 //////////////////////////////////////////////////////////////////////
 C_LoadLib* 

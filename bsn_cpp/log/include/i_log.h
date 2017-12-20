@@ -40,6 +40,15 @@ public:
 		, ...
 	) = 0;
 
+	virtual void
+		Init() = 0;
+	virtual void
+		Start() = 0;
+	virtual void
+		Quit() = 0;
+	virtual void
+		UnInit() = 0;
+
 protected:
 	virtual ~I_Log() = default;
 };

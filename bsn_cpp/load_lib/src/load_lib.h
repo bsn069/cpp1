@@ -35,6 +35,13 @@ public:
 		) override;
 	virtual I_Lib::T_SPI_Lib	
 		Get(const char* strLibName) override;
+
+	virtual void 
+		Init() override;
+	virtual void 
+		Start() override;
+	virtual void 
+		Quit() override;
 	virtual void		
 		UnInit() override;
 

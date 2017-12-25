@@ -36,17 +36,17 @@ C_Global::GetSPI_Global() {
 
 void 
 C_Global::Awake() {
-	D_LogInfo(nullptr, "enter global Awake");
+	D_OutInfo("enter global Awake");
 	
 	m_spI_Common = D_N1(common)::NewCommon();
-	D_LogInfo(nullptr, m_spI_Common.get());
+	D_OutInfo(m_spI_Common.get());
 
 	m_spI_AllocRaw = m_spI_Common->NewAlloc(D_N1(common)::I_Alloc::Raw);
-	D_LogInfo(nullptr, m_spI_AllocRaw.get());
+	D_OutInfo(m_spI_AllocRaw.get());
 	m_spI_Common->SetGlobalAlloc(m_spI_AllocRaw);
 
 	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(GetSPI_Global());
-	D_LogInfo(nullptr, m_spI_LoadLib.get());
+	D_OutInfo(m_spI_LoadLib.get());
 
 	{
 		auto pLib = m_spI_LoadLib->Load("log", "bsn_dlib_log", "_d", "");
@@ -78,9 +78,9 @@ void C_Global::Init() {
 	m_spI_Input->Init();
 	D_LogInfo(m_spI_Log, "begin input Init");
 
-	D_LogInfo(m_spI_LoadLib, "begin load lib Init");
+	D_LogInfo(m_spI_Log, "begin load lib Init");
 	m_spI_LoadLib->Init();
-	D_LogInfo(m_spI_LoadLib, "begin load lib Init");
+	D_LogInfo(m_spI_Log, "begin load lib Init");
 
 	D_LogInfo(m_spI_Log, "leave global Init");
 }

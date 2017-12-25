@@ -51,12 +51,12 @@ void
 C_Log::Init() {
 	D_LogInfo(
 		this
-		, "enter load lib Init"
+		, "enter log Init"
 	);
 
 	D_LogInfo(
 		this
-		, "leave load lib Init"
+		, "leave log Init"
 	);
 }
 
@@ -64,12 +64,12 @@ void
 C_Log::Start() {
 	D_LogInfo(
 		this
-		, "enter load lib Start"
+		, "enter log Start"
 	);
 
 	D_LogInfo(
 		this
-		, "leave load lib Start"
+		, "leave log Start"
 	);
 }
 
@@ -77,25 +77,12 @@ void
 C_Log::Quit() {
 	D_LogInfo(
 		this
-		, "enter load lib Quit"
+		, "enter log Quit"
 	);
-
-	D_LogInfoF(
-		this
-		, "m_Libs.size()=%u"
-		, m_Libs.size()
-	);
-	for (auto pair : m_Libs) {
-		m_WaitDelLibs.push_back(pair.second);
-		D_LogInfo(
-			this
-			, pair.first.c_str()
-		);
-	}
 
 	D_LogInfo(
 		this
-		, "leave load lib Quit"
+		, "leave log Quit"
 	);
 }
 
@@ -103,12 +90,12 @@ void
 C_Log::UnInit() {
 	D_LogInfo(
 		this
-		, "enter load lib UnInit"
+		, "enter log UnInit"
 	);
 
 	D_LogInfo(
 		this
-		, "leave load lib UnInit"
+		, "leave log UnInit"
 	);
 }
 //////////////////////////////////////////////////////////////////////

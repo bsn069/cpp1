@@ -66,7 +66,7 @@ C_Log::Start() {
 	);
 
 	D_LogInfo(
-		this
+		this 
 		, "leave log Start"
 	);
 }

@@ -1,3 +1,6 @@
+#define D_OutInfo(strLog) \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl 
+
 #define D_LogInfoF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
 { \

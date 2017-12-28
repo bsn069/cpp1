@@ -159,7 +159,7 @@ C_LoadLib::UnInit() {
 	auto itor = m_WaitDelLibs.begin();
 	for (; itor != m_WaitDelLibs.end(); ) {
 		auto spI_Lib = (*itor);
-		D_LogInfo(
+		D_LogInfoF(
 			m_spI_Log
 			, "lib=%s use_count=%u"
 			, spI_Lib->Name()

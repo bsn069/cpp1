@@ -26,21 +26,27 @@ C_Input::~C_Input() {
 
 void 
 C_Input::Init() {
-	D_LogInfo(m_spI_Log, "");
+	D_LogInfo(m_spI_Log, "enter input Init");
+	
+	D_LogInfo(m_spI_Log, "leave input Init");
 }
 
 void 
 C_Input::Start() {
-	D_LogInfo(m_spI_Log, "");
+	D_LogInfo(m_spI_Log, "enter input Start");
+
  	if (m_pThread != nullptr) {
 		return;
 	}
 	m_pThread = New<std::thread>(boost::bind(&C_Input::InputThread, this));
+
+	D_LogInfo(m_spI_Log, "leave input Start");
 }
 
 void
 C_Input::Quit() {
-	D_LogInfo(m_spI_Log, "begin quit");
+	D_LogInfo(m_spI_Log, "enter input Quit");
+
 	if (m_pThread != nullptr) {
 		m_bQuit = true;
 		D_LogInfo(m_spI_Log, "wait input thread end");
@@ -48,12 +54,15 @@ C_Input::Quit() {
 		D_LogInfo(m_spI_Log, "input thread end");
 		Delete(m_pThread);
 	}
-	D_LogInfo(m_spI_Log, "end quit");
+
+	D_LogInfo(m_spI_Log, "leave input Quit");
 }
 
 void 
 C_Input::UnInit() {
-	D_LogInfo(m_spI_Log, "");
+	D_LogInfo(m_spI_Log, "enter input UnInit");
+
+	D_LogInfo(m_spI_Log, "leave input UnInit");
 }
 
 I_Input::T_Cmds*

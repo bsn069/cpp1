@@ -45,16 +45,12 @@ C_Global::Awake() {
 	D_LogInfo(nullptr, m_spI_AllocRaw.get());
 	m_spI_Common->SetGlobalAlloc(m_spI_AllocRaw);
 
-	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(GetSPI_Global());
-	D_LogInfo(nullptr, m_spI_LoadLib.get());
+	m_spI_Log = D_N1(log)::NewLog(nullptr);
+	D_LogInfoF(m_spI_Log, "m_spI_Log=%p", m_spI_Log.get());
 
-	{
-		auto pLib = m_spI_LoadLib->Load("log", "bsn_dlib_log", "_d", "");
-		auto pFunc = pLib->Func("NewLog");
-		auto pFuncNewLog = (D_N1(log)::T_NewLog)pFunc;
-		m_spI_Log = pFuncNewLog(pLib);
-		D_LogInfoF(m_spI_Log, "m_spI_Log=%p", m_spI_Log.get())
-	}
+	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(GetSPI_Global());
+	D_LogInfoF(m_spI_Log, "m_spI_LoadLib=%p", m_spI_LoadLib.get());
+
 	{
 		auto pLib = m_spI_LoadLib->Load("input", "bsn_dlib_input", "_d", "");
 		auto pFunc = pLib->Func("NewInput");
@@ -74,13 +70,13 @@ void C_Global::Init() {
 	m_spI_Log->Init();
 	D_LogInfo(m_spI_Log, "begin log Init");
 
-	D_LogInfo(m_spI_Log, "begin input Init");
-	m_spI_Input->Init();
-	D_LogInfo(m_spI_Log, "begin input Init");
-
 	D_LogInfo(m_spI_LoadLib, "begin load lib Init");
 	m_spI_LoadLib->Init();
 	D_LogInfo(m_spI_LoadLib, "begin load lib Init");
+
+	D_LogInfo(m_spI_Log, "begin input Init");
+	m_spI_Input->Init();
+	D_LogInfo(m_spI_Log, "begin input Init");
 
 	D_LogInfo(m_spI_Log, "leave global Init");
 }
@@ -93,13 +89,13 @@ C_Global::Start() {
 	m_spI_Log->Start();
 	D_LogInfo(m_spI_Log, "end log start");
 
-	D_LogInfo(m_spI_Log, "begin input start");
-	m_spI_Input->Start();
-	D_LogInfo(m_spI_Log, "end input start");
-
 	D_LogInfo(m_spI_Log, "begin load lib start");
 	m_spI_LoadLib->Start();
 	D_LogInfo(m_spI_Log, "end load lib start");
+
+	D_LogInfo(m_spI_Log, "begin input start");
+	m_spI_Input->Start();
+	D_LogInfo(m_spI_Log, "end input start");
 
 	D_LogInfo(m_spI_Log, "leave global start");
 }
@@ -108,10 +104,6 @@ void
 C_Global::Quit() {
 	D_LogInfo(m_spI_Log, "enter global quit");
 
-	D_LogInfo(m_spI_Log, "begin log quit");
-	m_spI_Log->Quit();
-	D_LogInfo(m_spI_Log, "end log quit");
-
 	D_LogInfo(m_spI_Log, "begin input quit");
 	m_spI_Input->Quit();
 	D_LogInfo(m_spI_Log, "end input quit");
@@ -119,6 +111,10 @@ C_Global::Quit() {
 	D_LogInfo(m_spI_Log, "begin load lib quit");
 	m_spI_LoadLib->Quit();
 	D_LogInfo(m_spI_Log, "end load lib quit");
+
+	D_LogInfo(m_spI_Log, "begin log quit");
+	m_spI_Log->Quit();
+	D_LogInfo(m_spI_Log, "end log quit");
 
 	D_LogInfo(m_spI_Log, "leave global quit");
 }
@@ -131,15 +127,15 @@ void C_Global::UnInit() {
 	D_LogInfo(m_spI_Log, "end input UnInit");
 	m_spI_Input = nullptr;
 
-	D_LogInfo(m_spI_Log, "begin log UnInit");
-	m_spI_Log->UnInit();
-	D_LogInfo(m_spI_Log, "end log UnInit");
-	m_spI_Log = nullptr;
-
 	D_LogInfo(m_spI_Log, "begin load lib UnInit");
 	m_spI_LoadLib->UnInit();
 	D_LogInfo(m_spI_Log, "end load lib UnInit");
 	m_spI_LoadLib = nullptr;
+
+	D_LogInfo(m_spI_Log, "begin log UnInit");
+	m_spI_Log->UnInit();
+	D_LogInfo(m_spI_Log, "end log UnInit");
+	m_spI_Log = nullptr;
 
 	m_spI_AllocRaw 	= nullptr;
 	m_spI_Common 	= nullptr;

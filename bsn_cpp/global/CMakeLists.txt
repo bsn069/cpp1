@@ -25,6 +25,7 @@ ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 #target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}load_lib${OUTPUT_SUFFIX})
+target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}log${OUTPUT_SUFFIX})
 # 链接库
 # target_link_libraries(${OUT_NAME} sqlite3)
 target_link_libraries(${OUT_NAME} boost_system)

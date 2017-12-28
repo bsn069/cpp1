@@ -42,9 +42,8 @@ public:
 		UnInit() override;
 
 public:
-	void SetLib(T_SPI_Lib iLib)
-	{
-		m_iLib = iLib;
+	void SetLib(T_SPI_Lib spI_Lib) {
+		m_spI_Lib = spI_Lib;
 	};
 	void FmtPrint(
 			I_Log::E_Level eLevel
@@ -68,7 +67,7 @@ public:
 	virtual ~C_Log();
 
 private:
-	T_SPI_Lib m_iLib;
+	T_SPI_Lib m_spI_Lib;
 	char m_pszTime[128];
 };
 //////////////////////////////////////////////////////////////////////

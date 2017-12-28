@@ -29,7 +29,5 @@ NewLog(D_N1(load_lib)::I_Lib::T_SPI_Lib iLib) {
 	
 	return pSelfI;
 }
-
-
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

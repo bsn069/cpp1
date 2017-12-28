@@ -1,5 +1,11 @@
-#define D_OutInfo(strLog) \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl 
+#define D_OutInfo(strLog1) \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog1 << std::endl 
+
+#define D_OutInfo2(strLog1, strLog2) \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog1 << strLog2 << std::endl 
+
+#define D_OutInfo3(strLog1, strLog2, strLog3) \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog1 << strLog2 << strLog3 << std::endl 
 
 #define D_LogInfoF(iLog, strFormat, ...) \
 if (iLog != nullptr) \
@@ -13,7 +19,7 @@ if (iLog != nullptr) \
 		, ##__VA_ARGS__ \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strFormat << std::endl; \
 }
 
 
@@ -28,7 +34,7 @@ if (iLog != nullptr) \
 		, strLog \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog << std::endl; \
 }
 
 #define D_LogDebugF(iLog, strFormat, ...) \
@@ -43,7 +49,7 @@ if (iLog != nullptr) \
 		, ##__VA_ARGS__ \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strFormat << std::endl; \
 }
 
 #define D_LogDebug(iLog, strLog) \
@@ -57,7 +63,7 @@ if (iLog != nullptr) \
 		, strLog \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog << std::endl; \
 }
 
 #define D_LogWarnF(iLog, strFormat, ...) \
@@ -72,7 +78,7 @@ if (iLog != nullptr) \
 		, ##__VA_ARGS__ \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strFormat << std::endl; \
 }
 
 
@@ -87,7 +93,7 @@ if (iLog != nullptr) \
 		, strLog \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog << std::endl; \
 }
 
 #define D_LogErrorF(iLog, strFormat, ...) \
@@ -102,7 +108,7 @@ if (iLog != nullptr) \
 		, ##__VA_ARGS__ \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strFormat << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strFormat << std::endl; \
 }
 
 
@@ -117,6 +123,6 @@ if (iLog != nullptr) \
 		, strLog \
 	); \
 } else { \
-	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ")" << strLog << std::endl; \
+	std::cout << __FILE__ << ":" << __LINE__ << "(" << __FUNCTION__ << ") " << strLog << std::endl; \
 }
  

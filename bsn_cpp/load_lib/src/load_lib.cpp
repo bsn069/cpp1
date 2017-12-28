@@ -158,7 +158,7 @@ C_LoadLib::UnInit() {
 
 	auto itor = m_WaitDelLibs.begin();
 	for (; itor != m_WaitDelLibs.end(); ) {
-		auto spI_Lib = (*itor);
+		auto& spI_Lib = (*itor);
 		D_LogInfoF(
 			m_spI_Log
 			, "lib=%s use_count=%u"
@@ -168,6 +168,12 @@ C_LoadLib::UnInit() {
 
 		while (spI_Lib.use_count() > 1) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
+			D_LogInfoF(
+				m_spI_Log
+				, "lib=%s use_count=%u"
+				, spI_Lib->Name()
+				, spI_Lib.use_count()
+			);
 		}
 		++itor;
 		m_WaitDelLibs.pop_front();

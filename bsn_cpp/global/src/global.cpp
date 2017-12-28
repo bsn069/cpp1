@@ -39,25 +39,42 @@ C_Global::Awake() {
 	D_OutInfo("enter global Awake");
 	
 	m_spI_Common = D_N1(common)::NewCommon();
-	D_OutInfo(m_spI_Common.get());
+	D_OutInfo2("m_spI_Common.get()=", m_spI_Common.get());
 
 	m_spI_AllocRaw = m_spI_Common->NewAlloc(D_N1(common)::I_Alloc::Raw);
-	D_OutInfo(m_spI_AllocRaw.get());
+	D_OutInfo2("m_spI_AllocRaw.get()=", m_spI_AllocRaw.get());
 	m_spI_Common->SetGlobalAlloc(m_spI_AllocRaw);
 
 	m_spI_Log = D_N1(log)::NewLog(nullptr);
 	D_LogInfoF(m_spI_Log, "m_spI_Log=%p", m_spI_Log.get());
 
 	m_spI_LoadLib = D_N1(load_lib)::NewLoadLib(GetSPI_Global());
-	D_OutInfo(m_spI_LoadLib.get());
+	D_LogInfoF(m_spI_Log, "m_spI_LoadLib=%p", m_spI_LoadLib.get());
 
-	{
-		auto pLib = m_spI_LoadLib->Load("input", "bsn_dlib_input", "_d", "");
-		auto pFunc = pLib->Func("NewInput");
-		auto pFuncNewInput = (D_N1(input)::T_NewInput)pFunc;
-		m_spI_Input = pFuncNewInput(pLib);
-		D_LogInfoF(m_spI_Log, "m_spI_Input=%p", m_spI_Input.get())
-	}
+	m_spI_Input = D_N1(input)::NewInput(GetSPI_Global());
+	D_LogInfoF(m_spI_Log, "m_spI_Input=%p", m_spI_Input.get());
+
+	// {
+	// 	auto pLib = m_spI_LoadLib->Load("input", "bsn_dlib_input", "_d", "");
+	// 	D_LogInfoF(
+	// 		m_spI_Log
+	// 		, "lib=%s use_count=%u"
+	// 		, pLib->Name()
+	// 		, pLib.use_count()
+	// 	);
+	// 	auto pFunc = pLib->Func("NewInput");
+	// 	auto pFuncNewInput = (D_N1(input)::T_NewInput)pFunc;
+	// 	m_spI_Input = pFuncNewInput(pLib);
+	// 	D_LogInfoF(m_spI_Log, "m_spI_Input=%p", m_spI_Input.get())
+	// 	D_LogInfoF(
+	// 		m_spI_Log
+	// 		, "lib=%s use_count=%u"
+	// 		, pLib->Name()
+	// 		, pLib.use_count()
+	// 	);
+	// 	m_spI_Input->DebugInfo();
+	// }
+	// m_spI_Input->DebugInfo();
 
 	D_LogInfo(m_spI_Log, "leave global Awake");
 }
@@ -127,6 +144,7 @@ void C_Global::UnInit() {
 	D_LogInfo(m_spI_Log, "enter global UnInit");
  
 	D_LogInfo(m_spI_Log, "begin input UnInit");
+	m_spI_Input->DebugInfo();
 	m_spI_Input->UnInit();
 	D_LogInfo(m_spI_Log, "end input UnInit");
 	m_spI_Input = nullptr;
@@ -206,6 +224,7 @@ C_Global::NewI_Global() {
 }
 
 void C_Global::Run() {
+	Awake();
 	Init();
 	Start();
 

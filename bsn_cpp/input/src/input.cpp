@@ -11,7 +11,7 @@
 D_BsnNamespace1(input)
 //////////////////////////////////////////////////////////////////////
 C_Input::C_Input() 
-	: m_spI_Lib(nullptr) 
+	: m_spI_Global(nullptr)
 	, m_spI_Log(nullptr)
 	, m_pThread(nullptr)
 	, m_bQuit(false)
@@ -20,8 +20,7 @@ C_Input::C_Input()
 }
 
 C_Input::~C_Input() {
-	m_spI_Log	= nullptr;
-	m_spI_Lib 	= nullptr;
+ 
 }
 
 void 
@@ -61,20 +60,20 @@ C_Input::Quit() {
 void 
 C_Input::UnInit() {
 	D_LogInfo(m_spI_Log, "enter input UnInit");
-
+ 
 	D_LogInfo(m_spI_Log, "leave input UnInit");
+}
+
+void 
+C_Input::DebugInfo() {
+	D_LogInfo(m_spI_Log, "enter input DebugInfo");
+ 
+	D_LogInfo(m_spI_Log, "leave input DebugInfo");
 }
 
 I_Input::T_Cmds*
 C_Input::GetCmds() {
 	return &(m_InputCmd.Flip());
-}
-
-
-void 
-C_Input::SetLib(D_N1(load_lib)::I_Lib::T_SPI_Lib spI_Lib)	{
-	m_spI_Lib = spI_Lib;
-	m_spI_Log = spI_Lib->GetGlobal()->GetLog();
 }
 
 C_Input::T_SPI_Input
@@ -104,6 +103,12 @@ C_Input::InputThread() {
 		m_InputCmd.Write(strCmd);
 	}
 	D_LogInfo(m_spI_Log, "leave input thread");
+}
+
+void 
+C_Input::SetGlobal(D_N1(global)::I_Global::T_SPI_Global spI_Global) {
+	m_spI_Global 	= spI_Global;
+	m_spI_Log 		= m_spI_Global->GetLog();
 }
 
 //////////////////////////////////////////////////////////////////////

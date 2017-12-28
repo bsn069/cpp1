@@ -28,6 +28,9 @@ public:
 	virtual T_Cmds* 
 		GetCmds() = 0;
 
+	virtual void 
+		DebugInfo() = 0;
+
 protected:
 	virtual ~I_Input() = default;
 };

@@ -14,6 +14,22 @@ C_PlugOne::~C_PlugOne() {
  
 }
 
+void C_PlugOne::Awake() {
+
+}
+
+void C_PlugOne::Init() {
+
+}
+
+void C_PlugOne::Update() {
+
+}
+
+void C_PlugOne::UnInit() {
+
+}
+
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End
 

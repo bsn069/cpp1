@@ -9,6 +9,12 @@ public:
 	typedef std::shared_ptr<C_PlugOne> T_SPC_PlugOne;	
 
 public:
+	virtual void Awake() override;
+	virtual void Init() override;
+	virtual void Update() override;
+	virtual void UnInit() override;
+
+public:
 	C_PlugOne();
 	virtual ~C_PlugOne();
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "i_plug_mgr.h"
+
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>
@@ -14,7 +16,7 @@ public:
 	
 public:
 	virtual void Awake() = 0;
-	virtual void Init() = 0;
+	virtual void Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) = 0;
 	virtual void Update() = 0;
 	virtual void UnInit() = 0;
 

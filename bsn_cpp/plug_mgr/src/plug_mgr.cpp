@@ -14,7 +14,33 @@ C_PlugMgr::~C_PlugMgr() {
 }
 
 void C_PlugMgr::Run() {
+ 
+}
 
+
+void C_PlugMgr::Awake() {
+	AddPlug("log");
+}
+
+void C_PlugMgr::Init() {
+	for (auto& itor : m_strName) {
+		auto& spI_Plug = itor.second;
+		spI_Plug->Init(GetSPI_PlugMgr());
+	}
+}
+
+void C_PlugMgr::Update() {
+
+}
+
+void C_PlugMgr::UnInit() {
+
+}
+
+bool C_PlugMgr::AddPlug(std::string const& strName) {
+	auto spI_Plug = LoadPlug(strName);
+	m_Name2Plug.insert(strName, spI_Plug);
+	return true;	
 }
 
 I_Plug::T_SPI_Plug C_PlugMgr::GetPlug(std::string strName) {
@@ -22,6 +48,10 @@ I_Plug::T_SPI_Plug C_PlugMgr::GetPlug(std::string strName) {
 	if (itor != m_Name2Plug.end()) {
 		return itor->second;
 	}
+	return nullptr;
+}
+
+I_Plug::T_SPI_Plug C_PlugMgr::LoadPlug(std::string const& strName) {
 	return nullptr;
 }
 

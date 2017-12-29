@@ -10,7 +10,7 @@ public:
 
 public:
 	virtual void Awake() override;
-	virtual void Init() override;
+	virtual void Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) override;
 	virtual void Update() override;
 	virtual void UnInit() override;
 

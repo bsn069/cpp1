@@ -12,8 +12,13 @@ public:
 	typedef std::shared_ptr<I_PlugMgr> T_SPI_PlugMgr;
 	
 public:
+	virtual void Awake() = 0;
+	virtual void Init() = 0;
+	virtual void Update() = 0;
+	virtual void UnInit() = 0;
+	
 	virtual void Run() = 0;
-	virtual I_Plug::T_SPI_Plug GetPlug() = 0;
+	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) = 0;
 	
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {

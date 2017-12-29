@@ -18,7 +18,7 @@ void C_PlugOne::Awake() {
 
 }
 
-void C_PlugOne::Init() {
+void C_PlugOne::Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) {
 
 }
 

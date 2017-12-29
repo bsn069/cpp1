@@ -171,7 +171,7 @@ C_LoadLib::UnInit() {
 			D_LogInfoF(
 				m_spI_Log
 				, "lib=%s use_count=%u"
-				, spI_Lib->Name()
+				, spI_Lib->Name() 
 				, spI_Lib.use_count()
 			);
 		}

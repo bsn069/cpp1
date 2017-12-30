@@ -16,6 +16,7 @@ set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
 # 添加定义
 add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
+add_definitions( -DD_OutInfoOpen)
 
 # 生成lib
 SET( OUT_NAME ${LIB_PREFIX_D}${PROJECT_NAME}${OUTPUT_SUFFIX} )
@@ -25,6 +26,9 @@ ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 #target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
+target_link_libraries(${OUT_NAME} boost_system)
+target_link_libraries(${OUT_NAME} boost_filesystem)
+target_link_libraries(${OUT_NAME} dl)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic")
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic")

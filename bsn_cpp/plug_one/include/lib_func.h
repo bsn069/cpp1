@@ -7,6 +7,5 @@
 #include <bsn_cpp/include/name_space.h>
 
 D_BsnNamespace1(plug_one)
-D_FunDef D_DllImport I_PlugMgr::T_SPI_PlugMgr	
-NewPlugMgr();
+D_DllCImport I_Plug::T_SPI_Plug CreatePlug();
 D_BsnNamespace1End

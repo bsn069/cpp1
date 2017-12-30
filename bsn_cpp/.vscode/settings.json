@@ -86,6 +86,9 @@
 		"xloctime": "cpp",
 		"xtree": "cpp",
 		"xcomplex": "cpp",
-		"forward_list": "cpp"
+		"forward_list": "cpp",
+		"scoped_allocator": "cpp",
+		"shared_mutex": "cpp",
+		"clocale": "cpp"
 	}
 }

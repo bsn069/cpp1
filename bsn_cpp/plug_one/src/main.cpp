@@ -6,10 +6,8 @@
 D_BsnNamespace1(plug_one)
 //////////////////////////////////////////////////////////////////////
 
-D_FunDef D_DllExport I_PlugOne::T_SPI_PlugOne	
-NewPlugOne() {
- 
-	
+D_FunDef D_DllCExport I_Plug::T_SPI_Plug	
+CreatePlug() {
 	return I_PlugOne::T_SPI_PlugOne();
 }
 

@@ -16,6 +16,7 @@ set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
 # 添加定义
 #add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
+add_definitions( -DD_OutInfoOpen)
 
 # 生成二进制文件 ${SubProjectName}
 SET( OUT_NAME ${BIN_PREFIX}${PROJECT_NAME}${OUTPUT_SUFFIX} )

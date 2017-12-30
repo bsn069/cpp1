@@ -4,12 +4,14 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
-// D_DllCImport I_Plug::T_SPI_Plug CreatePlug();
-// D_DllCImport bool DestroyPlug(I_Plug::T_SPI_Plug);
+#include <boost/bind.hpp>
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
-C_PlugMgr::C_PlugMgr() {
+C_PlugMgr::C_PlugMgr() 
+	: m_u32FrameMS(1000)
+	, m_updateTimer(m_ioService, boost::posix_time::millisec(1)) 
+	, m_bQuit(false) {
 	D_OutInfo();
 
 }
@@ -27,11 +29,19 @@ C_PlugMgr::T_SPI_PlugMgr C_PlugMgr::GetSPI_PlugMgr() {
 
 void C_PlugMgr::Run() {
 	D_OutInfo();
+	Awake();
+	Init();
+
+	WaitUpdate();
+	m_ioService.run();
+
+	UnInit();
 }
 
 void C_PlugMgr::Awake() {
 	D_OutInfo();
- 
+	GetPlug("one");
+	GetPlug("input");
 }
 
 void C_PlugMgr::Init() {
@@ -39,9 +49,32 @@ void C_PlugMgr::Init() {
  
 }
 
-void C_PlugMgr::Update() {
+void C_PlugMgr::Update(const boost::system::error_code& ec) {
 	D_OutInfo();
 
+	for (auto& itor : m_Name2PlugData) {
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->Update();
+	}
+
+	WaitUpdate();
+}
+
+void C_PlugMgr::WaitUpdate() {
+	static auto s_updateFunc = boost::bind(
+		&C_PlugMgr::Update
+		, this
+		, boost::asio::placeholders::error
+	);
+
+	if (m_bQuit) {
+		D_OutInfo1("in quit");
+		return;
+	}
+
+	m_updateTimer.expires_at(m_updateTimer.expires_at() + boost::posix_time::millisec(m_u32FrameMS));
+	m_updateTimer.async_wait(s_updateFunc);
 }
 
 void C_PlugMgr::UnInit() {
@@ -53,19 +86,22 @@ I_Plug::T_SPI_Plug C_PlugMgr::GetPlug(std::string strName) {
 	D_OutInfo2("strName=", strName);
 	auto itor = m_Name2PlugData.find(strName);
 	if (itor != m_Name2PlugData.end()) {
-		return itor->second.GetPlug();
+		return itor->second->GetPlug();
 	}
 
-	C_PlugData plugData(strName);
-	if (!plugData.LoadLib()) {
+	D_OutInfo();
+	auto spC_PlugData = C_PlugData::T_SPC_PlugData(new C_PlugData(strName));
+	if (!spC_PlugData->LoadLib()) {
 		return nullptr;
 	}
-	if (!plugData.LoadPlug()) {
+	if (!spC_PlugData->LoadPlug()) {
 		return nullptr;
 	}
-	m_Name2PlugData.insert(std::make_pair(plugData.GetName(), plugData));
+	D_OutInfo();
+	m_Name2PlugData.insert(std::make_pair(spC_PlugData->GetName(), spC_PlugData));
+	D_OutInfo();
  
-	return plugData.GetPlug();
+	return spC_PlugData->GetPlug();
 }
 
 C_PlugMgr::T_SPC_PlugMgr C_PlugMgr::GetSPC_PlugMgr() {

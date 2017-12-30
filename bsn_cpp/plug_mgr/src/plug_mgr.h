@@ -5,6 +5,8 @@
  
 #include "plug_data.h"
 
+#include <boost/asio.hpp>
+
 #include <map>
 
 D_BsnNamespace1(plug_mgr)
@@ -12,7 +14,7 @@ D_BsnNamespace1(plug_mgr)
 class C_PlugMgr : public I_PlugMgr {
 public:
 	typedef std::shared_ptr<C_PlugMgr> T_SPC_PlugMgr;	
-	typedef std::map<std::string, C_PlugData> T_Name2PlugData;
+	typedef std::map<std::string, C_PlugData::T_SPC_PlugData> T_Name2PlugData;
 
 public:
 	virtual void Run() override;
@@ -27,12 +29,19 @@ public:
 
 	void Awake();
 	void Init();
-	void Update();
+	void Update(const boost::system::error_code& ec);
 	void UnInit();
+
+	void WaitUpdate();
 
 public:
 	T_Name2PlugData m_Name2PlugData;
 
+	uint32_t 					m_u32FrameMS;
+	boost::asio::io_service 	m_ioService;
+	boost::asio::deadline_timer	m_updateTimer;
+	bool 						m_bQuit;
+	
 public:
 	C_PlugMgr();
 	virtual ~C_PlugMgr();

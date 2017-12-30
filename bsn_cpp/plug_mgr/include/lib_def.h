@@ -1,5 +1,8 @@
 #pragma once
 
+#include <bsn_cpp/include/define.h>
+
+
 #ifdef D_BSN_IS_DLL_plug_mgr
 	#define D_BSN_plug_mgr_DLL D_DllExport
 #else

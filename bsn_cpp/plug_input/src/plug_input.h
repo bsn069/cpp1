@@ -1,12 +1,12 @@
 #pragma once
 
-#include "./../include/i_plug_one.h"
+#include "./../include/i_plug_input.h"
  
-D_BsnNamespace1(plug_one)
+D_BsnNamespace1(plug_input)
 //////////////////////////////////////////////////////////////////////
-class C_PlugOne : public I_PlugOne {
+class C_PlugInput : public I_PlugInput {
 public:
-	typedef std::shared_ptr<C_PlugOne> T_SPC_PlugOne;	
+	typedef std::shared_ptr<C_PlugInput> T_SPC_PlugInput;	
 
 public:
 	virtual void Awake() override;
@@ -15,14 +15,14 @@ public:
 	virtual void UnInit() override;
 
 public:
-	static T_SPC_PlugOne NewC_PlugOne();
-	static T_SPI_PlugOne NewI_PlugOne();
+	static T_SPC_PlugInput NewC_PlugInput();
+	static T_SPI_PlugInput NewI_PlugInput();
 
-	T_SPC_PlugOne GetSPC_PlugOne();
+	T_SPC_PlugInput GetSPC_PlugInput();
 
 public:
-	C_PlugOne();
-	virtual ~C_PlugOne();
+	C_PlugInput();
+	virtual ~C_PlugInput();
 
 public:
 	T_SPI_PlugMgr m_spI_PlugMgr;

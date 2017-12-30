@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef D_BSN_IS_DLL_plug_one
-	#define D_BSN_plug_one_DLL D_DllExport
+	#define D_BSN_plug_one_DLL D_DllCExport
 #else
-	#define D_BSN_plug_one_DLL D_DllImport
+	#define D_BSN_plug_one_DLL D_DllCImport
 
 	#if (defined WIN32)
 		#ifdef _DEBUG

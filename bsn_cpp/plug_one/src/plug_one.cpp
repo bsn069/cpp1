@@ -37,6 +37,10 @@ C_PlugOne::T_SPC_PlugOne C_PlugOne::GetSPC_PlugOne() {
 	return spC_PlugOne;
 }
 
+void C_PlugOne::ProcCmd(std::string const& strCmd) {
+	D_OutInfo1(strCmd);
+}
+
 //////////////////////////////////////////////////////////////////////
 C_PlugOne* CreateC_PlugOne() {
 	D_OutInfo();

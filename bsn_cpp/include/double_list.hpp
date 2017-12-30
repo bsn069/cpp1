@@ -67,7 +67,7 @@ C_DoubleList<T_Type>::Flip(  )
 {
 	{
 		boost::lock_guard<boost::mutex> lock_obj( m_Mutex );
-		swap(m_u32Write, m_u32Read);
+		std::swap(m_u32Write, m_u32Read);
 		m_Value[ m_u32Write ].clear();
 	}
 	return m_Value[ m_u32Read ];

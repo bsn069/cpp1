@@ -1,5 +1,7 @@
 #include "plug_mgr.h"
 
+#include "./../include/i_plug.h"
+
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
@@ -19,11 +21,6 @@ C_PlugMgr::C_PlugMgr()
 C_PlugMgr::~C_PlugMgr() {
 	D_OutInfo();
  
-}
-
-C_PlugMgr::T_SPI_PlugMgr C_PlugMgr::GetSPI_PlugMgr() {
-	D_OutInfo();
-	return shared_from_this();
 }
 
 
@@ -47,10 +44,44 @@ void C_PlugMgr::Awake() {
 void C_PlugMgr::Init() {
 	D_OutInfo();
  
+	for (auto& itor : m_Name2PlugData) {
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->Init(GetSPI_PlugMgr());
+	}
+}
+
+void C_PlugMgr::PushCmd(std::string const& strCmd) {
+	m_InputCmd.Write(strCmd);
+}
+
+void C_PlugMgr::ProcCmd(std::string const& strCmd) {
+	D_OutInfo1(strCmd);
+
+	if (strCmd.compare("quit") == 0) {
+		Quit();
+		return;
+	}
+
+	if (strCmd.compare("reload") == 0) {
+		 
+		return;
+	}
 }
 
 void C_PlugMgr::Update(const boost::system::error_code& ec) {
 	D_OutInfo();
+
+	auto& cmds = m_InputCmd.Flip();
+	for (auto& strCmd : cmds) {
+		D_OutInfo2("strCmd=", strCmd);
+		ProcCmd(strCmd);
+		for (auto& itor : m_Name2PlugData) {
+			auto& spC_PlugData = itor.second;
+			auto spI_Plug = spC_PlugData->GetPlug();
+			spI_Plug->ProcCmd(strCmd);
+		}
+	}
 
 	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
@@ -60,6 +91,11 @@ void C_PlugMgr::Update(const boost::system::error_code& ec) {
 
 	WaitUpdate();
 }
+
+void C_PlugMgr::Quit() {
+	m_bQuit = true;
+}
+
 
 void C_PlugMgr::WaitUpdate() {
 	static auto s_updateFunc = boost::bind(
@@ -80,6 +116,11 @@ void C_PlugMgr::WaitUpdate() {
 void C_PlugMgr::UnInit() {
 	D_OutInfo();
 
+	for (auto& itor : m_Name2PlugData) {
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->UnInit();
+	}
 }
 
 I_Plug::T_SPI_Plug C_PlugMgr::GetPlug(std::string strName) {

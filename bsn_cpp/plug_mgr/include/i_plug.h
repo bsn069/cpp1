@@ -21,6 +21,8 @@ public:
 	virtual void Update() = 0;
 	virtual void UnInit() = 0;
 
+	virtual void ProcCmd(std::string const& strCmd) = 0;
+
 	T_SPI_Plug GetSPI_Plug() {
 		return shared_from_this();
 	}

@@ -14,6 +14,8 @@ public:
 	virtual void Update() override;
 	virtual void UnInit() override;
 
+	virtual void ProcCmd(std::string const& strCmd) override;
+
 public:
 	static T_SPC_PlugOne NewC_PlugOne();
 	static T_SPI_PlugOne NewI_PlugOne();

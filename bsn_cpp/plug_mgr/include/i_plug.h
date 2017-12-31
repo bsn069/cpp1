@@ -16,10 +16,15 @@ public:
 	typedef std::shared_ptr<I_PlugMgr> T_SPI_PlugMgr;
 
 public:
-	virtual void Awake() = 0;
-	virtual void Init(T_SPI_PlugMgr spI_PlugMgr) = 0;
-	virtual void Update() = 0;
-	virtual void UnInit() = 0;
+	virtual bool Awake() = 0;
+	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) = 0;
+	virtual bool AllInitAfter() = 0;
+	virtual bool Update() = 0;
+	virtual bool Quit() = 0;
+	virtual bool UnInit() = 0;
+
+	virtual void OnReloadPre(std::string const& strName) = 0;
+	virtual void OnReloadPost(std::string const& strName) = 0;
 
 	virtual void ProcCmd(std::string const& strCmd) = 0;
 

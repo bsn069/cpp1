@@ -1,7 +1,12 @@
 #include "plug_data.h"
 
+#include "./../include/plug_data_cmd.h"
+#include "./../include/plug_data_log.h"
+
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/define.h>
+#include <bsn_cpp/include/new.hpp>
+#include <bsn_cpp/include/delete.hpp>
 
 #include <boost/function.hpp>
 #include <boost/format.hpp>
@@ -10,15 +15,114 @@ D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 C_PlugData::C_PlugData(std::string strName) 
 	: m_strName(strName) 
+	, m_pData(nullptr)
 {
 	D_OutInfo1(m_strName);
+
+	if (m_strName.compare("cmd") == 0) {
+		m_pData = New<C_PlugDataCmd>();
+	}
+	if (m_strName.compare("log") == 0) {
+		m_pData = New<C_PlugDataLog>();
+	}
 }
 
 C_PlugData::~C_PlugData() {
 	D_OutInfo1(m_strName);
- 
+	
 	UnLoadPlug();
 	UnLoadLib();
+
+	if (m_strName.compare("cmd") == 0) {
+		auto pImp = reinterpret_cast<C_PlugDataCmd*>(m_pData);
+		Delete(pImp);
+	}
+	if (m_strName.compare("log") == 0) {
+		auto pImp = reinterpret_cast<C_PlugDataLog*>(m_pData);
+		Delete(pImp);
+	}
+
+	m_pData = nullptr;
+}
+
+bool C_PlugData::Awake() {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->Awake();
+}
+
+bool C_PlugData::Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->Init(spI_PlugMgr);
+}
+
+bool C_PlugData::AllInitAfter() {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->AllInitAfter();
+}
+
+bool C_PlugData::Update() {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->Update();
+}
+
+bool C_PlugData::Quit() {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->Quit();
+}
+
+bool C_PlugData::UnInit() {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->UnInit();
+}
+
+void C_PlugData::OnReloadPre(std::string const& strName) {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return;
+	}
+
+	m_spI_Plug->OnReloadPre(strName);
+}
+
+void C_PlugData::OnReloadPost(std::string const& strName) {
+	D_OutInfo1(m_strName);
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return;
+	}
+
+	m_spI_Plug->OnReloadPost(strName);
 }
 
 bool C_PlugData::LoadLib() {
@@ -57,7 +161,8 @@ bool C_PlugData::UnLoadLib() {
 	}
 
 	if (m_spI_Plug) {
-		UnLoadPlug();
+		D_OutInfo1("plug had loaded");
+		return false;
 	}
 
 	m_lib.unload();
@@ -78,10 +183,15 @@ bool C_PlugData::LoadPlug() {
 		return false;
 	}
 
-	typedef I_Plug::T_SPI_Plug	(T_CreatePlug)();
+	if (m_pData == nullptr) {
+		D_OutInfo1("m_pData == nullptr");
+		return false;
+	}
+
+	typedef I_Plug::T_SPI_Plug	(T_CreatePlug)(void*);
 	auto pFunc = m_lib.get<T_CreatePlug>("CreatePlug");
 	D_OutInfo2("pFunc=", pFunc);
-	m_spI_Plug = pFunc();
+	m_spI_Plug = pFunc(m_pData);
 	D_OutInfo2("m_spI_Plug=", m_spI_Plug.get());
 
 	return true;

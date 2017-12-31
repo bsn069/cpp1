@@ -17,9 +17,11 @@ public:
 	virtual void Run() = 0;
 	
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) = 0;
+
 	virtual void PushCmd(std::string const& strCmd) = 0;
 	virtual void Quit() = 0;
-	
+	virtual bool IsQuit() = 0;
+
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {
 		return shared_from_this();

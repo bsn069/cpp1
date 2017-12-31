@@ -14,21 +14,43 @@ C_PlugOne::~C_PlugOne() {
  
 }
 
-void C_PlugOne::Awake() {
-
+bool C_PlugOne::Awake() {
+	return true;	
 }
 
-void C_PlugOne::Init(T_SPI_PlugMgr spI_PlugMgr) {
-	m_spI_PlugMgr = spI_PlugMgr;
+bool C_PlugOne::Init(T_SPI_PlugMgr spI_PlugMgr) {
+	return true;	
 }
 
-void C_PlugOne::Update() {
-
+bool C_PlugOne::AllInitAfter() {
+	return true;	
 }
 
-void C_PlugOne::UnInit() {
-	m_spI_PlugMgr = nullptr;
+bool C_PlugOne::Update() {
+	return true;	
 }
+
+bool C_PlugOne::Quit() {
+	return true;	
+}
+
+bool C_PlugOne::UnInit() {
+	return true;	
+}
+
+void C_PlugOne::OnReloadPre(std::string const& strName) {
+	return;	
+}
+
+void C_PlugOne::OnReloadPost(std::string const& strName) {
+	return;	
+}
+
+void C_PlugOne::ProcCmd(std::string const& strCmd) {
+	return;	
+}
+
+ 
 
 C_PlugOne::T_SPC_PlugOne C_PlugOne::GetSPC_PlugOne() {
 	D_OutInfo();
@@ -36,10 +58,7 @@ C_PlugOne::T_SPC_PlugOne C_PlugOne::GetSPC_PlugOne() {
 	auto spC_PlugOne = std::dynamic_pointer_cast<C_PlugOne>(spI_Plug);
 	return spC_PlugOne;
 }
-
-void C_PlugOne::ProcCmd(std::string const& strCmd) {
-	D_OutInfo1(strCmd);
-}
+ 
 
 //////////////////////////////////////////////////////////////////////
 C_PlugOne* CreateC_PlugOne() {

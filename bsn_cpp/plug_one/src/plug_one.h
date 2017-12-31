@@ -9,10 +9,15 @@ public:
 	typedef std::shared_ptr<C_PlugOne> T_SPC_PlugOne;	
 
 public:
-	virtual void Awake() override;
-	virtual void Init(T_SPI_PlugMgr spI_PlugMgr) override;
-	virtual void Update() override;
-	virtual void UnInit() override;
+	virtual bool Awake() override;
+	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) override;
+	virtual bool AllInitAfter() override;
+	virtual bool Update() override;
+	virtual bool Quit() override;
+	virtual bool UnInit() override;
+
+	virtual void OnReloadPre(std::string const& strName) override;
+	virtual void OnReloadPost(std::string const& strName) override;
 
 	virtual void ProcCmd(std::string const& strCmd) override;
 

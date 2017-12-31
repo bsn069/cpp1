@@ -26,10 +26,6 @@ ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 #target_link_libraries(${OUT_NAME} ${LIB_PREFIX_D}common${OUTPUT_SUFFIX})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
-target_link_libraries(${OUT_NAME} boost_system)
-target_link_libraries(${OUT_NAME} boost_filesystem)
-target_link_libraries(${OUT_NAME} boost_thread)
-target_link_libraries(${OUT_NAME} dl)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic")
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic")

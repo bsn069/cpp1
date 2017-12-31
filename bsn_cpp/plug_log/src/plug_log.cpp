@@ -1,16 +1,14 @@
 #include "plug_log.h"
  
-#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
-
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
 D_BsnNamespace1(plug_log)
 //////////////////////////////////////////////////////////////////////
-C_PlugLog::C_PlugLog(void* pData) {
+C_PlugLog::C_PlugLog() {
 	D_OutInfo();
-	// m_pData = reinterpret_cast<T_PlugData*>(pData);
+	// m_ = reinterpret_cast<T_PlugData*>();
 }
 
 C_PlugLog::~C_PlugLog() {
@@ -26,7 +24,7 @@ bool C_PlugLog::Awake() {
 
 bool C_PlugLog::Init(T_SPI_PlugMgr spI_PlugMgr) {
 	D_OutInfo();
-	m_spI_PlugMgr = spI_PlugMgr;
+	// m_spI_PlugMgr = spI_PlugMgr;
 	return true;
 }
 
@@ -47,7 +45,7 @@ bool C_PlugLog::Quit() {
 
 bool C_PlugLog::UnInit() {
 	D_OutInfo();
-	m_spI_PlugMgr = nullptr;
+	// m_spI_PlugMgr = nullptr;
 	return true;
 }
 
@@ -61,6 +59,10 @@ void OnReloadPost(std::string const& strName) {
 	
 }
 
+void C_PlugLog::ProcCmd(std::string const& strCmd) {
+	D_OutInfo1(strCmd);
+ 
+}
 
 C_PlugLog::T_SPC_PlugLog C_PlugLog::GetSPC_PlugLog() {
 	D_OutInfo();
@@ -69,15 +71,11 @@ C_PlugLog::T_SPC_PlugLog C_PlugLog::GetSPC_PlugLog() {
 	return spC_PlugLog;
 }
 
-void C_PlugLog::ProcCmd(std::string const& strCmd) {
-	D_OutInfo1(strCmd);
- 
-}
 
 //////////////////////////////////////////////////////////////////////
-C_PlugLog* CreateC_PlugLog(void* pData) {
+C_PlugLog* CreateC_PlugLog() {
 	D_OutInfo();
-	C_PlugLog* pC_PlugLog = New<C_PlugLog>(pData);
+	C_PlugLog* pC_PlugLog = New<C_PlugLog>();
 	return pC_PlugLog;
 }
 
@@ -87,16 +85,16 @@ void ReleaseC_PlugLog(I_PlugLog* pI_PlugLog) {
 	Delete(pC_PlugLog);
 }
 
-C_PlugLog::T_SPC_PlugLog C_PlugLog::NewC_PlugLog(void* pData) {
+C_PlugLog::T_SPC_PlugLog C_PlugLog::NewC_PlugLog() {
 	D_OutInfo();
-	auto pC_PlugLog = CreateC_PlugLog(pData);
+	auto pC_PlugLog = CreateC_PlugLog();
 	auto spC_PlugLog = C_PlugLog::T_SPC_PlugLog(pC_PlugLog, ReleaseC_PlugLog);
 	return spC_PlugLog;
 }
 
-C_PlugLog::T_SPI_PlugLog C_PlugLog::NewI_PlugLog(void* pData) {
+C_PlugLog::T_SPI_PlugLog C_PlugLog::NewI_PlugLog() {
 	D_OutInfo();
-	auto spC_PlugLog = C_PlugLog::NewC_PlugLog(pData);
+	auto spC_PlugLog = C_PlugLog::NewC_PlugLog();
 	auto spI_PlugLog = spC_PlugLog->GetSPI_PlugLog();
 	return spI_PlugLog;
 }

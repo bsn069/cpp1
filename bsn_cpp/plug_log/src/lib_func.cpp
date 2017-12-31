@@ -8,9 +8,9 @@
 
 D_BsnNamespace1(plug_log)
 //////////////////////////////////////////////////////////////////////
-D_DllCExport D_N1(plug_mgr)::I_Plug::T_SPI_Plug	CreatePlug(void* pData) {
+D_DllCExport D_N1(plug_mgr)::I_Plug::T_SPI_Plug	CreatePlug() {
 	D_OutInfo();
-	return C_PlugLog::NewI_PlugLog(pData);
+	return C_PlugLog::NewI_PlugLog();
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

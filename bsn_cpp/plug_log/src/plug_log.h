@@ -28,18 +28,18 @@ public: // I_PlugLog
 	
 
 public:
-	static T_SPC_PlugLog NewC_PlugLog(void* pData);
-	static T_SPI_PlugLog NewI_PlugLog(void* pData);
+	static T_SPC_PlugLog NewC_PlugLog();
+	static T_SPI_PlugLog NewI_PlugLog();
 
 	T_SPC_PlugLog GetSPC_PlugLog();
 
 public:
-	C_PlugLog(void* pData);
+	C_PlugLog();
 	virtual ~C_PlugLog();
 
 public:
 	T_SPI_PlugMgr 	m_spI_PlugMgr;
-	T_PlugData* 	m_pData;
+	// T_PlugData* 	m_pData;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

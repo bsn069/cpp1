@@ -16,6 +16,8 @@ public:
 	typedef std::shared_ptr<I_PlugMgr> T_SPI_PlugMgr;
 
 public:
+	virtual char const * const GetName() const = 0;
+
 	virtual bool Awake() = 0;
 	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) = 0;
 	virtual bool AllInitAfter() = 0;

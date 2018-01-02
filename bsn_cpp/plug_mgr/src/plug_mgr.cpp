@@ -90,7 +90,7 @@ bool C_PlugMgr::LoadAll() {
 	C_PlugData::T_SPC_PlugData spC_PlugData;
 	std::string strName;
 
-	strName = "log";
+	strName = "cmd";
 	spC_PlugData = LoadPlugData(strName);
 	if (spC_PlugData == nullptr) {
 		D_OutInfo1("LoadPlugData fail");
@@ -226,7 +226,7 @@ void C_PlugMgr::ProcCmd(std::string const& strCmd) {
 }
 
 void C_PlugMgr::Update(const boost::system::error_code& ec) {
-	D_OutInfo();
+	// D_OutInfo();
 
 	std::string strCmd;
 	while (fl_InputCmds.pop(strCmd)) {

@@ -49,13 +49,13 @@ bool C_PlugLog::UnInit() {
 	return true;
 }
 
-void OnReloadPre(std::string const& strName) {
+void C_PlugLog::OnReloadPre(std::string const& strName) {
 	D_OutInfo();
 	
 }
 
-void OnReloadPost(std::string const& strName) {
-	D_OutInfo();
+void C_PlugLog::OnReloadPost(std::string const& strName) {
+	// D_OutInfo();
 	
 }
 

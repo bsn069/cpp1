@@ -3,14 +3,23 @@
 #include "./../include/i_plug_cmd.h"
 #include <bsn_cpp/plug_mgr/include/plug_data_cmd.h>
 
+#include <boost/function.hpp>
+
+#include <map>
+
 D_BsnNamespace1(plug_cmd)
 //////////////////////////////////////////////////////////////////////
 class C_PlugCmd : public I_PlugCmd {
 public:
 	typedef std::shared_ptr<C_PlugCmd> T_SPC_PlugCmd;	
 	typedef D_N1(plug_mgr)::C_PlugDataCmd T_PlugData;
+	typedef boost::function<void(bool, std::string const&)> T_FuncCmd;
+	typedef std::map<std::string, T_FuncCmd> T_Cmd2Func;
+	typedef std::map<std::string, T_Cmd2Func> T_PlugCmds;
 
 public: // I_Plug
+	virtual char const * const GetName() const override;
+
 	virtual bool Awake() override;
 	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) override;
 	virtual bool AllInitAfter() override;
@@ -39,6 +48,18 @@ public:
 
 	T_SPC_PlugCmd GetSPC_PlugCmd();
 
+	void RegPlugCmd(
+			std::string const& strPlug
+			, std::string const& strCmd
+			, T_FuncCmd funcCmd
+		);
+
+public: // cmd
+	void CmdQuit(bool bShowHelp, std::string const& strParam);
+	void CmdLS(bool bShowHelp, std::string const& strParam);
+	void CmdCD(bool bShowHelp, std::string const& strParam);
+	void CmdPWD(bool bShowHelp, std::string const& strParam);
+
 public:
 	C_PlugCmd(void* pData);
 	virtual ~C_PlugCmd();
@@ -46,6 +67,7 @@ public:
 public:
 	T_SPI_PlugMgr 	m_spI_PlugMgr;
 	T_PlugData* 	m_pData;
+	T_PlugCmds		m_PlugCmds;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

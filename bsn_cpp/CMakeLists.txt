@@ -104,9 +104,9 @@ MESSAGE(STATUS "OUTPUT_SUFFIX " ${OUTPUT_SUFFIX})
 # ADD_SUBDIRECTORY( input )
 ADD_SUBDIRECTORY( plug_mgr_loader )
 ADD_SUBDIRECTORY( plug_mgr )
-ADD_SUBDIRECTORY( plug_one )
+#ADD_SUBDIRECTORY( plug_one )
 ADD_SUBDIRECTORY( plug_cmd )
-ADD_SUBDIRECTORY( plug_log )
+#ADD_SUBDIRECTORY( plug_log )
 #-------------------------------------------------------------------------------
 
 MESSAGE(STATUS "------------------------------------------------------------- ")

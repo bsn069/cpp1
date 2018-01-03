@@ -53,12 +53,21 @@ public:
 			, std::string const& strCmd
 			, T_FuncCmd funcCmd
 		);
+	bool DoCmd(
+			std::string const& strPlug
+			, std::string const& strCmd
+			, std::string const& strParam
+		);
 
 public: // cmd
 	void CmdQuit(bool bShowHelp, std::string const& strParam);
 	void CmdLS(bool bShowHelp, std::string const& strParam);
 	void CmdCD(bool bShowHelp, std::string const& strParam);
 	void CmdPWD(bool bShowHelp, std::string const& strParam);
+	void CmdPushD(bool bShowHelp, std::string const& strParam);
+	void CmdPopD(bool bShowHelp, std::string const& strParam);
+	void CmdReloadPlug(bool bShowHelp, std::string const& strParam);
+	void CmdHelp(bool bShowHelp, std::string const& strParam);
 
 public:
 	C_PlugCmd(void* pData);

@@ -17,6 +17,7 @@ public:
 	virtual void Run() = 0;
 	
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) = 0;
+	virtual bool ReloadPlug(std::string const& strName) = 0;
 
 	virtual void PushCmd(std::string const& strCmd) = 0;
 	virtual void Quit() = 0;

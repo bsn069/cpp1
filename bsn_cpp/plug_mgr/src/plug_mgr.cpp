@@ -24,12 +24,12 @@ void InputThread() {
 	char cInput;
 
 	while (!fl_bQuit) {
-		D_OutInfo1("wait input");
+		// D_OutInfo1("wait input");
 		strCmd.clear();
 		while ((cInput = getchar()) != '\n') {
 			strCmd += cInput;
 		}
-		D_OutInfo2("strCmd=", strCmd);
+		// D_OutInfo2("strCmd=", strCmd);
 		if (!fl_InputCmds.push(strCmd)) {
 			D_OutInfo1("push fail");
 		}
@@ -160,6 +160,12 @@ void C_PlugMgr::UnInitAll() {
 
 bool C_PlugMgr::ReloadPlug(std::string const& strName) {
 	D_OutInfo2("strName=", strName);
+	m_waitReloadPlug = strName;
+	return true;
+}
+
+bool C_PlugMgr::DoReloadPlug(std::string const& strName) {
+	D_OutInfo2("strName=", strName);
 
 	auto spC_PlugData = GetPlugData(strName);
 	if (spC_PlugData == nullptr) {
@@ -191,6 +197,7 @@ bool C_PlugMgr::ReloadPlug(std::string const& strName) {
 
 	spC_PlugData->Awake();
 	spC_PlugData->Init(GetSPC_PlugMgr());
+	spC_PlugData->AllInitAfter();
 
 	for (auto& itor : m_Name2PlugData) {
 		itor.second->OnReloadPost(strName);
@@ -212,12 +219,7 @@ void C_PlugMgr::PushCmd(std::string const& strCmd) {
 }
 
 void C_PlugMgr::ProcCmd(std::string const& strCmd) {
-	D_OutInfo1(strCmd);
-
-	if (strCmd.compare("reload cmd") == 0) {
-		ReloadPlug("cmd");
-		return;
-	}
+	// D_OutInfo1(strCmd);
 
 	auto pCmd = GetPlug("cmd");
 	if (pCmd != nullptr) {
@@ -231,6 +233,11 @@ void C_PlugMgr::Update(const boost::system::error_code& ec) {
 	std::string strCmd;
 	while (fl_InputCmds.pop(strCmd)) {
 		ProcCmd(strCmd);
+	}
+
+	if (!m_waitReloadPlug.empty()) {
+		DoReloadPlug(m_waitReloadPlug);
+		m_waitReloadPlug.clear();
 	}
 	
 	for (auto& itor : m_Name2PlugData) {
@@ -291,7 +298,7 @@ C_PlugData::T_SPC_PlugData C_PlugMgr::LoadPlugData(std::string const& strName) {
 }
 
 I_Plug::T_SPI_Plug C_PlugMgr::GetPlug(std::string strName) {
-	D_OutInfo2("strName=", strName);
+	// D_OutInfo2("strName=", strName);
 	auto itor = m_Name2PlugData.find(strName);
 	if (itor != m_Name2PlugData.end()) {
 		return itor->second->GetPlug();

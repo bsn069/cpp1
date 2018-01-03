@@ -19,10 +19,12 @@ public:
 public:
 	virtual void Run() override;
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) override;
+	virtual bool ReloadPlug(std::string const& strName) override;
 
 	virtual void PushCmd(std::string const& strCmd) override;
 	virtual void Quit() override;
 	virtual bool IsQuit() override;
+
 
 public:
 	static T_SPC_PlugMgr NewC_PlugMgr();
@@ -43,7 +45,8 @@ public:
 
 	C_PlugData::T_SPC_PlugData GetPlugData(std::string const& strName);
 	C_PlugData::T_SPC_PlugData LoadPlugData(std::string const& strName);
-	bool ReloadPlug(std::string const& strName);
+	
+	bool DoReloadPlug(std::string const& strName);
 	
 public:
 	T_Name2PlugData m_Name2PlugData;
@@ -51,6 +54,7 @@ public:
 	uint32_t 					m_u32FrameMS;
 	boost::asio::io_service 	m_ioService;
 	boost::asio::deadline_timer	m_updateTimer;
+	std::string 				m_waitReloadPlug;
 
 public:
 	C_PlugMgr();

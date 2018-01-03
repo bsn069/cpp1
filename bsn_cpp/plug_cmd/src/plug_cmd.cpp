@@ -43,8 +43,30 @@ bool C_PlugCmd::AllInitAfter() {
 	RegPlugCmd(GetName(), "quit", boost::bind(&C_PlugCmd::CmdQuit, this, _1, _2));
 	RegPlugCmd(GetName(), "ls", boost::bind(&C_PlugCmd::CmdLS, this, _1, _2));
 	RegPlugCmd(GetName(), "cd", boost::bind(&C_PlugCmd::CmdCD, this, _1, _2));
+	RegPlugCmd(GetName(), "pushd", boost::bind(&C_PlugCmd::CmdPushD, this, _1, _2));
+	RegPlugCmd(GetName(), "popd", boost::bind(&C_PlugCmd::CmdPopD, this, _1, _2));
 	RegPlugCmd(GetName(), "pwd", boost::bind(&C_PlugCmd::CmdPWD, this, _1, _2));
+	RegPlugCmd(GetName(), "ReloadPlug", boost::bind(&C_PlugCmd::CmdReloadPlug, this, _1, _2));
+	RegPlugCmd(GetName(), "help", boost::bind(&C_PlugCmd::CmdHelp, this, _1, _2));
 	return true;
+}
+
+void C_PlugCmd::CmdHelp(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+ 	D_OutInfo1("all plug cmd list:");
+	for (auto& itor : m_PlugCmds) {
+		D_OutInfo2(itor.first, ":");
+		for (auto& itor2 : itor.second) {
+			D_OutInfo2("\t", itor2.first);
+		}
+	}
+}
+
+void C_PlugCmd::CmdReloadPlug(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	m_spI_PlugMgr->ReloadPlug(strParam);
 }
 
 void C_PlugCmd::CmdPWD(bool bShowHelp, std::string const& strParam) {
@@ -56,9 +78,41 @@ void C_PlugCmd::CmdPWD(bool bShowHelp, std::string const& strParam) {
 void C_PlugCmd::CmdCD(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
 
+	if (strParam.compare(m_pData->m_strCurPlug) == 0) {
+		return;
+	}
+
+	if (strParam.compare("..") == 0) {
+		CmdPopD(bShowHelp, strParam);
+		return;
+	}
+
 	D_OutInfo2("leave plug:", m_pData->m_strCurPlug);
 	m_pData->m_strCurPlug = strParam;
 	D_OutInfo2("enter plug:", m_pData->m_strCurPlug);
+}
+
+void C_PlugCmd::CmdPushD(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+
+	if (strParam.compare(m_pData->m_strCurPlug) == 0) {
+		return;
+	}
+
+	m_pData->m_PlugStack.push_back(strParam);
+	CmdCD(bShowHelp, strParam);
+}
+
+void C_PlugCmd::CmdPopD(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+
+	if (m_pData->m_PlugStack.empty()) {
+		return;
+	}
+
+	auto strPlug = m_pData->m_PlugStack.back();
+	m_pData->m_PlugStack.pop_back();
+	CmdCD(bShowHelp, strPlug);
 }
 
 void C_PlugCmd::CmdLS(bool bShowHelp, std::string const& strParam) {
@@ -112,15 +166,45 @@ C_PlugCmd::T_SPC_PlugCmd C_PlugCmd::GetSPC_PlugCmd() {
 
 void C_PlugCmd::ProcCmd(std::string const& strCmd) {
 	D_OutInfo1(strCmd);
+	std::string strFirstCmd;
+	std::string strParam;
 
-	auto& cmd2Func = m_PlugCmds[m_pData->m_strCurPlug];
-	auto itor = cmd2Func.find(strCmd);
-	if (itor != cmd2Func.end()) {
-		auto& func = itor->second;
-		func(false, strCmd);
-		return;
+	auto pos = strCmd.find_first_of(' ');
+	if (pos != std::string::npos) {
+		strParam 	= strCmd.substr(pos + 1);
+		strFirstCmd	= strCmd.substr(0, pos);
+	} else {
+		strFirstCmd = strCmd;
 	}
-	D_OutInfo1("unknown cmd");
+
+	auto bRet = DoCmd(m_pData->m_strCurPlug, strFirstCmd, strParam);
+	if (!bRet && m_pData->m_strCurPlug.compare(GetName()) != 0) {
+		DoCmd(GetName(), strFirstCmd, strParam);
+	}
+}
+
+bool C_PlugCmd::DoCmd(
+	std::string const& strPlug
+	, std::string const& strCmd
+	, std::string const& strParam
+) {
+	D_OutInfo2("strPlug=", strPlug);
+	D_OutInfo2("strCmd=", strCmd);
+	D_OutInfo2("strParam=", strParam);
+	
+	auto itor = m_PlugCmds.find(strPlug);
+	if (itor == m_PlugCmds.end()) {
+		return false;
+	}
+
+	auto& cmd2Func = itor->second;
+	auto itor2 = cmd2Func.find(strCmd);
+	if (itor2 != cmd2Func.end()) {
+		auto& func = itor2->second;
+		func(false, strParam);
+		return true;
+	}
+	return false;
 }
 
 void C_PlugCmd::RegPlug(std::string const& strName) {

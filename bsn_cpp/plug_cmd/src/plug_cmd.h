@@ -3,8 +3,6 @@
 #include "./../include/i_plug_cmd.h"
 #include <bsn_cpp/plug_mgr/include/plug_data_cmd.h>
 
-#include <boost/function.hpp>
-
 #include <map>
 
 D_BsnNamespace1(plug_cmd)
@@ -13,7 +11,6 @@ class C_PlugCmd : public I_PlugCmd {
 public:
 	typedef std::shared_ptr<C_PlugCmd> T_SPC_PlugCmd;	
 	typedef D_N1(plug_mgr)::C_PlugDataCmd T_PlugData;
-	typedef boost::function<void(bool, std::string const&)> T_FuncCmd;
 	typedef std::map<std::string, T_FuncCmd> T_Cmd2Func;
 	typedef std::map<std::string, T_Cmd2Func> T_PlugCmds;
 
@@ -41,18 +38,17 @@ public: // I_PlugCmd
 	virtual void CDPlug(std::string const& strName) override;
 	virtual void QuitPlug(std::string const& strName) override;
 	
-
+	virtual void RegPlugCmd(
+					std::string const& strPlug
+					, std::string const& strCmd
+					, T_FuncCmd funcCmd
+				) override;
 public:
 	static T_SPC_PlugCmd NewC_PlugCmd(void* pData);
 	static T_SPI_PlugCmd NewI_PlugCmd(void* pData);
 
 	T_SPC_PlugCmd GetSPC_PlugCmd();
 
-	void RegPlugCmd(
-			std::string const& strPlug
-			, std::string const& strCmd
-			, T_FuncCmd funcCmd
-		);
 	bool DoCmd(
 			std::string const& strPlug
 			, std::string const& strCmd

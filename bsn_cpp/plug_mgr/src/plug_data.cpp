@@ -2,6 +2,7 @@
 
 #include "./../include/plug_data_cmd.h"
 #include "./../include/plug_data_log.h"
+#include "./../include/plug_data_net.h"
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/define.h>
@@ -25,6 +26,9 @@ C_PlugData::C_PlugData(std::string strName)
 	if (m_strName.compare("log") == 0) {
 		m_pData = New<C_PlugDataLog>();
 	}
+	if (m_strName.compare("net") == 0) {
+		m_pData = New<C_PlugDataNet>();
+	}
 }
 
 C_PlugData::~C_PlugData() {
@@ -39,6 +43,10 @@ C_PlugData::~C_PlugData() {
 	}
 	if (m_strName.compare("log") == 0) {
 		auto pImp = reinterpret_cast<C_PlugDataLog*>(m_pData);
+		Delete(pImp);
+	}
+	if (m_strName.compare("net") == 0) {
+		auto pImp = reinterpret_cast<C_PlugDataNet*>(m_pData);
 		Delete(pImp);
 	}
 

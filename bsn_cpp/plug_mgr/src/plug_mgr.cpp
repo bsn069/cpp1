@@ -87,17 +87,20 @@ void C_PlugMgr::Run() {
 bool C_PlugMgr::LoadAll() {
 	D_OutInfo();
 	
-	C_PlugData::T_SPC_PlugData spC_PlugData;
-	std::string strName;
+	if (!LoadPlug("cmd")) { return false; };
+	if (!LoadPlug("net")) { return false; };
 
-	strName = "cmd";
-	spC_PlugData = LoadPlugData(strName);
+	return true;
+}
+
+bool C_PlugMgr::LoadPlug(std::string const& strName) {
+	D_OutInfo1(strName);
+	auto spC_PlugData = LoadPlugData(strName);
 	if (spC_PlugData == nullptr) {
 		D_OutInfo1("LoadPlugData fail");
 		return false;
 	}
 	m_Name2PlugData.insert(std::make_pair(strName, spC_PlugData));
-
 	return true;
 }
 

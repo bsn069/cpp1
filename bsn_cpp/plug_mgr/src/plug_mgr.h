@@ -47,6 +47,7 @@ public:
 	C_PlugData::T_SPC_PlugData LoadPlugData(std::string const& strName);
 	
 	bool DoReloadPlug(std::string const& strName);
+	bool LoadPlug(std::string const& strName);
 	
 public:
 	T_Name2PlugData m_Name2PlugData;

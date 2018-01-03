@@ -15,6 +15,7 @@ chmod +x _compile.sh
 chmod +x _gen.sh
 chmod +x _recompile.sh
 chmod +x _rm_docker.sh
+chmod +x _run.sh
 
 pushd docker_env/cppdev
 	chmod +x _build.sh

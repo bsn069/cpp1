@@ -37,6 +37,7 @@ public:
 	static T_SPI_PlugNet NewI_PlugNet(void* pData);
 
 	T_SPC_PlugNet GetSPC_PlugNet();
+	bool RegAllCmd();
 
 public: // net
 	void CmdHelp(bool bShowHelp, std::string const& strParam);

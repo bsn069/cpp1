@@ -48,7 +48,6 @@ C_PlugMgr::C_PlugMgr()
 C_PlugMgr::~C_PlugMgr() {
 	D_OutInfo();
 
-	UnInitAll();
 }
 
 
@@ -82,6 +81,8 @@ void C_PlugMgr::Run() {
 	m_ioService.run();
 
 	QuitAll();
+	UnInitAll();
+	
 }
 
 bool C_PlugMgr::LoadAll() {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "i_plug_data.h"
+
 #include <bsn_cpp/include/name_space.h>
 
 #include <stdint.h>
@@ -10,7 +12,7 @@
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
-class C_PlugDataCmd {
+class C_PlugDataCmd : public I_PlugData {
 public:
 	std::set<std::string> m_Plugs;
 	std::string m_strCurPlug;
@@ -18,7 +20,7 @@ public:
 	
 public:
 	C_PlugDataCmd();
-	~C_PlugDataCmd();
+	virtual ~C_PlugDataCmd();
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -37,20 +37,21 @@ C_PlugData::~C_PlugData() {
 	UnLoadPlug();
 	UnLoadLib();
 
-	if (m_strName.compare("cmd") == 0) {
-		auto pImp = reinterpret_cast<C_PlugDataCmd*>(m_pData);
-		Delete(pImp);
-	}
-	if (m_strName.compare("log") == 0) {
-		auto pImp = reinterpret_cast<C_PlugDataLog*>(m_pData);
-		Delete(pImp);
-	}
-	if (m_strName.compare("net") == 0) {
-		auto pImp = reinterpret_cast<C_PlugDataNet*>(m_pData);
-		Delete(pImp);
-	}
+	Delete(m_pData);
+	// if (m_strName.compare("cmd") == 0) {
+	// 	auto pImp = reinterpret_cast<C_PlugDataCmd*>(m_pData);
+	// 	Delete(pImp);
+	// }
+	// if (m_strName.compare("log") == 0) {
+	// 	auto pImp = reinterpret_cast<C_PlugDataLog*>(m_pData);
+	// 	Delete(pImp);
+	// }
+	// if (m_strName.compare("net") == 0) {
+	// 	auto pImp = reinterpret_cast<C_PlugDataNet*>(m_pData);
+	// 	Delete(pImp);
+	// }
 
-	m_pData = nullptr;
+	// m_pData = nullptr;
 }
 
 bool C_PlugData::Awake() {

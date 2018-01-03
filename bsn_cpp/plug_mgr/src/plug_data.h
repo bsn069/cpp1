@@ -2,6 +2,7 @@
 
 #include "./../include/i_plug.h"
 #include "./../include/i_plug_mgr.h"
+#include "./../include/i_plug_data.h"
  
 #include <boost/dll.hpp>
 
@@ -41,7 +42,7 @@ public:
 	std::string 				m_strName;
 	I_Plug::T_SPI_Plug 			m_spI_Plug;
 	boost::dll::shared_library 	m_lib;
-	void* m_pData;
+	I_PlugData* m_pData;
 	
 };
 //////////////////////////////////////////////////////////////////////

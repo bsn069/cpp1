@@ -40,14 +40,21 @@ bool C_PlugNet::Init(T_SPI_PlugMgr spI_PlugMgr) {
 bool C_PlugNet::AllInitAfter() {
 	D_OutInfo();
 
-	auto spI_Plug = m_spI_PlugMgr->GetPlug("cmd");
-	if (spI_Plug) {
-		auto spI_PlugCmd = std::dynamic_pointer_cast<D_N1(plug_cmd)::I_PlugCmd>(spI_Plug);
-		if (spI_PlugCmd) {
-			spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugNet::CmdHelp, this, _1, _2));
-		}
+	RegAllCmd();
+
+	return true;
+}
+
+bool C_PlugNet::RegAllCmd() {
+	D_OutInfo();
+
+	auto spI_PlugCmd = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_cmd)::I_PlugCmd>("cmd");
+	if (!spI_PlugCmd) {
+		return false;
 	}
- 
+
+	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugNet::CmdHelp, this, _1, _2));
+
 	return true;
 }
 
@@ -63,6 +70,7 @@ bool C_PlugNet::Update() {
 
 bool C_PlugNet::Quit() {
 	D_OutInfo();
+ 
 	return true;
 }
 
@@ -80,6 +88,9 @@ void C_PlugNet::OnReloadPre(std::string const& strName) {
 void C_PlugNet::OnReloadPost(std::string const& strName) {
 	D_OutInfo();
 	
+	if (strName.compare("cmd") == 0) {
+		RegAllCmd();
+	}
 }
 
 

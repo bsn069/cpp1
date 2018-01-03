@@ -3,6 +3,7 @@
 #include "i_plug.h"
 
 #include <bsn_cpp/include/name_space.h>
+#include <bsn_cpp/include/d_out.h>
 
 #include <stdint.h>
 #include <memory>
@@ -26,6 +27,18 @@ public:
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {
 		return shared_from_this();
+	}
+
+	template<typename T>
+	std::shared_ptr<T> GetPlugPtr(std::string const& strPlugName) {
+		D_OutInfo();
+
+		auto spI_Plug = GetPlug(strPlugName);
+		if (!spI_Plug) {
+			return nullptr;
+		}
+
+		return std::dynamic_pointer_cast<T>(spI_Plug);
 	}
 
 public:

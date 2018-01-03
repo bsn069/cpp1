@@ -149,6 +149,7 @@ bool C_PlugCmd::UnInit() {
 void C_PlugCmd::OnReloadPre(std::string const& strName) {
 	D_OutInfo();
 	
+	m_PlugCmds.erase(strName);
 }
 
 void C_PlugCmd::OnReloadPost(std::string const& strName) {

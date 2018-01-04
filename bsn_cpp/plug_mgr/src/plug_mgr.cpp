@@ -82,7 +82,6 @@ void C_PlugMgr::Run() {
 
 	QuitAll();
 	UnInitAll();
-	
 }
 
 bool C_PlugMgr::LoadAll() {

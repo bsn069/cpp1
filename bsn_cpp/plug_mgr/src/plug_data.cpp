@@ -12,8 +12,12 @@
 #include <boost/function.hpp>
 #include <boost/format.hpp>
 
+int g_test = 0;
+
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
+C_PlugData::T_Name2FuncCreatePlugData C_PlugData::m_Name2FuncCreatePlugData;
+
 C_PlugData::C_PlugData(std::string strName) 
 	: m_strName(strName) 
 	, m_pData(nullptr)

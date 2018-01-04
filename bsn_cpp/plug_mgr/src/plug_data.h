@@ -7,13 +7,18 @@
 #include <boost/dll.hpp>
 
 #include <string>
+#include <map>
+
+extern int g_test;
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 class C_PlugData {
 public:
 	typedef std::shared_ptr<C_PlugData> T_SPC_PlugData;	
-
+	typedef I_PlugData* (*T_FuncCreatePlugData)();
+	typedef std::map<std::string, T_FuncCreatePlugData> T_Name2FuncCreatePlugData;
+	//typedef int T_Name2FuncCreatePlugData;
 public:
 	bool LoadLib();
 	bool UnLoadLib();
@@ -34,6 +39,8 @@ public:
 	void OnReloadPre(std::string const& strName);
 	void OnReloadPost(std::string const& strName);
 
+	static bool RegPlugData();
+
 public:
 	C_PlugData(std::string strName);
 	~C_PlugData();
@@ -43,7 +50,7 @@ public:
 	I_Plug::T_SPI_Plug 			m_spI_Plug;
 	boost::dll::shared_library 	m_lib;
 	I_PlugData* m_pData;
-	
+	static T_Name2FuncCreatePlugData m_Name2FuncCreatePlugData;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

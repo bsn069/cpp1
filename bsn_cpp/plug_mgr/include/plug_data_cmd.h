@@ -21,6 +21,8 @@ public:
 public:
 	C_PlugDataCmd();
 	virtual ~C_PlugDataCmd();
+
+	static I_PlugData* CreateI_PlugData();
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

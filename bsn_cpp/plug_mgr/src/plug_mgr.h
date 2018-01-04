@@ -9,6 +9,7 @@
 
 #include <map>
 
+
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 class C_PlugMgr : public I_PlugMgr {

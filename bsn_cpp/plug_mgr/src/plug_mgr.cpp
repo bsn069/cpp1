@@ -13,12 +13,16 @@
 #include <boost/lockfree/spsc_queue.hpp>
 #include <boost/algorithm/string.hpp>
 
+
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 static boost::atomic<bool> fl_bQuit(false);
 static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024> > fl_InputCmds;
 
+
 void InputThread() {
+	g_test = 1;
+D_OutInfo1(g_test);
 	D_OutInfo();
 	std::string strCmd;
 	char cInput;

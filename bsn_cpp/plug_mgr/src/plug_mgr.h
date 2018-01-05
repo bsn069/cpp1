@@ -1,14 +1,12 @@
 #pragma once
 
-#include "./../include/i_plug_mgr.h"
-#include "./../include/i_plug.h"
- 
-#include "plug_data.h"
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
+#include <bsn_cpp/plug_mgr/include/i_plug.h>
+#include <bsn_cpp/plug_mgr/src/plug_data.h>
 
 #include <boost/asio.hpp>
 
 #include <map>
-
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////

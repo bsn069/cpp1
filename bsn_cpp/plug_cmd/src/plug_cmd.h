@@ -1,7 +1,7 @@
 #pragma once
 
-#include "./../include/i_plug_cmd.h"
-#include <bsn_cpp/plug_mgr/include/plug_data_cmd.h>
+#include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_cmd.h>
 
 #include <map>
 

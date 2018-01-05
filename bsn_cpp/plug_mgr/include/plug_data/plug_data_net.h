@@ -1,6 +1,6 @@
 #pragma once
 
-#include "i_plug_data.h"
+#include <bsn_cpp/plug_mgr/include/i_plug_data.h>
 
 #include <bsn_cpp/include/name_space.h>
 
@@ -19,6 +19,8 @@ public:
 public:
 	C_PlugDataNet();
 	virtual ~C_PlugDataNet();
+
+	static I_PlugData* CreateI_PlugData();
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

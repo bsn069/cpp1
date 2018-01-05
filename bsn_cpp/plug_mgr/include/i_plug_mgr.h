@@ -1,6 +1,6 @@
 #pragma once
 
-#include "i_plug.h"
+#include <bsn_cpp/plug_mgr/include/i_plug.h>
 
 #include <bsn_cpp/include/name_space.h>
 #include <bsn_cpp/include/d_out.h>

@@ -1,4 +1,4 @@
-#include "plug_cmd.h"
+#include <bsn_cpp/plug_cmd/src/plug_cmd.h>
  
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 

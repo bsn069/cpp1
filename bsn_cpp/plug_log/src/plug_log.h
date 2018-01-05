@@ -1,14 +1,14 @@
 #pragma once
 
 #include "./../include/i_plug_log.h"
-// #include <bsn_cpp/plug_mgr/include/plug_data_log.h>
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_log.h>
 
 D_BsnNamespace1(plug_log)
 //////////////////////////////////////////////////////////////////////
 class C_PlugLog : public I_PlugLog {
 public:
 	typedef std::shared_ptr<C_PlugLog> T_SPC_PlugLog;	
-	typedef void T_PlugData;
+	typedef D_N1(plug_mgr)::C_PlugDataCmd T_PlugData;
 
 public: // I_Plug
 	virtual bool Awake() override;

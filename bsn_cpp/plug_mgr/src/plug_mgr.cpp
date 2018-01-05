@@ -1,6 +1,5 @@
-#include "plug_mgr.h"
-
-#include "./../include/i_plug.h"
+#include <bsn_cpp/plug_mgr/src/plug_mgr.h>
+#include <bsn_cpp/plug_mgr/include/i_plug.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -21,8 +20,6 @@ static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024> 
 
 
 void InputThread() {
-	g_test = 1;
-D_OutInfo1(g_test);
 	D_OutInfo();
 	std::string strCmd;
 	char cInput;
@@ -47,6 +44,8 @@ C_PlugMgr::C_PlugMgr()
 	, m_updateTimer(m_ioService, boost::posix_time::millisec(1))
 {
 	D_OutInfo();
+
+	C_PlugData::RegPlugData();
 }
 
 C_PlugMgr::~C_PlugMgr() {

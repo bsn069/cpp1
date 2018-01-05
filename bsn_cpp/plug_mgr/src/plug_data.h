@@ -1,15 +1,14 @@
 #pragma once
 
-#include "./../include/i_plug.h"
-#include "./../include/i_plug_mgr.h"
-#include "./../include/i_plug_data.h"
- 
+#include <bsn_cpp/plug_mgr/include/i_plug.h>
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
+#include <bsn_cpp/plug_mgr/include/i_plug_data.h>
+
+
 #include <boost/dll.hpp>
 
 #include <string>
 #include <map>
-
-extern int g_test;
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
@@ -18,7 +17,7 @@ public:
 	typedef std::shared_ptr<C_PlugData> T_SPC_PlugData;	
 	typedef I_PlugData* (*T_FuncCreatePlugData)();
 	typedef std::map<std::string, T_FuncCreatePlugData> T_Name2FuncCreatePlugData;
-	//typedef int T_Name2FuncCreatePlugData;
+ 
 public:
 	bool LoadLib();
 	bool UnLoadLib();
@@ -49,7 +48,7 @@ public:
 	std::string 				m_strName;
 	I_Plug::T_SPI_Plug 			m_spI_Plug;
 	boost::dll::shared_library 	m_lib;
-	I_PlugData* m_pData;
+	I_PlugData* 				m_pData;
 	static T_Name2FuncCreatePlugData m_Name2FuncCreatePlugData;
 };
 //////////////////////////////////////////////////////////////////////

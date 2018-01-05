@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./../include/i_plug_net.h"
-#include <bsn_cpp/plug_mgr/include/plug_data_net.h>
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_net.h>
 
 #include <boost/function.hpp>
 

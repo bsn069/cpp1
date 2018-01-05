@@ -1,6 +1,6 @@
-#include "./../include/lib_func.h"
-#include "./../include/i_plug_mgr.h"
-#include "plug_mgr.h"
+#include <bsn_cpp/plug_mgr/include/lib_func.h>
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
+#include <bsn_cpp/plug_mgr/src/plug_mgr.h>
 
 #include <bsn_cpp/include/name_space.h>
 

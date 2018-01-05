@@ -1,11 +1,8 @@
-#include "plug_data.h"
+#include <bsn_cpp/plug_mgr/src/plug_data.h>
 
-#include "./../include/plug_data_cmd.h"
-#include "./../include/plug_data_log.h"
-#include "./../include/plug_data_net.h"
-
-#include <bsn_cpp/include/new.hpp>
-
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_cmd.h>
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_log.h>
+#include <bsn_cpp/plug_mgr/include/plug_data/plug_data_net.h>
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
@@ -14,8 +11,9 @@ D_BsnNamespace1(plug_mgr)
 	m_Name2FuncCreatePlugData[#strPlugName] = className::CreateI_PlugData
 
 bool C_PlugData::RegPlugData() {
-	//m_Name2FuncCreatePlugData["cmd"] = C_PlugDataCmd::CreateI_PlugData;
 	D_RegPlugData(cmd, C_PlugDataCmd);
+	D_RegPlugData(net, C_PlugDataNet);
+	D_RegPlugData(log, C_PlugDataLog);
 	return true;
 }
 

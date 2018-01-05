@@ -1,7 +1,7 @@
 #pragma once
 
-#include "i_plug_mgr.h"
-#include "lib_def.h"
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
+#include <bsn_cpp/plug_mgr/include/lib_def.h>
 
 #include <bsn_cpp/include/name_space.h>
 

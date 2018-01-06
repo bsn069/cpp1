@@ -5,6 +5,8 @@
 #include <bsn_cpp/include/name_space.h>
 #include <bsn_cpp/include/d_out.h>
 
+#include <boost/asio.hpp>
+
 #include <stdint.h>
 #include <memory>
 
@@ -23,6 +25,8 @@ public:
 	virtual void PushCmd(std::string const& strCmd) = 0;
 	virtual void Quit() = 0;
 	virtual bool IsQuit() = 0;
+
+	virtual boost::asio::io_service& GetIOService() = 0;
 
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {

@@ -53,6 +53,9 @@ C_PlugMgr::~C_PlugMgr() {
 
 }
 
+boost::asio::io_service& C_PlugMgr::GetIOService() {
+	return m_ioService;
+}
 
 void C_PlugMgr::Run() {
 	D_OutInfo();

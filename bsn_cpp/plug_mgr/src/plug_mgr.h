@@ -24,6 +24,7 @@ public:
 	virtual void Quit() override;
 	virtual bool IsQuit() override;
 
+	virtual boost::asio::io_service& GetIOService() override;
 
 public:
 	static T_SPC_PlugMgr NewC_PlugMgr();

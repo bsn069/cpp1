@@ -1,4 +1,4 @@
-#include <bsn_cpp/plug_net/src/http_client.h>
+#include <bsn_cpp/plug_net/src/dns.h>
  
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -7,24 +7,37 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
-C_HttpClient::C_HttpClient(boost::asio::io_service& ioService)
-	: m_ioService(ioService) {
+C_Dns::C_Dns(boost::asio::io_service& ioService)
+	: m_ioService(ioService) 
+	, m_Resolver(ioService) {
 	D_OutInfo();
 }
 
-C_HttpClient::~C_HttpClient() {
+C_Dns::~C_Dns() {
 	D_OutInfo();
  
 }
 
-C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
+C_Dns::T_SPC_Dns C_Dns::GetSPC_Dns() {
 	D_OutInfo();
-	auto spI_HttpClient = GetSPI_HttpClient();
-	auto spC_HttpClient = std::dynamic_pointer_cast<C_HttpClient>(spI_HttpClient);
-	return spC_HttpClient;
+	auto spI_Dns = GetSPI_Dns();
+	auto spC_Dns = std::dynamic_pointer_cast<C_Dns>(spI_Dns);
+	return spC_Dns;
 }
 
-// std::string C_HttpClient::GetRequest(std::string url) {  
+std::vector<std::string> C_Dns::Domain2IPs(std::string const& strDomain) {
+	std::cout << "[" << strDomain << "]" << std::endl;
+    boost::asio::ip::tcp::resolver::query qry(strDomain, "http");
+    boost::asio::ip::tcp::resolver::iterator it = m_Resolver.resolve(qry);  
+    boost::asio::ip::tcp::resolver::iterator end;  
+    std::vector<std::string> vecIPs;  
+    for (; it != end; it++) {  
+        vecIPs.push_back((*it).endpoint().address().to_string());  
+    }  
+    return vecIPs;  
+}
+
+// std::string C_Dns::GetRequest(std::string url) {  
 //     size_t index;  
       
 //     // 去掉url中的协议头  
@@ -45,7 +58,7 @@ C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
 //     return GetRequest(host, urlPath);  
 // }  
 
-// std::string C_HttpClient::GetRequest(char* host, char* path) {  
+// std::string C_Dns::GetRequest(char* host, char* path) {  
 //     boost::asio::tcp::resolver resolver(m_ioService);  
 //     boost::asio::tcp::resolver::query query(host,"http");  
 //     boost::asio::tcp::resolver::iterator iter = resolver.resolve(query);  
@@ -139,30 +152,30 @@ C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
 //     return sz;  
 // }
 //////////////////////////////////////////////////////////////////////
-C_HttpClient* CreateC_HttpClient(boost::asio::io_service& ioService) {
+C_Dns* CreateC_Dns(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	C_HttpClient* pC_HttpClient = New<C_HttpClient>(ioService);
-	return pC_HttpClient;
+	C_Dns* pC_Dns = New<C_Dns>(ioService);
+	return pC_Dns;
 }
 
-void ReleaseC_HttpClient(I_HttpClient* pI_HttpClient) {
+void ReleaseC_Dns(I_Dns* pI_Dns) {
 	D_OutInfo();
-	C_HttpClient* pC_HttpClient = static_cast<C_HttpClient*>(pI_HttpClient);
-	Delete(pC_HttpClient);
+	C_Dns* pC_Dns = static_cast<C_Dns*>(pI_Dns);
+	Delete(pC_Dns);
 }
 
-C_HttpClient::T_SPC_HttpClient C_HttpClient::NewC_HttpClient(boost::asio::io_service& ioService) {
+C_Dns::T_SPC_Dns C_Dns::NewC_Dns(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	auto pC_HttpClient = CreateC_HttpClient(ioService);
-	auto spC_HttpClient = C_HttpClient::T_SPC_HttpClient(pC_HttpClient, ReleaseC_HttpClient);
-	return spC_HttpClient;
+	auto pC_Dns = CreateC_Dns(ioService);
+	auto spC_Dns = C_Dns::T_SPC_Dns(pC_Dns, ReleaseC_Dns);
+	return spC_Dns;
 }
 
-C_HttpClient::T_SPI_HttpClient C_HttpClient::NewI_HttpClient(boost::asio::io_service& ioService) {
+C_Dns::T_SPI_Dns C_Dns::NewI_Dns(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(ioService);
-	auto spI_HttpClient = spC_HttpClient->GetSPI_HttpClient();
-	return spI_HttpClient;
+	auto spC_Dns = C_Dns::NewC_Dns(ioService);
+	auto spI_Dns = spC_Dns->GetSPI_Dns();
+	return spI_Dns;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

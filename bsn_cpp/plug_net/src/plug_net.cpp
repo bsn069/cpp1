@@ -1,5 +1,6 @@
-#include "plug_net.h"
- 
+#include <bsn_cpp/plug_net/src/plug_net.h>
+#include <bsn_cpp/plug_net/src/dns.h>
+
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
 
@@ -54,6 +55,7 @@ bool C_PlugNet::RegAllCmd() {
 	}
 
 	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugNet::CmdHelp, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIP", boost::bind(&C_PlugNet::CmdShowIP, this, _1, _2));
 
 	return true;
 }
@@ -61,6 +63,16 @@ bool C_PlugNet::RegAllCmd() {
 void C_PlugNet::CmdHelp(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
+}
+
+void C_PlugNet::CmdShowIP(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_Dns = C_Dns::NewC_Dns(m_spI_PlugMgr->GetIOService());
+	auto vecIPs = spC_Dns->Domain2IPs(strParam);
+	for (auto strIP : vecIPs) {
+		D_OutInfo1(strIP);
+	}
 }
 
 bool C_PlugNet::Update() {

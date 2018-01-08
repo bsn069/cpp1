@@ -14,7 +14,7 @@ public:
 	typedef std::shared_ptr<C_HttpClient> T_SPC_HttpClient;	
 
 public: // I_HttpClient
-	std::string GetRequest(std::string strUrl);
+	// std::string GetRequest(std::string strUrl);
  	
 
 public:
@@ -28,7 +28,7 @@ public:
 	virtual ~C_HttpClient();
 
 public:
-	boost::asio::io_service 	m_ioService;
+	boost::asio::io_service& 	m_ioService;
 
 };
 //////////////////////////////////////////////////////////////////////

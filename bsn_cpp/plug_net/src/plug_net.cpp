@@ -56,6 +56,7 @@ bool C_PlugNet::RegAllCmd() {
 
 	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugNet::CmdHelp, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIP", boost::bind(&C_PlugNet::CmdShowIP, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIPAsync", boost::bind(&C_PlugNet::CmdShowIPAsync, this, _1, _2));
 
 	return true;
 }
@@ -63,6 +64,13 @@ bool C_PlugNet::RegAllCmd() {
 void C_PlugNet::CmdHelp(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
+}
+
+void C_PlugNet::CmdShowIPAsync(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_Dns = C_Dns::NewC_Dns(m_spI_PlugMgr->GetIOService());
+	spC_Dns->Domain2IPs_async(strParam);
 }
 
 void C_PlugNet::CmdShowIP(bool bShowHelp, std::string const& strParam) {

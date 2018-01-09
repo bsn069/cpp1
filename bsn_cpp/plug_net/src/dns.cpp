@@ -4,6 +4,7 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
+#include <boost/bind.hpp>
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
@@ -27,7 +28,7 @@ C_Dns::T_SPC_Dns C_Dns::GetSPC_Dns() {
 
 std::vector<std::string> C_Dns::Domain2IPs(std::string const& strDomain) {
 	std::cout << "[" << strDomain << "]" << std::endl;
-    boost::asio::ip::tcp::resolver::query qry(strDomain, "http");
+    boost::asio::ip::tcp::resolver::query qry(strDomain, "0");
     boost::asio::ip::tcp::resolver::iterator it = m_Resolver.resolve(qry);  
     boost::asio::ip::tcp::resolver::iterator end;  
     std::vector<std::string> vecIPs;  
@@ -35,6 +36,12 @@ std::vector<std::string> C_Dns::Domain2IPs(std::string const& strDomain) {
         vecIPs.push_back((*it).endpoint().address().to_string());  
     }  
     return vecIPs;  
+}
+
+void C_Dns::Domain2IPs_async(std::string const& strDomain) {
+	D_OutInfo1(strDomain);
+    boost::asio::ip::tcp::resolver::query qry(strDomain, "0");
+    m_Resolver.async_resolve(qry, boost::bind(&C_Dns::Domain2IPs_async_handle, GetSPC_Dns(), _1, _2));  
 }
 
 // std::string C_Dns::GetRequest(std::string url) {  

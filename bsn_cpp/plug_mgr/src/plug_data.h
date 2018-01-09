@@ -15,7 +15,7 @@ D_BsnNamespace1(plug_mgr)
 class C_PlugData {
 public:
 	typedef std::shared_ptr<C_PlugData> T_SPC_PlugData;	
-	typedef I_PlugData* (*T_FuncCreatePlugData)();
+	typedef I_PlugData* (*T_FuncCreatePlugData)(I_PlugMgr::T_SPI_PlugMgr);
 	typedef std::map<std::string, T_FuncCreatePlugData> T_Name2FuncCreatePlugData;
  
 public:
@@ -41,7 +41,7 @@ public:
 	static bool RegPlugData();
 
 public:
-	C_PlugData(std::string strName);
+	C_PlugData(std::string strName, I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr);
 	~C_PlugData();
 
 public:

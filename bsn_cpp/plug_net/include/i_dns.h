@@ -16,6 +16,7 @@ public:
 	
 public:
 	virtual std::vector<std::string> Domain2IPs(std::string const& strIP) = 0;
+	virtual void Domain2IPs_async(std::string const& strDomain) = 0;
 
 public:
 	T_SPI_Dns GetSPI_Dns() {

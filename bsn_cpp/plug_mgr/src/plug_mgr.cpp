@@ -293,7 +293,7 @@ C_PlugData::T_SPC_PlugData C_PlugMgr::GetPlugData(std::string const& strName) {
 C_PlugData::T_SPC_PlugData C_PlugMgr::LoadPlugData(std::string const& strName) {
 	D_OutInfo2("strName=", strName);
 
-	auto spC_PlugData = C_PlugData::T_SPC_PlugData(new C_PlugData(strName));
+	auto spC_PlugData = C_PlugData::T_SPC_PlugData(new C_PlugData(strName, GetSPI_PlugMgr()));
 	if (!spC_PlugData->LoadLib()) {
 		D_OutInfo1("LoadLib fail");
 		return nullptr;

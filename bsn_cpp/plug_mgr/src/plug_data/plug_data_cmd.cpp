@@ -14,7 +14,7 @@ C_PlugDataCmd::~C_PlugDataCmd() {
 	D_OutInfo();
 }
 
-I_PlugData* C_PlugDataCmd::CreateI_PlugData() {
+I_PlugData* C_PlugDataCmd::CreateI_PlugData(I_PlugMgr::T_SPI_PlugMgr) {
 	return New<C_PlugDataCmd>();
 }
 //////////////////////////////////////////////////////////////////////

@@ -42,6 +42,7 @@ public:
 public: // net
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
 	void CmdShowIP(bool bShowHelp, std::string const& strParam);
+	void CmdShowIPAsync(bool bShowHelp, std::string const& strParam);
 
 public:
 	C_PlugNet(void* pData);

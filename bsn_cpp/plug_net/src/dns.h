@@ -17,12 +17,15 @@ public:
 
 public: // I_Dns
  	virtual std::vector<std::string> Domain2IPs(std::string const& strIP) override; 
+	virtual void Domain2IPs_async(std::string const& strDomain) override;
 
 public:
 	static T_SPC_Dns NewC_Dns(boost::asio::io_service& ioService);
 	static T_SPI_Dns NewI_Dns(boost::asio::io_service& ioService);
 
 	T_SPC_Dns GetSPC_Dns();
+	
+	void Domain2IPs_async_handle(boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator it);
 
 public:
 	C_Dns(boost::asio::io_service& ioService);

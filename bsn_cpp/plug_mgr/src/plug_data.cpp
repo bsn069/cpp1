@@ -12,7 +12,7 @@ D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 C_PlugData::T_Name2FuncCreatePlugData C_PlugData::m_Name2FuncCreatePlugData;
 
-C_PlugData::C_PlugData(std::string strName) 
+C_PlugData::C_PlugData(std::string strName, I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) 
 	: m_strName(strName) 
 	, m_pData(nullptr)
 {
@@ -22,7 +22,7 @@ C_PlugData::C_PlugData(std::string strName)
 	if (pCreatePlugDataFunc == nullptr) {
 
 	} else {
-		m_pData = pCreatePlugDataFunc();
+		m_pData = pCreatePlugDataFunc(spI_PlugMgr);
 	}
 }
 

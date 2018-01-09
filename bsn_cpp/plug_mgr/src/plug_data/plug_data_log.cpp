@@ -14,7 +14,7 @@ C_PlugDataLog::~C_PlugDataLog() {
 	D_OutInfo();
 }
 
-I_PlugData* C_PlugDataLog::CreateI_PlugData() {
+I_PlugData* C_PlugDataLog::CreateI_PlugData(I_PlugMgr::T_SPI_PlugMgr) {
 	return New<C_PlugDataLog>();
 }
 //////////////////////////////////////////////////////////////////////

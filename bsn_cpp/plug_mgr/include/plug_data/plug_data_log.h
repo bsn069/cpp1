@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bsn_cpp/plug_mgr/include/i_plug_data.h>
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 
 #include <bsn_cpp/include/name_space.h>
 
@@ -19,7 +20,7 @@ public:
 	C_PlugDataLog();
 	virtual ~C_PlugDataLog();
 
-	static I_PlugData* CreateI_PlugData();
+	static I_PlugData* CreateI_PlugData(I_PlugMgr::T_SPI_PlugMgr);
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

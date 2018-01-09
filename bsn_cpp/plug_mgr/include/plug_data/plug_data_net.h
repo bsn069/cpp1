@@ -1,8 +1,11 @@
 #pragma once
 
 #include <bsn_cpp/plug_mgr/include/i_plug_data.h>
+#include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 
 #include <bsn_cpp/include/name_space.h>
+
+#include <boost/asio.hpp>
 
 #include <stdint.h>
 #include <memory>
@@ -14,13 +17,17 @@ D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 class C_PlugDataNet : public I_PlugData {
 public:
- 
-	
+	boost::asio::io_service& 	m_ioService;
+	boost::asio::ip::tcp::resolver m_Resolver;
+
 public:
-	C_PlugDataNet();
+	void Domain2IPs_async_handle(boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator it);
+
+public:
+	C_PlugDataNet(boost::asio::io_service& ioService);
 	virtual ~C_PlugDataNet();
 
-	static I_PlugData* CreateI_PlugData();
+	static I_PlugData* CreateI_PlugData(I_PlugMgr::T_SPI_PlugMgr);
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -21,15 +21,21 @@ I_PlugData* C_PlugDataNet::CreateI_PlugData(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr
 }
 
 
-void C_PlugDataNet::Domain2IPs_async_handle(boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator it) { 
-	if (ec) { 
+void C_PlugDataNet::Domain2IPs_async_handle(boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator it, std::string strIP, T_DnsAsyncCB cb) { 
+	auto& vecIPs = m_Domain2IPs[strIP];
+	vecIPs.clear();
+	if (!ec) { 
+		boost::asio::ip::tcp::resolver::iterator end;  
+		for (; it != end; it++) {  
+			vecIPs.push_back((*it).endpoint().address().to_string());
+		}  
+	} else {
 		D_OutInfo1(ec);
-		return;
-	} 
-    boost::asio::ip::tcp::resolver::iterator end;  
-	for (; it != end; it++) {  
-        D_OutInfo1((*it).endpoint().address().to_string());  
-    }  
+	}
+
+	if (cb) {
+		cb(vecIPs);
+	}
 } 
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

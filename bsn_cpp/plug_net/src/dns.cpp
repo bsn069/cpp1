@@ -8,9 +8,8 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
-C_Dns::C_Dns(boost::asio::io_service& ioService)
-	: m_ioService(ioService) 
-	, m_Resolver(ioService) {
+C_Dns::C_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet) 
+	: m_spC_PlugNet(spC_PlugNet) {
 	D_OutInfo();
 }
 
@@ -29,7 +28,7 @@ C_Dns::T_SPC_Dns C_Dns::GetSPC_Dns() {
 std::vector<std::string> C_Dns::Domain2IPs(std::string const& strDomain) {
 	std::cout << "[" << strDomain << "]" << std::endl;
     boost::asio::ip::tcp::resolver::query qry(strDomain, "0");
-    boost::asio::ip::tcp::resolver::iterator it = m_Resolver.resolve(qry);  
+    boost::asio::ip::tcp::resolver::iterator it = m_spC_PlugNet->m_pData->m_Resolver.resolve(qry);  
     boost::asio::ip::tcp::resolver::iterator end;  
     std::vector<std::string> vecIPs;  
     for (; it != end; it++) {  
@@ -38,10 +37,10 @@ std::vector<std::string> C_Dns::Domain2IPs(std::string const& strDomain) {
     return vecIPs;  
 }
 
-void C_Dns::Domain2IPs_async(std::string const& strDomain) {
+void C_Dns::Domain2IPs_async(std::string const& strDomain, T_DnsAsyncCB cb) {
 	D_OutInfo1(strDomain);
     boost::asio::ip::tcp::resolver::query qry(strDomain, "0");
-    m_Resolver.async_resolve(qry, boost::bind(&C_Dns::Domain2IPs_async_handle, GetSPC_Dns(), _1, _2));  
+    m_spC_PlugNet->m_pData->m_Resolver.async_resolve(qry, boost::bind(&D_N1(plug_mgr)::C_PlugDataNet::Domain2IPs_async_handle, m_spC_PlugNet->m_pData, _1, _2, strDomain, cb));  
 }
 
 // std::string C_Dns::GetRequest(std::string url) {  
@@ -159,9 +158,9 @@ void C_Dns::Domain2IPs_async(std::string const& strDomain) {
 //     return sz;  
 // }
 //////////////////////////////////////////////////////////////////////
-C_Dns* CreateC_Dns(boost::asio::io_service& ioService) {
+C_Dns* CreateC_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();
-	C_Dns* pC_Dns = New<C_Dns>(ioService);
+	C_Dns* pC_Dns = New<C_Dns>(spC_PlugNet);
 	return pC_Dns;
 }
 
@@ -171,16 +170,16 @@ void ReleaseC_Dns(I_Dns* pI_Dns) {
 	Delete(pC_Dns);
 }
 
-C_Dns::T_SPC_Dns C_Dns::NewC_Dns(boost::asio::io_service& ioService) {
+C_Dns::T_SPC_Dns C_Dns::NewC_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();
-	auto pC_Dns = CreateC_Dns(ioService);
+	auto pC_Dns = CreateC_Dns(spC_PlugNet);
 	auto spC_Dns = C_Dns::T_SPC_Dns(pC_Dns, ReleaseC_Dns);
 	return spC_Dns;
 }
 
-C_Dns::T_SPI_Dns C_Dns::NewI_Dns(boost::asio::io_service& ioService) {
+C_Dns::T_SPI_Dns C_Dns::NewI_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();
-	auto spC_Dns = C_Dns::NewC_Dns(ioService);
+	auto spC_Dns = C_Dns::NewC_Dns(spC_PlugNet);
 	auto spI_Dns = spC_Dns->GetSPI_Dns();
 	return spI_Dns;
 }

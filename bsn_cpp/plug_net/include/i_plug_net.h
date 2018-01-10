@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bsn_cpp/plug_mgr/include/i_plug.h>
+#include <bsn_cpp/plug_net/include/i_dns.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/name_space.h>
@@ -15,6 +16,7 @@ public:
 	typedef std::shared_ptr<I_PlugNet> T_SPI_PlugNet;
 	
 public:
+ 	virtual I_Dns::T_SPI_Dns NewI_Dns() = 0;
  
 
 public:

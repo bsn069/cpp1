@@ -69,14 +69,18 @@ void C_PlugNet::CmdHelp(bool bShowHelp, std::string const& strParam) {
 void C_PlugNet::CmdShowIPAsync(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
-	auto spC_Dns = C_Dns::NewC_Dns(m_spI_PlugMgr->GetIOService());
-	spC_Dns->Domain2IPs_async(strParam);
+	auto spC_Dns = C_Dns::NewC_Dns(GetSPC_PlugNet());
+	spC_Dns->Domain2IPs_async(strParam, [](D_N1(plug_mgr)::C_PlugDataNet::T_IPs vecIPs){
+		for (auto strIP : vecIPs) {
+			D_OutInfo1(strIP);
+		}
+	});
 }
 
 void C_PlugNet::CmdShowIP(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
-	auto spC_Dns = C_Dns::NewC_Dns(m_spI_PlugMgr->GetIOService());
+	auto spC_Dns = C_Dns::NewC_Dns(GetSPC_PlugNet());
 	auto vecIPs = spC_Dns->Domain2IPs(strParam);
 	for (auto strIP : vecIPs) {
 		D_OutInfo1(strIP);
@@ -111,6 +115,10 @@ void C_PlugNet::OnReloadPost(std::string const& strName) {
 	if (strName.compare("cmd") == 0) {
 		RegAllCmd();
 	}
+}
+
+I_Dns::T_SPI_Dns C_PlugNet::NewI_Dns() {
+	return C_Dns::NewI_Dns(GetSPC_PlugNet());
 }
 
 

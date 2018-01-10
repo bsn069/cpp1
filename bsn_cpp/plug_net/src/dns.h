@@ -1,6 +1,8 @@
 #pragma once
 
 #include <bsn_cpp/plug_net/include/i_dns.h>
+#include <bsn_cpp/plug_net/src/plug_net.h>
+
 
 #include <bsn_cpp/include/name_space.h>
 
@@ -17,24 +19,20 @@ public:
 
 public: // I_Dns
  	virtual std::vector<std::string> Domain2IPs(std::string const& strIP) override; 
-	virtual void Domain2IPs_async(std::string const& strDomain) override;
+	virtual void Domain2IPs_async(std::string const& strDomain, T_DnsAsyncCB cb) override;
 
 public:
-	static T_SPC_Dns NewC_Dns(boost::asio::io_service& ioService);
-	static T_SPI_Dns NewI_Dns(boost::asio::io_service& ioService);
+	static T_SPC_Dns NewC_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
+	static T_SPI_Dns NewI_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 
 	T_SPC_Dns GetSPC_Dns();
 	
-	void Domain2IPs_async_handle(boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator it);
-
 public:
-	C_Dns(boost::asio::io_service& ioService);
+	C_Dns(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	virtual ~C_Dns();
 
 public:
-	boost::asio::io_service& 	m_ioService;
-	boost::asio::ip::tcp::resolver m_Resolver;
-
+	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

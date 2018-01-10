@@ -2,6 +2,7 @@
 
 #include "./../include/i_plug_net.h"
 #include <bsn_cpp/plug_mgr/include/plug_data/plug_data_net.h>
+#include <bsn_cpp/plug_net/include/i_dns.h>
 
 #include <boost/function.hpp>
 
@@ -30,7 +31,8 @@ public: // I_Plug
 	virtual void OnReloadPost(std::string const& strName) override;
 
 public: // I_PlugNet
- 	
+ 	virtual I_Dns::T_SPI_Dns NewI_Dns() override;
+
 
 public:
 	static T_SPC_PlugNet NewC_PlugNet(void* pData);

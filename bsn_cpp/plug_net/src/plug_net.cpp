@@ -1,5 +1,6 @@
 #include <bsn_cpp/plug_net/src/plug_net.h>
 #include <bsn_cpp/plug_net/src/dns.h>
+#include <bsn_cpp/plug_net/src/http_client.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
@@ -57,6 +58,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugNet::CmdHelp, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIP", boost::bind(&C_PlugNet::CmdShowIP, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIPAsync", boost::bind(&C_PlugNet::CmdShowIPAsync, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGet", boost::bind(&C_PlugNet::CmdHttpGet, this, _1, _2));
 
 	return true;
 }
@@ -85,6 +87,14 @@ void C_PlugNet::CmdShowIP(bool bShowHelp, std::string const& strParam) {
 	for (auto strIP : vecIPs) {
 		D_OutInfo1(strIP);
 	}
+}
+
+void C_PlugNet::CmdHttpGet(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
+	auto strRet = spC_HttpClient->Get(strParam, "");
+	D_OutInfo1(strRet);
 }
 
 bool C_PlugNet::Update() {

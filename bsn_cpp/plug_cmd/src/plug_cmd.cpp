@@ -82,8 +82,17 @@ void C_PlugCmd::CmdCD(bool bShowHelp, std::string const& strParam) {
 		return;
 	}
 
-	if (strParam.compare("..") == 0) {
-		CmdPopD(bShowHelp, strParam);
+	if (strParam.empty()) {
+		D_OutInfo1("plug list:");
+		for (auto& itor : m_PlugCmds) {
+			D_OutInfo1(itor.first);
+		}
+		return;
+	}
+
+	auto itor = m_PlugCmds.find(strParam);
+	if (itor == m_PlugCmds.end()) {
+		D_OutInfo2("unknown plug:", strParam);
 		return;
 	}
 
@@ -118,8 +127,17 @@ void C_PlugCmd::CmdPopD(bool bShowHelp, std::string const& strParam) {
 void C_PlugCmd::CmdLS(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
 
-	D_OutInfo1("plug list:");
-	for (auto& itor : m_PlugCmds) {
+	auto itor = m_PlugCmds.find(m_pData->m_strCurPlug);
+	if (itor == m_PlugCmds.end()) {
+		itor = m_PlugCmds.find(GetName());		
+		if (itor == m_PlugCmds.end()) {
+			return;	
+		}
+	}
+
+	auto& cmd2Func = itor->second;
+	D_OutInfo1("cur plug command list:");
+	for (auto& itor : cmd2Func) {
 		D_OutInfo1(itor.first);
 	}
 }

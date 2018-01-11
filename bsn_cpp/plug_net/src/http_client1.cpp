@@ -1,19 +1,14 @@
 #include <bsn_cpp/plug_net/src/http_client.h>
-#include <bsn_cpp/plug_net/src/dns.h>
  
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-
-#include <iostream>
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
-C_HttpClient::C_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) 
-	: m_spC_PlugNet(spC_PlugNet) {
+C_HttpClient::C_HttpClient(boost::asio::io_service& ioService)
+	: m_ioService(ioService) {
 	D_OutInfo();
 }
 
@@ -28,50 +23,6 @@ C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
 	auto spC_HttpClient = std::dynamic_pointer_cast<C_HttpClient>(spI_HttpClient);
 	return spC_HttpClient;
 }
-
-std::string C_HttpClient::Get(std::string const& strDomain, std::string const& strPath) {
-	std::string strRet;
-	auto spC_Dns = C_Dns::NewC_Dns(m_spC_PlugNet);
-	auto vecIPs = spC_Dns->Domain2IPs(strDomain);
-	if (vecIPs.empty()) {
-		D_OutInfo2("not found ip", strDomain);
-		return "";
-	}
-	
-	boost::asio::ip::tcp::socket Socket(m_spC_PlugNet->m_pData->m_ioService);  
-	boost::system::error_code ec; 
-	for (auto strIP : vecIPs) {
-		boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address_v4::from_string(strIP), 80);
-		Socket.connect(ep, ec);     
-        if (ec) {  
-			continue;
-        }   
-		break; 
-	}
-	if (ec) {  
-		D_OutInfo1(boost::system::system_error(ec).what());   
-		return "";
-	} 
-
-	boost::asio::streambuf request;  
-    std::ostream request_stream(&request);  
-    request_stream << "GET " << "/" << " HTTP/1.1\r\n";  
-    request_stream << "Host: " << strDomain << "\r\n";  
-    request_stream << "Accept: */*\r\n";  
-    request_stream << "Connection: close\r\n\r\n";  
-      
-    // 发送请求  
-    boost::asio::write(Socket, request);  
-
-	boost::asio::streambuf response;  
-    boost::asio::read_until(Socket, response, "\r\n"); 
-	std::istream response_stream(&response);  
-    std::string http_version;  
-    response_stream >> http_version;  
-	D_OutInfo1(http_version);
-	return strRet;
-}
-
 
 // std::string C_HttpClient::GetRequest(std::string url) {  
 //     size_t index;  
@@ -188,9 +139,9 @@ std::string C_HttpClient::Get(std::string const& strDomain, std::string const& s
 //     return sz;  
 // }
 //////////////////////////////////////////////////////////////////////
-C_HttpClient* CreateC_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_HttpClient* CreateC_HttpClient(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	C_HttpClient* pC_HttpClient = New<C_HttpClient>(spC_PlugNet);
+	C_HttpClient* pC_HttpClient = New<C_HttpClient>(ioService);
 	return pC_HttpClient;
 }
 
@@ -200,16 +151,16 @@ void ReleaseC_HttpClient(I_HttpClient* pI_HttpClient) {
 	Delete(pC_HttpClient);
 }
 
-C_HttpClient::T_SPC_HttpClient C_HttpClient::NewC_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_HttpClient::T_SPC_HttpClient C_HttpClient::NewC_HttpClient(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	auto pC_HttpClient = CreateC_HttpClient(spC_PlugNet);
+	auto pC_HttpClient = CreateC_HttpClient(ioService);
 	auto spC_HttpClient = C_HttpClient::T_SPC_HttpClient(pC_HttpClient, ReleaseC_HttpClient);
 	return spC_HttpClient;
 }
 
-C_HttpClient::T_SPI_HttpClient C_HttpClient::NewI_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_HttpClient::T_SPI_HttpClient C_HttpClient::NewI_HttpClient(boost::asio::io_service& ioService) {
 	D_OutInfo();
-	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(spC_PlugNet);
+	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(ioService);
 	auto spI_HttpClient = spC_HttpClient->GetSPI_HttpClient();
 	return spI_HttpClient;
 }

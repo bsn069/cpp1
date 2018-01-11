@@ -21,6 +21,7 @@ public:
 	typedef std::vector<std::string> 		T_IPs;
 	typedef std::map<std::string, T_IPs> 	T_Domain2IPs; 
 	typedef boost::function<void(T_IPs)> 	T_DnsAsyncCB;
+	typedef boost::function<void(T_IPs)> 	T_HttpClientAsyncCB;
 
 public:
 	boost::asio::io_service& 		m_ioService;

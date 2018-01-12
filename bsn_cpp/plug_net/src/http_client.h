@@ -19,6 +19,7 @@ public:
 
 public: // I_HttpClient
  	virtual std::string Get(std::string const& strDomain, std::string const& strPath) override; 
+ 	virtual void Get_async(std::string const& strDomain, std::string const& strPath, T_HttpClientAsyncCB cb) override; 
 	// virtual void Get_async(std::string const& strUri, T_HttpClientAsyncCB cb) override;
 
 public:

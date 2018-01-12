@@ -22,6 +22,7 @@ public:
 
 public:
  	virtual std::string Get(std::string const& strDomain, std::string const& strPath) = 0; 
+ 	virtual void Get_async(std::string const& strDomain, std::string const& strPath, T_HttpClientAsyncCB cb) = 0; 
 
 public:
 	T_SPI_HttpClient GetSPI_HttpClient() {

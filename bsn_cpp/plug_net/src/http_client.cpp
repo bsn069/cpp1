@@ -29,6 +29,66 @@ C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
 	return spC_HttpClient;
 }
 
+void C_HttpClient::Get_async(std::string const& strDomain, std::string const& strPath, T_HttpClientAsyncCB cb) {
+
+	auto self = GetSPC_HttpClient();
+	boost::asio::ip::tcp::resolver::query qry(strDomain, "80");
+    m_spC_PlugNet->m_pData->m_Resolver.async_resolve(
+		qry
+		, [self,strDomain](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i) {
+			if (ec) {
+				D_OutInfo1(ec);
+				return;
+			}
+			D_OutInfo1((*i).endpoint().address().to_string());
+
+			auto pSocket = new boost::asio::ip::tcp::socket(self->m_spC_PlugNet->m_pData->m_ioService);  
+			auto Socket = std::shared_ptr<boost::asio::ip::tcp::socket>(pSocket);
+
+			boost::asio::ip::tcp::resolver::iterator end;
+			boost::asio::async_connect(
+				*Socket
+				, i
+				, [self, Socket, strDomain](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i){
+					if (ec) {
+						D_OutInfo1(ec);
+						D_OutInfo1(boost::system::system_error(ec).what());   
+						return;
+					}
+					boost::asio::streambuf request;  
+					std::ostream request_stream(&request);  
+					request_stream << "GET " << "/" << " HTTP/1.1\r\n";  
+					request_stream << "Host: " << strDomain << "\r\n";  
+					request_stream << "Accept: */*\r\n";  
+					request_stream << "Connection: close\r\n\r\n";  
+					
+					boost::asio::write(*Socket, request);  
+
+					boost::asio::streambuf response;  
+
+					boost::system::error_code error;  // 读取错误  
+					while (boost::asio::read(*Socket, response, boost::asio::transfer_at_least(1), error)) {  
+						auto size = response.size();  
+						D_OutInfo1(size);
+					}  
+				
+					if (error != boost::asio::error::eof) {  
+						D_OutInfo1(error);
+					}  
+
+					std::istream is(&response);  
+					is.unsetf(std::ios_base::skipws);  
+					std::string sz;  
+					sz.append(std::istream_iterator<char>(is), std::istream_iterator<char>());  
+					D_OutInfo1(sz);
+
+
+				}
+			);
+		}
+	);
+}
+
 std::string C_HttpClient::Get(std::string const& strDomain, std::string const& strPath) {
 	std::string strRet;
 	auto spC_Dns = C_Dns::NewC_Dns(m_spC_PlugNet);
@@ -60,15 +120,26 @@ std::string C_HttpClient::Get(std::string const& strDomain, std::string const& s
     request_stream << "Accept: */*\r\n";  
     request_stream << "Connection: close\r\n\r\n";  
       
-    // 发送请求  
     boost::asio::write(Socket, request);  
 
 	boost::asio::streambuf response;  
-    boost::asio::read_until(Socket, response, "\r\n"); 
-	std::istream response_stream(&response);  
-    std::string http_version;  
-    response_stream >> http_version;  
-	D_OutInfo1(http_version);
+
+    boost::system::error_code error;  // 读取错误  
+    while (boost::asio::read(Socket, response, boost::asio::transfer_at_least(1), error)) {  
+        auto size = response.size();  
+		D_OutInfo1(size);
+    }  
+  
+    if (error != boost::asio::error::eof) {  
+		D_OutInfo1(error);
+    }  
+
+    std::istream is(&response);  
+    is.unsetf(std::ios_base::skipws);  
+    std::string sz;  
+    sz.append(std::istream_iterator<char>(is), std::istream_iterator<char>());  
+	D_OutInfo1(sz);
+    
 	return strRet;
 }
 

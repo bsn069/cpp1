@@ -59,6 +59,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIP", boost::bind(&C_PlugNet::CmdShowIP, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIPAsync", boost::bind(&C_PlugNet::CmdShowIPAsync, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGet", boost::bind(&C_PlugNet::CmdHttpGet, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetAsync", boost::bind(&C_PlugNet::CmdHttpGetAsync, this, _1, _2));
 
 	return true;
 }
@@ -95,6 +96,13 @@ void C_PlugNet::CmdHttpGet(bool bShowHelp, std::string const& strParam) {
 	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
 	auto strRet = spC_HttpClient->Get(strParam, "");
 	D_OutInfo1(strRet);
+}
+
+void C_PlugNet::CmdHttpGetAsync(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
+	spC_HttpClient->Get_async(strParam, "", [](){});
 }
 
 bool C_PlugNet::Update() {

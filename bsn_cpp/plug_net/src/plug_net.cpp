@@ -1,6 +1,7 @@
 #include <bsn_cpp/plug_net/src/plug_net.h>
 #include <bsn_cpp/plug_net/src/dns.h>
 #include <bsn_cpp/plug_net/src/http_client.h>
+#include <bsn_cpp/plug_net/src/url.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
@@ -60,6 +61,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIPAsync", boost::bind(&C_PlugNet::CmdShowIPAsync, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGet", boost::bind(&C_PlugNet::CmdHttpGet, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetAsync", boost::bind(&C_PlugNet::CmdHttpGetAsync, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "URL", boost::bind(&C_PlugNet::CmdURL, this, _1, _2));
 
 	return true;
 }
@@ -103,6 +105,13 @@ void C_PlugNet::CmdHttpGetAsync(bool bShowHelp, std::string const& strParam) {
  
 	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
 	spC_HttpClient->Get_async(strParam, "", [](){});
+}
+
+void C_PlugNet::CmdURL(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_URL = C_URL::NewC_URL(GetSPC_PlugNet());
+	spC_URL->Parse(strParam);
 }
 
 bool C_PlugNet::Update() {

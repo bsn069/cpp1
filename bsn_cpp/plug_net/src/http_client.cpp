@@ -60,29 +60,41 @@ void C_HttpClient::Get_async(std::string const& strDomain, std::string const& st
 					request_stream << "GET " << "/" << " HTTP/1.1\r\n";  
 					request_stream << "Host: " << strDomain << "\r\n";  
 					request_stream << "Accept: */*\r\n";  
-					request_stream << "Connection: close\r\n\r\n";  
-					
-					boost::asio::write(*Socket, request);  
+					request_stream << "Connection: close\r\n\r\n"; 
 
-					boost::asio::streambuf response;  
+					boost::asio::async_write(*Socket
+						, request
+						, boost::asio::transfer_all()
+						, [self, Socket](boost::system::error_code ec, std::size_t st){
+							D_OutInfo1(st);
+							if (ec) {
+								D_OutInfo1(ec);
+								D_OutInfo1(boost::system::system_error(ec).what());   
+								return;
+							}
 
-					boost::system::error_code error;  // 读取错误  
-					while (boost::asio::read(*Socket, response, boost::asio::transfer_at_least(1), error)) {  
-						auto size = response.size();  
-						D_OutInfo1(size);
-					}  
-				
-					if (error != boost::asio::error::eof) {  
-						D_OutInfo1(error);
-					}  
-
-					std::istream is(&response);  
-					is.unsetf(std::ios_base::skipws);  
-					std::string sz;  
-					sz.append(std::istream_iterator<char>(is), std::istream_iterator<char>());  
-					D_OutInfo1(sz);
-
-
+							auto pRes = new boost::asio::streambuf();
+							auto Res = std::shared_ptr<boost::asio::streambuf>(pRes);
+							boost::asio::streambuf response;  
+							boost::asio::async_read(*Socket
+								, *Res
+								, boost::asio::transfer_all()
+								, [self, Socket, Res](boost::system::error_code ec, std::size_t st){
+									D_OutInfo1(st);
+									if (ec && ec != boost::asio::error::eof) {
+										D_OutInfo1(ec);
+										D_OutInfo1(boost::system::system_error(ec).what());   
+										return;
+									}
+									std::istream is(Res.get());  
+									is.unsetf(std::ios_base::skipws);  
+									std::string sz;  
+									sz.append(std::istream_iterator<char>(is), std::istream_iterator<char>());  
+									D_OutInfo1(sz);
+								}
+							);
+						}
+					); 
 				}
 			);
 		}

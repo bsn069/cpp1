@@ -18,8 +18,8 @@ public:
 	typedef std::shared_ptr<C_HttpClient> T_SPC_HttpClient;	
 
 public: // I_HttpClient
- 	virtual std::string Get(std::string const& strDomain, std::string const& strPath) override; 
- 	virtual void Get_async(std::string const& strDomain, std::string const& strPath, T_HttpClientAsyncCB cb) override; 
+ 	virtual std::string Get(std::string const& strURL) override; 
+ 	virtual void Get_async(std::string const& strURL, T_HttpClientAsyncCB cb) override; 
 	// virtual void Get_async(std::string const& strUri, T_HttpClientAsyncCB cb) override;
 
 public:

@@ -96,7 +96,7 @@ void C_PlugNet::CmdHttpGet(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
 	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
-	auto strRet = spC_HttpClient->Get(strParam, "");
+	auto strRet = spC_HttpClient->Get(strParam);
 	D_OutInfo1(strRet);
 }
 
@@ -104,7 +104,7 @@ void C_PlugNet::CmdHttpGetAsync(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
 	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
-	spC_HttpClient->Get_async(strParam, "", [](){});
+	spC_HttpClient->Get_async(strParam, [](){});
 }
 
 void C_PlugNet::CmdURL(bool bShowHelp, std::string const& strParam) {

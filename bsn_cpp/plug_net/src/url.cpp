@@ -28,36 +28,58 @@ C_URL::T_SPC_URL C_URL::GetSPC_URL() {
 	return spC_URL;
 }
 
+std::string const& C_URL::GetHost() {
+	return m_strHost;
+}
+
+std::string const& C_URL::GetPath() {
+	return m_strPath;
+}
+
+std::string const& C_URL::GetProto() {
+	return m_strProto;
+}
+
+std::string const& C_URL::GetURL() {
+	return m_strURL;
+}
+
+uint16_t C_URL::GetPort() {
+	return m_u16Port;
+}
+
+
 void C_URL::Parse(std::string const& strURL) {
 	D_OutInfo1(strURL);
 
-	std::string strProto;
 	std::size_t beginIndex;
 	if (strURL.compare(0, 7, "http://") == 0) {
-		strProto = "http";
+		m_strProto = "http";
 		beginIndex = 7;
+		m_u16Port = 80;
 	} else if (strURL.compare(0, 8, "https://") == 0) {
-		strProto = "https";
+		m_strProto = "https";
 		beginIndex = 8;
+		m_u16Port = 443;
 	} else {
 		D_OutInfo1("must begin http:// or https://");
 		return;
 	}
+	m_strURL = strURL;
 
-	std::string strHost;
-	std::string strPath;
-	auto pos = strURL.find_first_of('/', beginIndex);
+	auto pos = m_strURL.find_first_of('/', beginIndex);
 	if (pos == std::string::npos) {
-		strHost	= strURL.substr(beginIndex);
-		strPath	= "/";
+		m_strHost	= m_strURL.substr(beginIndex);
+		m_strPath	= "/";
 	} else {
-		strHost	= strURL.substr(beginIndex, pos-beginIndex);
-		strPath = strURL.substr(pos);
+		m_strHost	= m_strURL.substr(beginIndex, pos-beginIndex);
+		m_strPath = m_strURL.substr(pos);
 	}
 
-	D_OutInfo2("proto:", strProto);
-	D_OutInfo2("host:", strHost);
-	D_OutInfo2("path:", strPath);
+	D_OutInfo2("proto:", m_strProto);
+	D_OutInfo2("host:", m_strHost);
+	D_OutInfo2("port:", m_u16Port);
+	D_OutInfo2("path:", m_strPath);
 }
 
 

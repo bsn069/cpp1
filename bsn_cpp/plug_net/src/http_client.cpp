@@ -1,5 +1,6 @@
 #include <bsn_cpp/plug_net/src/http_client.h>
 #include <bsn_cpp/plug_net/src/dns.h>
+#include <bsn_cpp/plug_net/src/url.h>
  
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -7,6 +8,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <iostream>
 
@@ -29,13 +31,16 @@ C_HttpClient::T_SPC_HttpClient C_HttpClient::GetSPC_HttpClient() {
 	return spC_HttpClient;
 }
 
-void C_HttpClient::Get_async(std::string const& strDomain, std::string const& strPath, T_HttpClientAsyncCB cb) {
+void C_HttpClient::Get_async(std::string const& strURL, T_HttpClientAsyncCB cb) {
+
+	auto spC_URL = C_URL::NewC_URL(m_spC_PlugNet);
+	spC_URL->Parse(strURL);
 
 	auto self = GetSPC_HttpClient();
-	boost::asio::ip::tcp::resolver::query qry(strDomain, "80");
+	boost::asio::ip::tcp::resolver::query qry(spC_URL->GetHost(), boost::lexical_cast<std::string>(spC_URL->GetPort()));
     m_spC_PlugNet->m_pData->m_Resolver.async_resolve(
 		qry
-		, [self,strDomain](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i) {
+		, [spC_URL, self](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i) {
 			if (ec) {
 				D_OutInfo1(ec);
 				return;
@@ -49,7 +54,7 @@ void C_HttpClient::Get_async(std::string const& strDomain, std::string const& st
 			boost::asio::async_connect(
 				*Socket
 				, i
-				, [self, Socket, strDomain](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i){
+				, [spC_URL, self, Socket](boost::system::error_code const& ec, boost::asio::ip::tcp::resolver::iterator i){
 					if (ec) {
 						D_OutInfo1(ec);
 						D_OutInfo1(boost::system::system_error(ec).what());   
@@ -57,8 +62,8 @@ void C_HttpClient::Get_async(std::string const& strDomain, std::string const& st
 					}
 					boost::asio::streambuf request;  
 					std::ostream request_stream(&request);  
-					request_stream << "GET " << "/" << " HTTP/1.1\r\n";  
-					request_stream << "Host: " << strDomain << "\r\n";  
+					request_stream << "GET " << spC_URL->GetPath() << " HTTP/1.1\r\n";  
+					request_stream << "Host: " << spC_URL->GetHost() << "\r\n";  
 					request_stream << "Accept: */*\r\n";  
 					request_stream << "Connection: close\r\n\r\n"; 
 
@@ -101,19 +106,24 @@ void C_HttpClient::Get_async(std::string const& strDomain, std::string const& st
 	);
 }
 
-std::string C_HttpClient::Get(std::string const& strDomain, std::string const& strPath) {
+std::string C_HttpClient::Get(std::string const& strURL) {
 	std::string strRet;
+
+	auto spC_URL = C_URL::NewC_URL(m_spC_PlugNet);
+	spC_URL->Parse(strURL);
+
 	auto spC_Dns = C_Dns::NewC_Dns(m_spC_PlugNet);
-	auto vecIPs = spC_Dns->Domain2IPs(strDomain);
+	auto vecIPs = spC_Dns->Domain2IPs(spC_URL->GetHost());
 	if (vecIPs.empty()) {
-		D_OutInfo2("not found ip", strDomain);
+		D_OutInfo2("not found ip", spC_URL->GetHost());
 		return "";
 	}
-	
+
+
 	boost::asio::ip::tcp::socket Socket(m_spC_PlugNet->m_pData->m_ioService);  
 	boost::system::error_code ec; 
 	for (auto strIP : vecIPs) {
-		boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address_v4::from_string(strIP), 80);
+		boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address_v4::from_string(strIP), spC_URL->GetPort());
 		Socket.connect(ep, ec);     
         if (ec) {  
 			continue;
@@ -127,8 +137,8 @@ std::string C_HttpClient::Get(std::string const& strDomain, std::string const& s
 
 	boost::asio::streambuf request;  
     std::ostream request_stream(&request);  
-    request_stream << "GET " << "/" << " HTTP/1.1\r\n";  
-    request_stream << "Host: " << strDomain << "\r\n";  
+    request_stream << "GET " << spC_URL->GetPath() << " HTTP/1.1\r\n";  
+    request_stream << "Host: " << spC_URL->GetHost() << "\r\n";  
     request_stream << "Accept: */*\r\n";  
     request_stream << "Connection: close\r\n\r\n";  
       

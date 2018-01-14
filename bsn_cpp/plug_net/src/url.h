@@ -19,6 +19,11 @@ public:
 
 public: // I_URL
 	virtual void Parse(std::string const& strURL) override;
+	virtual std::string const& GetHost() override;
+	virtual std::string const& GetPath() override;
+	virtual std::string const& GetProto() override;
+	virtual std::string const& GetURL() override;
+	virtual uint16_t GetPort() override;
 
 public:
 	static T_SPC_URL NewC_URL(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
@@ -32,6 +37,11 @@ public:
 
 public:
 	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
+	std::string m_strURL;
+	std::string m_strProto;
+	std::string m_strHost;
+	std::string m_strPath;
+	uint16_t m_u16Port;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

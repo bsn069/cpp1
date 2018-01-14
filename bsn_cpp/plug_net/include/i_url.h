@@ -21,6 +21,11 @@ public:
 
 public:
 	virtual void Parse(std::string const& strURL) = 0;
+	virtual std::string const& GetURL() = 0;
+	virtual std::string const& GetHost() = 0;
+	virtual std::string const& GetPath() = 0;
+	virtual std::string const& GetProto() = 0;
+	virtual uint16_t GetPort() = 0;
 
 public:
 	T_SPI_URL GetSPI_URL() {

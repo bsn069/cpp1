@@ -29,10 +29,20 @@ C_HttpsClient::~C_HttpsClient() {
 
 C_HttpsClient::T_SPC_HttpsClient C_HttpsClient::GetSPC_HttpsClient() {
 	D_OutInfo();
-	auto spI_HttpClient = GetSPI_HttpClient();
-	auto spC_HttpsClient = std::dynamic_pointer_cast<C_HttpsClient>(spI_HttpClient);
+	auto spI_HttpsClient = GetSPI_HttpsClient();
+	auto spC_HttpsClient = std::dynamic_pointer_cast<C_HttpsClient>(spI_HttpsClient);
 	return spC_HttpsClient;
 }
+
+bool C_HttpsClient::verify_certificate(bool preverified, boost::asio::ssl::verify_context& ctx) {
+	// char subject_name[256];
+	// X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
+	// X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
+	// std::cout << "Verifying " << subject_name << "\n";
+
+	return true;
+}
+
 
 std::string C_HttpsClient::Get(std::string const& strURL) {
 	std::string strRet;
@@ -47,17 +57,26 @@ std::string C_HttpsClient::Get(std::string const& strURL) {
 		return "";
 	}
 
+	T_Socket Socket(m_spC_PlugNet->m_pData->m_ioService, m_ssl_context);  
+	Socket.set_verify_mode(boost::asio::ssl::verify_peer);
+    Socket.set_verify_callback(
+        boost::bind(&C_HttpsClient::verify_certificate, this, _1, _2));
 
-	boost::asio::ip::tcp::socket Socket(m_spC_PlugNet->m_pData->m_ioService);  
 	boost::system::error_code ec; 
 	for (auto strIP : vecIPs) {
 		boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address_v4::from_string(strIP), spC_URL->GetPort());
-		Socket.connect(ep, ec);     
+		Socket.lowest_layer().connect(ep, ec);     
         if (ec) {  
 			continue;
         }   
 		break; 
 	}
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return "";
+	} 
+
+	Socket.handshake(boost::asio::ssl::stream_base::client, ec);
 	if (ec) {  
 		D_OutInfo1(boost::system::system_error(ec).what());   
 		return "";
@@ -215,9 +234,9 @@ C_HttpsClient* CreateC_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	return pC_HttpsClient;
 }
 
-void ReleaseC_HttpsClient(I_HttpClient* pI_HttpClient) {
+void ReleaseC_HttpsClient(I_HttpsClient* pI_HttpsClient) {
 	D_OutInfo();
-	C_HttpsClient* pC_HttpsClient = static_cast<C_HttpsClient*>(pI_HttpClient);
+	C_HttpsClient* pC_HttpsClient = static_cast<C_HttpsClient*>(pI_HttpsClient);
 	Delete(pC_HttpsClient);
 }
 
@@ -228,11 +247,11 @@ C_HttpsClient::T_SPC_HttpsClient C_HttpsClient::NewC_HttpsClient(C_PlugNet::T_SP
 	return spC_HttpsClient;
 }
 
-C_HttpsClient::T_SPI_HttpClient C_HttpsClient::NewI_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_HttpsClient::T_SPI_HttpsClient C_HttpsClient::NewI_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();
 	auto spC_HttpsClient = C_HttpsClient::NewC_HttpsClient(spC_PlugNet);
-	auto spI_HttpClient = spC_HttpsClient->GetSPI_HttpClient();
-	return spI_HttpClient;
+	auto spI_HttpsClient = spC_HttpsClient->GetSPI_HttpsClient();
+	return spI_HttpsClient;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -14,19 +14,22 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
-class C_HttpsClient : public I_HttpClient {
+class C_HttpsClient : public I_HttpsClient {
 public:
-	typedef std::shared_ptr<C_HttpsClient> T_SPC_HttpClient;	
+	typedef std::shared_ptr<C_HttpsClient> T_SPC_HttpsClient;	
+	typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> T_Socket;
 
-public: // I_HttpClient
+public: // I_HttpsClient
  	virtual std::string Get(std::string const& strURL) override; 
 
 public:
-	static T_SPC_HttpClient NewC_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
-	static T_SPI_HttpClient NewI_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
+	static T_SPC_HttpsClient NewC_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
+	static T_SPI_HttpsClient NewI_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 
-	T_SPC_HttpClient GetSPC_HttpClient();
+	T_SPC_HttpsClient GetSPC_HttpsClient();
 	
+	bool verify_certificate(bool preverified, boost::asio::ssl::verify_context& ctx);
+
 public:
 	C_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	virtual ~C_HttpsClient();

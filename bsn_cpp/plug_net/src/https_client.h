@@ -21,6 +21,7 @@ public:
 
 public: // I_HttpsClient
  	virtual std::string Get(std::string const& strURL) override; 
+ 	virtual std::string GetCoroutine(std::string const& strURL) override; 
 
 public:
 	static T_SPC_HttpsClient NewC_HttpsClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);

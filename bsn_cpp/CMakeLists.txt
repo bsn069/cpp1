@@ -54,6 +54,7 @@ LINK_DIRECTORIES( ${LIBRARY_OUTPUT_PATH} )
 
 # 添加定义
 add_definitions(-DUNICODE -D_UNICODE)
+add_definitions(-DBOOST_COROUTINES_NO_DEPRECATION_WARNING)
 #-------------------------------------------------------------------------------
 
 

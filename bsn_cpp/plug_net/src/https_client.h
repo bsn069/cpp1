@@ -35,8 +35,8 @@ public:
 	virtual ~C_HttpsClient();
 
 public:
-	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
 	boost::asio::ssl::context m_ssl_context;
+	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

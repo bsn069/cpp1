@@ -112,28 +112,6 @@ std::string C_HttpsClient::Get(std::string const& strURL) {
 	return strRet;
 }
 
-void C_HttpsClient::GetCoroutine(std::string const& strURL) {
-    boost::asio::spawn(strand_,
-        boost::bind(&C_HttpsClient::GetCoroutineImp,
-          shared_from_this(), std::ref(strURL), _1));
-}
-
-void C_HttpsClient::GetCoroutineImp(std::string const& strURL, boost::asio::yield_context yield) {
-	std::string strRet;
-	boost::system::error_code ec; 
-
-	auto spC_URL = C_URL::NewC_URL(m_spC_PlugNet);
-	spC_URL->Parse(strURL);
-
-	boost::asio::ip::tcp::resolver::query qry(spC_URL->GetHost(), boost::lexical_cast<std::string>(spC_URL->GetPort()));
-	boost::asio::ip::tcp::resolver 	rsv(m_spC_PlugNet->m_pData->m_ioService);
-	auto i = rsv.async_resolve(qry, yield[ec])
-	if (ec) {  
-		D_OutInfo1(boost::system::system_error(ec).what());   
-		return;
-	} 
-}
-
 // std::string C_HttpsClient::GetRequest(std::string url) {  
 //     size_t index;  
       

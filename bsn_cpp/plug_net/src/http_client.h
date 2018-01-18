@@ -7,6 +7,7 @@
 #include <bsn_cpp/include/name_space.h>
 
 #include <boost/asio.hpp>
+#include <boost/asio/spawn.hpp>
 
 #include <vector>
 #include <string>
@@ -21,13 +22,14 @@ public: // I_HttpClient
  	virtual std::string Get(std::string const& strURL) override; 
  	virtual void Get_async(std::string const& strURL, T_HttpClientAsyncCB cb) override; 
 	// virtual void Get_async(std::string const& strUri, T_HttpClientAsyncCB cb) override;
+ 	virtual void GetCoroutine(std::string const& strURL) override; 
 
 public:
 	static T_SPC_HttpClient NewC_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	static T_SPI_HttpClient NewI_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 
 	T_SPC_HttpClient GetSPC_HttpClient();
-	
+	void GetCoroutineImp(std::string strURL, boost::asio::yield_context yield); 
 public:
 	C_HttpClient(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	virtual ~C_HttpClient();

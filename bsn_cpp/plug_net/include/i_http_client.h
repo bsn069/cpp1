@@ -23,6 +23,7 @@ public:
 public:
  	virtual std::string Get(std::string const& strURL) = 0; 
  	virtual void Get_async(std::string const& strURL, T_HttpClientAsyncCB cb) = 0; 
+ 	virtual void GetCoroutine(std::string const& strURL) = 0; 
 
 public:
 	T_SPI_HttpClient GetSPI_HttpClient() {

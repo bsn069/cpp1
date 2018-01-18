@@ -40,6 +40,7 @@ ADD ./bsn_lib_path.conf /etc/ld.so.conf.d/
 RUN ldconfig
 
 WORKDIR /bsn_cpp
+RUN yum -y install opensll-devel; yum clean all
 
 
 

@@ -106,6 +106,67 @@ void C_HttpClient::Get_async(std::string const& strURL, T_HttpClientAsyncCB cb) 
 	);
 }
 
+
+void C_HttpClient::GetCoroutine(std::string const& strURL) {
+    boost::asio::spawn(m_spC_PlugNet->m_pData->m_ioService,
+        boost::bind(&C_HttpClient::GetCoroutineImp,
+          GetSPC_HttpClient(), strURL, _1));
+}
+
+void C_HttpClient::GetCoroutineImp(std::string strURL, boost::asio::yield_context yield) {
+	boost::system::error_code ec; 
+
+	auto spC_URL = C_URL::NewC_URL(m_spC_PlugNet);
+	spC_URL->Parse(strURL);
+
+	boost::asio::ip::tcp::resolver::query qry(spC_URL->GetHost(), boost::lexical_cast<std::string>(spC_URL->GetPort()));
+	boost::asio::ip::tcp::resolver 	rsv(m_spC_PlugNet->m_pData->m_ioService);
+	auto endpoint_iterator = rsv.async_resolve(qry, yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+
+	auto Socket = boost::asio::ip::tcp::socket(m_spC_PlugNet->m_pData->m_ioService);
+	
+	boost::asio::async_connect(Socket, endpoint_iterator, yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+
+	boost::asio::streambuf request;  
+	std::ostream request_stream(&request);  
+	request_stream << "GET " << spC_URL->GetPath() << " HTTP/1.1\r\n";  
+	request_stream << "Host: " << spC_URL->GetHost() << "\r\n";  
+	request_stream << "Accept: */*\r\n";  
+	request_stream << "Connection: close\r\n\r\n"; 
+
+	boost::asio::async_write(Socket, request, boost::asio::transfer_all(), yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+
+	boost::asio::streambuf response;  
+	boost::asio::async_read(
+		Socket
+		, response
+		, boost::asio::transfer_all()
+		, yield[ec]
+	);
+	if (ec && ec != boost::asio::error::eof) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+
+	std::istream is(&response);  
+	is.unsetf(std::ios_base::skipws);  
+	std::string sz;  
+	sz.append(std::istream_iterator<char>(is), std::istream_iterator<char>());  
+	D_OutInfo1(sz);
+}
+
 std::string C_HttpClient::Get(std::string const& strURL) {
 	std::string strRet;
 

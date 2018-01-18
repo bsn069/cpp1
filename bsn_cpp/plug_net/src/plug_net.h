@@ -46,6 +46,7 @@ public: // net
 	void CmdShowIP(bool bShowHelp, std::string const& strParam);
 	void CmdShowIPAsync(bool bShowHelp, std::string const& strParam);
 	void CmdHttpGet(bool bShowHelp, std::string const& strParam);
+	void CmdHttpGetCoro(bool bShowHelp, std::string const& strParam);
 	void CmdHttpsGet(bool bShowHelp, std::string const& strParam);
 	void CmdHttpGetAsync(bool bShowHelp, std::string const& strParam);
 	void CmdURL(bool bShowHelp, std::string const& strParam);

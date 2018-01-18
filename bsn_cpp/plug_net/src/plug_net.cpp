@@ -61,6 +61,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIP", boost::bind(&C_PlugNet::CmdShowIP, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "ShowIPAsync", boost::bind(&C_PlugNet::CmdShowIPAsync, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGet", boost::bind(&C_PlugNet::CmdHttpGet, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetCoro", boost::bind(&C_PlugNet::CmdHttpGetCoro, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpsGet", boost::bind(&C_PlugNet::CmdHttpsGet, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetAsync", boost::bind(&C_PlugNet::CmdHttpGetAsync, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "URL", boost::bind(&C_PlugNet::CmdURL, this, _1, _2));
@@ -115,6 +116,13 @@ void C_PlugNet::CmdHttpGetAsync(bool bShowHelp, std::string const& strParam) {
  
 	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
 	spC_HttpClient->Get_async(strParam, [](){});
+}
+
+void C_PlugNet::CmdHttpGetCoro(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_HttpClient = C_HttpClient::NewC_HttpClient(GetSPC_PlugNet());
+	spC_HttpClient->GetCoroutine(strParam);
 }
 
 void C_PlugNet::CmdURL(bool bShowHelp, std::string const& strParam) {

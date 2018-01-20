@@ -33,9 +33,15 @@ public:
 	T_SPI_Plug GetSPI_Plug() {
 		return shared_from_this();
 	}
+	T_SPI_PlugMgr GetSPI_PlugMgr() {
+		return m_spI_PlugMgr;
+	}
 
 public:
 	virtual ~I_Plug() = default;
+
+protected:
+	T_SPI_PlugMgr 	m_spI_PlugMgr;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

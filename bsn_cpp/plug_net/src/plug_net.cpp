@@ -173,6 +173,11 @@ C_PlugNet::T_SPC_PlugNet C_PlugNet::GetSPC_PlugNet() {
 	auto spC_PlugNet = std::dynamic_pointer_cast<C_PlugNet>(spI_Plug);
 	return spC_PlugNet;
 }
+
+boost::asio::io_service& C_PlugNet::GetIOService() {
+	return m_pData->m_ioService;
+}
+
 //////////////////////////////////////////////////////////////////////
 C_PlugNet* CreateC_PlugNet(void* pData) {
 	D_OutInfo();

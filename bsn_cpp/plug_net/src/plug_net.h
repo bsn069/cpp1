@@ -40,8 +40,10 @@ public:
 
 	T_SPC_PlugNet GetSPC_PlugNet();
 	bool RegAllCmd();
+	boost::asio::io_service& GetIOService();
 
-public: // net
+
+public:  
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
 	void CmdShowIP(bool bShowHelp, std::string const& strParam);
 	void CmdShowIPAsync(bool bShowHelp, std::string const& strParam);

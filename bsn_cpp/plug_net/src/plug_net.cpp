@@ -125,6 +125,13 @@ void C_PlugNet::CmdHttpGetCoro(bool bShowHelp, std::string const& strParam) {
 	spC_HttpClient->GetCoroutine(strParam);
 }
 
+void C_PlugNet::CmdHttpServer(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_HttpServer = C_HttpServer::NewC_HttpServer(GetSPC_PlugNet());
+	spC_HttpServer->Start();
+}
+
 void C_PlugNet::CmdURL(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  

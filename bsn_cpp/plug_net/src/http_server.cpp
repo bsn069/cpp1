@@ -15,7 +15,9 @@
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
 C_HttpServer::C_HttpServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet) 
-	: m_spC_PlugNet(spC_PlugNet) {
+	: m_spC_PlugNet(spC_PlugNet)
+	, m_IOService(spC_PlugNet->GetIOService()) 
+	, m_Acceptor(m_IOService) {
 	D_OutInfo();
 }
 
@@ -29,6 +31,55 @@ C_HttpServer::T_SPC_HttpServer C_HttpServer::GetSPC_HttpServer() {
 	auto spI_HttpServer = GetSPI_HttpServer();
 	auto spC_HttpServer = std::dynamic_pointer_cast<C_HttpServer>(spI_HttpServer);
 	return spC_HttpServer;
+}
+
+I_Address::T_SPI_Address C_HttpServer::GetAddress() {
+	return m_spI_Address;
+}
+
+void C_HttpServer::SetAddress(I_Address::T_SPI_Address spI_Address) {
+	m_spI_Address = spI_Address;
+}
+
+bool C_HttpServer::Start() {
+	auto Address = GetAddress();
+	if (!Address) {
+		return false;
+	}
+
+    boost::asio::spawn(
+		m_IOService
+		, boost::bind(
+			&C_HttpServer::RunCoroutineImp
+			, GetSPC_HttpServer()
+			, _1
+		)
+	);
+	return true;
+}
+
+bool C_HttpServer::Stop() {
+
+	return true;
+}
+
+
+void C_HttpServer::RunCoroutineImp(boost::asio::yield_context yield) {
+	boost::system::error_code ec; 
+
+	auto Address = GetAddress();
+	auto const& strHost = Address->GetAddr();
+	auto u16Port = Address->GetPort();
+
+	boost::asio::ip::tcp::resolver::query Query(strHost, boost::lexical_cast<std::string>(u16Port));
+	boost::asio::ip::tcp::resolver 	Resover(m_IOService);
+	auto EndPointItor = Resover.async_resolve(Query, yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+
+
 }
 
 //////////////////////////////////////////////////////////////////////

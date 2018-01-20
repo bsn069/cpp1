@@ -52,6 +52,7 @@ public:
 	void CmdHttpsGet(bool bShowHelp, std::string const& strParam);
 	void CmdHttpGetAsync(bool bShowHelp, std::string const& strParam);
 	void CmdURL(bool bShowHelp, std::string const& strParam);
+	void CmdHttpServer(bool bShowHelp, std::string const& strParam);
 
 public:
 	C_PlugNet(void* pData);

@@ -13,9 +13,9 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
-C_HttpServerClientSession::C_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket) 
+C_HttpServerClientSession::C_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer) 
 	: m_spC_HttpServer(spC_HttpServer) 
-	, m_Socket(std::move(Socket)) {
+	, m_Socket(spC_HttpServer->m_IOService) {
 	D_OutInfo();
 }
 
@@ -25,6 +25,7 @@ C_HttpServerClientSession::~C_HttpServerClientSession() {
 }
 
 bool C_HttpServerClientSession::Start() {
+	D_OutInfo();
     boost::asio::spawn(
 		m_spC_HttpServer->m_IOService
 		, boost::bind(
@@ -37,6 +38,7 @@ bool C_HttpServerClientSession::Start() {
 }
 
 bool C_HttpServerClientSession::Stop() {
+	D_OutInfo();
 	m_Socket.close();
 	return true;	
 }
@@ -50,6 +52,7 @@ C_HttpServerClientSession::T_SPC_HttpServerClientSession C_HttpServerClientSessi
 }
  
 void C_HttpServerClientSession::RunCoroutineImp(boost::asio::yield_context yield) {
+	D_OutInfo();
 	boost::system::error_code ec; 
 
 	while (true) {
@@ -78,9 +81,9 @@ void C_HttpServerClientSession::RunCoroutineImp(boost::asio::yield_context yield
 }
 
 //////////////////////////////////////////////////////////////////////
-C_HttpServerClientSession* CreateC_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket) {
+C_HttpServerClientSession* CreateC_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer) {
 	D_OutInfo();
-	C_HttpServerClientSession* pC_HttpServerClientSession = New<C_HttpServerClientSession>(spC_HttpServer, std::move(Socket));
+	C_HttpServerClientSession* pC_HttpServerClientSession = New<C_HttpServerClientSession>(spC_HttpServer);
 	return pC_HttpServerClientSession;
 }
 
@@ -90,16 +93,16 @@ void ReleaseC_HttpServerClientSession(I_HttpServerClientSession* pI_HttpServerCl
 	Delete(pC_HttpServerClientSession);
 }
 
-C_HttpServerClientSession::T_SPC_HttpServerClientSession C_HttpServerClientSession::NewC_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket) {
+C_HttpServerClientSession::T_SPC_HttpServerClientSession C_HttpServerClientSession::NewC_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer) {
 	D_OutInfo();
-	auto pC_HttpServerClientSession = CreateC_HttpServerClientSession(spC_HttpServer, std::move(Socket));
+	auto pC_HttpServerClientSession = CreateC_HttpServerClientSession(spC_HttpServer);
 	auto spC_HttpServerClientSession = C_HttpServerClientSession::T_SPC_HttpServerClientSession(pC_HttpServerClientSession, ReleaseC_HttpServerClientSession);
 	return spC_HttpServerClientSession;
 }
 
-C_HttpServerClientSession::T_SPI_HttpServerClientSession C_HttpServerClientSession::NewI_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket) {
+C_HttpServerClientSession::T_SPI_HttpServerClientSession C_HttpServerClientSession::NewI_HttpServerClientSession(C_HttpServer::T_SPC_HttpServer spC_HttpServer) {
 	D_OutInfo();
-	auto spC_HttpServerClientSession = C_HttpServerClientSession::NewC_HttpServerClientSession(spC_HttpServer, std::move(Socket));
+	auto spC_HttpServerClientSession = C_HttpServerClientSession::NewC_HttpServerClientSession(spC_HttpServer);
 	auto spI_HttpServerClientSession = spC_HttpServerClientSession->GetSPI_HttpServerClientSession();
 	return spI_HttpServerClientSession;
 }

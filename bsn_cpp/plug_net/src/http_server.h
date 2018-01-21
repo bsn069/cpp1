@@ -35,7 +35,7 @@ public:
  	T_SPC_HttpServer GetSPC_HttpServer();
 	void RunCoroutineImp(boost::asio::yield_context yield);
 
-	bool Start(boost::asio::ip::tcp::socket Socket);
+	bool Start(T_SPC_HttpServerClientSession session);
 	bool Stop(T_SPC_HttpServerClientSession session);
 
 public:

@@ -23,7 +23,8 @@ public:
 	typedef std::shared_ptr<I_HttpServerClientSession> T_SPI_HttpServerClientSession;
 
 public:
-
+ 	virtual bool Start() = 0;
+	virtual bool Stop() = 0;
 
 public:
 	T_SPI_HttpServerClientSession GetSPI_HttpServerClientSession() {

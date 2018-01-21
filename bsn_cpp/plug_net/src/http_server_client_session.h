@@ -25,14 +25,14 @@ public: // I_HttpServerClientSession
 	virtual bool Stop() override;
 
 public:
-	static T_SPC_HttpServerClientSession NewC_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket);
-	static T_SPI_HttpServerClientSession NewI_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket);
+	static T_SPC_HttpServerClientSession NewC_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer);
+	static T_SPI_HttpServerClientSession NewI_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer);
  
  	T_SPC_HttpServerClientSession GetSPC_HttpServerClientSession();
 	void RunCoroutineImp(boost::asio::yield_context yield);
 
 public:
-	explicit C_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer, boost::asio::ip::tcp::socket Socket);
+	explicit C_HttpServerClientSession(T_SPC_HttpServer spC_HttpServer);
 	virtual ~C_HttpServerClientSession();
 
 public:

@@ -2,6 +2,8 @@
 #include <bsn_cpp/plug_net/src/dns.h>
 #include <bsn_cpp/plug_net/src/http_client.h>
 #include <bsn_cpp/plug_net/src/https_client.h>
+#include <bsn_cpp/plug_net/src/http_server.h>
+#include <bsn_cpp/plug_net/src/address.h>
 #include <bsn_cpp/plug_net/src/url.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
@@ -63,6 +65,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGet", boost::bind(&C_PlugNet::CmdHttpGet, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetCoro", boost::bind(&C_PlugNet::CmdHttpGetCoro, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpsGet", boost::bind(&C_PlugNet::CmdHttpsGet, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "HttpServer", boost::bind(&C_PlugNet::CmdHttpServer, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetAsync", boost::bind(&C_PlugNet::CmdHttpGetAsync, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "URL", boost::bind(&C_PlugNet::CmdURL, this, _1, _2));
 
@@ -128,7 +131,12 @@ void C_PlugNet::CmdHttpGetCoro(bool bShowHelp, std::string const& strParam) {
 void C_PlugNet::CmdHttpServer(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
+ 	auto spC_Address = C_Address::NewC_Address();
+	spC_Address->SetAddr("0.0.0.0");
+	spC_Address->SetPort(80);
+
 	auto spC_HttpServer = C_HttpServer::NewC_HttpServer(GetSPC_PlugNet());
+	spC_HttpServer->SetAddress(spC_Address);
 	spC_HttpServer->Start();
 }
 

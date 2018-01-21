@@ -77,10 +77,9 @@ bool C_HttpServer::StopAllClient() {
 	return true;
 }
 
-bool C_HttpServer::Start(boost::asio::ip::tcp::socket Socket) {
-	auto spC_HttpServerClientSession = C_HttpServerClientSession::NewC_HttpServerClientSession(GetSPC_HttpServer(), std::move(Socket));
-	m_ClientSessions.insert(spC_HttpServerClientSession);
-	spC_HttpServerClientSession->Start();
+bool C_HttpServer::Start(T_SPC_HttpServerClientSession session) {
+	m_ClientSessions.insert(session);
+	session->Start();
 	return true;
 }
 
@@ -97,29 +96,37 @@ void C_HttpServer::RunCoroutineImp(boost::asio::yield_context yield) {
 	auto Address = GetAddress();
 	auto const& strHost = Address->GetAddr();
 	auto u16Port = Address->GetPort();
+// boost::asio::ip::tcp::resolver resolver(io_service_);
+//   boost::asio::ip::tcp::resolver::query query(address, port);
+//   boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
+//   acceptor_.open(endpoint.protocol());
+//   acceptor_.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
+//   acceptor_.bind(endpoint);
+//   acceptor_.listen();
 
-	boost::asio::ip::tcp::resolver::query Query(strHost, boost::lexical_cast<std::string>(u16Port));
 	boost::asio::ip::tcp::resolver 	Resover(m_IOService);
+	boost::asio::ip::tcp::resolver::query Query(strHost, boost::lexical_cast<std::string>(u16Port));
 	auto EndPointItor = Resover.async_resolve(Query, yield[ec]);
 	if (ec) {  
 		D_OutInfo1(boost::system::system_error(ec).what());   
 		return;
 	} 
 
-	auto EndPoint = *EndPointItor;
+	auto EndPoint = EndPointItor->endpoint();
 	m_Acceptor.open(EndPoint.protocol());
 	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	m_Acceptor.bind(EndPoint);
 	m_Acceptor.listen();
 
 	while (m_Acceptor.is_open()) {
-		auto Socket = boost::asio::ip::tcp::socket(m_IOService);
-		m_Acceptor.async_accept(Socket, yield[ec]);
+		auto spC_HttpServerClientSession = C_HttpServerClientSession::NewC_HttpServerClientSession(GetSPC_HttpServer());
+		m_Acceptor.async_accept(spC_HttpServerClientSession->m_Socket, yield[ec]);
 		if (ec) {  
 			D_OutInfo1(boost::system::system_error(ec).what());   
 			return;
 		}
-		Start(std::move(Socket));
+		D_OutInfo1("on client connect");
+		Start(spC_HttpServerClientSession);
 	}
 }
 

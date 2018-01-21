@@ -1,4 +1,5 @@
 #include <bsn_cpp/plug_net/src/http_server.h>
+#include <bsn_cpp/plug_net/src/http_server_client_session.h>
 #include <bsn_cpp/plug_net/src/dns.h>
 #include <bsn_cpp/plug_net/src/url.h>
  
@@ -23,7 +24,7 @@ C_HttpServer::C_HttpServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet)
 
 C_HttpServer::~C_HttpServer() {
 	D_OutInfo();
- 
+	Stop();
 }
 
 C_HttpServer::T_SPC_HttpServer C_HttpServer::GetSPC_HttpServer() {
@@ -47,6 +48,10 @@ bool C_HttpServer::Start() {
 		return false;
 	}
 
+	if (m_Acceptor.is_open()) {
+		return true;
+	}
+
     boost::asio::spawn(
 		m_IOService
 		, boost::bind(
@@ -59,10 +64,32 @@ bool C_HttpServer::Start() {
 }
 
 bool C_HttpServer::Stop() {
-
+	m_Acceptor.close();
+	StopAllClient();
 	return true;
 }
 
+bool C_HttpServer::StopAllClient() {
+	for (auto& session : m_ClientSessions) {
+		session->Stop();
+	}
+	m_ClientSessions.clear();
+	return true;
+}
+
+bool C_HttpServer::Start(boost::asio::ip::tcp::socket Socket) {
+	auto spC_HttpServerClientSession = C_HttpServerClientSession::NewC_HttpServerClientSession(GetSPC_HttpServer(), std::move(Socket));
+	m_ClientSessions.insert(spC_HttpServerClientSession);
+	spC_HttpServerClientSession->Start();
+	return true;
+}
+
+
+bool C_HttpServer::Stop(T_SPC_HttpServerClientSession session) {
+	m_ClientSessions.erase(session);
+	session->Stop();
+	return true;
+}
 
 void C_HttpServer::RunCoroutineImp(boost::asio::yield_context yield) {
 	boost::system::error_code ec; 
@@ -79,7 +106,21 @@ void C_HttpServer::RunCoroutineImp(boost::asio::yield_context yield) {
 		return;
 	} 
 
+	auto EndPoint = *EndPointItor;
+	m_Acceptor.open(EndPoint.protocol());
+	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
+	m_Acceptor.bind(EndPoint);
+	m_Acceptor.listen();
 
+	while (m_Acceptor.is_open()) {
+		auto Socket = boost::asio::ip::tcp::socket(m_IOService);
+		m_Acceptor.async_accept(Socket, yield[ec]);
+		if (ec) {  
+			D_OutInfo1(boost::system::system_error(ec).what());   
+			return;
+		}
+		Start(std::move(Socket));
+	}
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -14,15 +14,19 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
+class C_HttpServerClientSession;
+
 class C_HttpServer : public I_HttpServer {
 public:
 	typedef std::shared_ptr<C_HttpServer> T_SPC_HttpServer;	
+	typedef std::shared_ptr<C_HttpServerClientSession> T_SPC_HttpServerClientSession;	
 
 public: // I_HttpServer
 	virtual I_Address::T_SPI_Address GetAddress() override;
 	virtual void SetAddress(I_Address::T_SPI_Address spI_Address) override;
 	virtual bool Start() override;
 	virtual bool Stop() override;
+	virtual bool StopAllClient() override;
 
 public:
 	static T_SPC_HttpServer NewC_HttpServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
@@ -30,6 +34,9 @@ public:
  
  	T_SPC_HttpServer GetSPC_HttpServer();
 	void RunCoroutineImp(boost::asio::yield_context yield);
+
+	bool Start(boost::asio::ip::tcp::socket Socket);
+	bool Stop(T_SPC_HttpServerClientSession session);
 
 public:
 	C_HttpServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
@@ -41,6 +48,7 @@ public:
 	boost::asio::ip::tcp::acceptor m_Acceptor;
 
 	I_Address::T_SPI_Address m_spI_Address;
+	std::set<T_SPC_HttpServerClientSession> m_ClientSessions;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

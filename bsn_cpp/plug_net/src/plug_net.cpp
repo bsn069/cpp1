@@ -67,6 +67,7 @@ bool C_PlugNet::RegAllCmd() {
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpsGet", boost::bind(&C_PlugNet::CmdHttpsGet, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpServer", boost::bind(&C_PlugNet::CmdHttpServer, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "HttpGetAsync", boost::bind(&C_PlugNet::CmdHttpGetAsync, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "SendMail", boost::bind(&C_PlugNet::CmdSendMail, this, _1, _2));
 	spI_PlugCmd->RegPlugCmd(GetName(), "URL", boost::bind(&C_PlugNet::CmdURL, this, _1, _2));
 
 	return true;
@@ -138,6 +139,13 @@ void C_PlugNet::CmdHttpServer(bool bShowHelp, std::string const& strParam) {
 	auto spC_HttpServer = C_HttpServer::NewC_HttpServer(GetSPC_PlugNet());
 	spC_HttpServer->SetAddress(spC_Address);
 	spC_HttpServer->Start();
+}
+
+void C_PlugNet::CmdSendMail(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+ 
+	auto spC_SendMail = C_SendMail::NewC_SendMail(GetSPC_PlugNet());
+	spC_SendMail->SendTest();
 }
 
 void C_PlugNet::CmdURL(bool bShowHelp, std::string const& strParam) {

@@ -28,6 +28,7 @@ public:
 	T_SPC_SendMail GetSPC_SendMail();
 	void CoroutineImp(boost::asio::yield_context yield); 
 	void SendTestCoroutineImp(boost::asio::yield_context yield); 
+	void SendTestSyncImp();
 	void SpawnCoroutine();
 
 public:

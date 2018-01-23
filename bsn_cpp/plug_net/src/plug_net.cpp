@@ -3,6 +3,7 @@
 #include <bsn_cpp/plug_net/src/http_client.h>
 #include <bsn_cpp/plug_net/src/https_client.h>
 #include <bsn_cpp/plug_net/src/http_server.h>
+#include <bsn_cpp/plug_net/src/send_mail.h>
 #include <bsn_cpp/plug_net/src/address.h>
 #include <bsn_cpp/plug_net/src/url.h>
 
@@ -47,7 +48,8 @@ bool C_PlugNet::AllInitAfter() {
 	D_OutInfo();
 
 	RegAllCmd();
-
+	
+	CmdSendMail(false, "");
 	return true;
 }
 

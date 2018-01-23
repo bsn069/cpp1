@@ -31,12 +31,20 @@ public:
 	void SendTestSyncImp();
 	void SpawnCoroutine();
 
+	void LoginCoro();
+
+
 public:
 	C_SendMail(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	virtual ~C_SendMail();
 
 public:
 	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
+	boost::asio::ip::tcp::socket m_Socket;
+	std::string m_strSmtpHost;
+	uint16_t m_u16Port;
+	std::string m_strUser;
+	std::string m_strPwd;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

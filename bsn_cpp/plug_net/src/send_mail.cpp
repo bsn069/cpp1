@@ -13,10 +13,13 @@
 
 #include <iostream>
 
+using boost::asio::ip;
+
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
 C_SendMail::C_SendMail(C_PlugNet::T_SPC_PlugNet spC_PlugNet) 
-	: m_spC_PlugNet(spC_PlugNet) {
+	: m_spC_PlugNet(spC_PlugNet)
+	, m_Socket(spC_PlugNet->GetIOService()) {
 	D_OutInfo();
 }
 
@@ -48,10 +51,54 @@ void C_SendMail::CoroutineImp(boost::asio::yield_context yield) {
 void C_SendMail::SendTest() {
 	D_OutInfo();
 
-	SendTestSyncImp();
+	// SendTestSyncImp();
     // boost::asio::spawn(m_spC_PlugNet->GetIOService(),
     //     boost::bind(&C_SendMail::SendTestCoroutineImp,
     //       GetSPC_SendMail(), _1));
+    boost::asio::spawn(m_spC_PlugNet->GetIOService(),
+        boost::bind(&C_SendMail::LoginCoro,
+          GetSPC_SendMail(), _1));
+}
+
+void C_SendMail::LoginCoro(boost::asio::yield_context yield) {
+	D_OutInfo();
+	boost::system::error_code ec; 
+
+	tcp::resolver::query Query(m_strSmtpHost, boost::lexical_cast<std::string>(m_u16Port));
+	tcp::resolver 	Resolver(m_spC_PlugNet->GetIOService());
+	auto endpoint_iterator = Resolver.async_resolve(Query, yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+	D_OutInfo1("resolve success");
+
+	boost::asio::async_connect(m_Socket, endpoint_iterator, yield[ec]);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+	D_OutInfo1("connect success");
+
+	char reply[1024];
+	size_t reply_length = 0;
+
+	boost::asio::streambuf response;  
+	reply_length = boost::asio::async_read_until(
+		m_Socket
+		, boost::asio::buffer(reply)
+		, "\n"
+		, yield[ec]
+	);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+	D_OutInfo1("read success");
+ 
+     std::cout << "Reply is: ";
+    std::cout.write(reply, reply_length);
+    std::cout << "\n";
 }
 
 void C_SendMail::SendTestSyncImp() {

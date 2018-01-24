@@ -31,7 +31,7 @@ public:
 	void SendTestSyncImp();
 	void SpawnCoroutine();
 
-	void LoginCoro();
+	void SendCoro(boost::asio::yield_context yield);
 
 
 public:

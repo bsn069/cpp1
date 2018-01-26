@@ -56,11 +56,11 @@ void C_SendMail::SendTest() {
     //     boost::bind(&C_SendMail::SendTestCoroutineImp,
     //       GetSPC_SendMail(), _1));
     boost::asio::spawn(m_spC_PlugNet->GetIOService(),
-        boost::bind(&C_SendMail::SendCoro,
+        boost::bind(&C_SendMail::LoginCoro,
           GetSPC_SendMail(), _1));
 }
 
-void C_SendMail::SendCoro(boost::asio::yield_context yield) {
+void C_SendMail::LoginCoro(boost::asio::yield_context yield) {
 	D_OutInfo();
 	boost::system::error_code ec; 
 

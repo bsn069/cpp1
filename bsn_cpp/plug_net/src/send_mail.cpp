@@ -12,8 +12,10 @@
 #include <boost/thread.hpp>
 
 #include <iostream>
+#include <istream>
 
-using boost::asio::ip;
+// using boost::asio::ip;
+using namespace boost::asio::ip;
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
@@ -55,13 +57,64 @@ void C_SendMail::SendTest() {
     // boost::asio::spawn(m_spC_PlugNet->GetIOService(),
     //     boost::bind(&C_SendMail::SendTestCoroutineImp,
     //       GetSPC_SendMail(), _1));
+	m_strSmtpHost = "smtp.163.com";
+	m_u16Port = 25;
+	m_strUserBase64 = "YnNuXzE2M0AxNjMuY29t";
+	m_strPwdBase64 = "WG8zSjJwMDQwTXVz";
     boost::asio::spawn(m_spC_PlugNet->GetIOService(),
-        boost::bind(&C_SendMail::LoginCoro,
+        boost::bind(&C_SendMail::SendMailCoro,
           GetSPC_SendMail(), _1));
 }
 
-void C_SendMail::LoginCoro(boost::asio::yield_context yield) {
+void C_SendMail::Cmd(
+	boost::asio::yield_context yield
+	, std::string const& strSend
+	, uint32_t& u32RetCode
+) {
+	boost::system::error_code ec;
+	size_t reply_length = 0;
+	boost::asio::streambuf response;  
+	std::istream is(&response);  
+	is.unsetf(std::ios_base::skipws);  
+	std::string strData;  
+	u32RetCode = 0;
+
+	D_OutInfo2("strSend=", strSend);
+
+	if (!strSend.empty()) {
+		boost::asio::async_write(
+			m_Socket
+			, boost::asio::buffer(strSend.data(), strSend.size())
+			, yield[ec]
+		); 
+		if (ec) {  
+			D_OutInfo1(boost::system::system_error(ec).what());   
+			return;
+		} 
+	}
+	
+	D_OutInfo1("wait rsp");
+	reply_length = boost::asio::async_read_until(
+		m_Socket
+		, response
+		, "\n"
+		, yield[ec]
+	);
+	if (ec) {  
+		D_OutInfo1(boost::system::system_error(ec).what());   
+		return;
+	} 
+	is >> u32RetCode;
+	getline(is, strData);
+	D_OutInfo3("ret code=", u32RetCode, strData);
+}
+
+void C_SendMail::ConnectCoro(boost::asio::yield_context yield) {
 	D_OutInfo();
+
+	if (m_bHadConnect) {
+		return;
+	}
 	boost::system::error_code ec; 
 
     tcp::resolver::query    Query(m_strSmtpHost, boost::lexical_cast<std::string>(m_u16Port));
@@ -80,22 +133,94 @@ void C_SendMail::LoginCoro(boost::asio::yield_context yield) {
 	} 
 	D_OutInfo1("connect success");
 
-	char reply[1024];
-	size_t reply_length = 0;
+	m_bHadConnect = true;
+}
 
-	boost::asio::streambuf response;  
-	reply_length = boost::asio::async_read_until(
-		m_Socket
-		, boost::asio::buffer(reply)
-		, "\n"
-		, yield[ec]
-	);
-	if (ec) {  
-		D_OutInfo1(boost::system::system_error(ec).what());   
+void C_SendMail::SendMailCoro(boost::asio::yield_context yield) {
+	D_OutInfo();
+
+	ConnectCoro(yield);
+	if (!m_bHadConnect) {
 		return;
-	} 
-    reply[reply_length] = '\0';
-	D_OutInfo2("read success", reply);
+	}
+
+	LoginCoro(yield);
+	if (!m_bHadLogin) {
+		return;
+	}
+
+	SendCoro(yield);
+}
+
+void C_SendMail::LoginCoro(boost::asio::yield_context yield) {
+	D_OutInfo();
+	boost::system::error_code ec; 
+	uint32_t u32RetCode;
+
+	if (!m_bHadConnect) {
+		return;
+	}
+
+	if (m_bHadLogin) {
+		return;
+	}
+
+	Cmd(yield, "", u32RetCode);
+	if (u32RetCode != 220) {
+		return;
+	}
+
+	Cmd(yield, "helo s\r\n", u32RetCode);
+ 	if (u32RetCode != 250) {
+		return;
+	}
+
+	Cmd(yield, "auth login\r\n", u32RetCode);
+ 	if (u32RetCode != 334) {
+		return;
+	}
+	
+	Cmd(yield, "YnNuXzE2M0AxNjMuY29t\r\n", u32RetCode);
+ 	if (u32RetCode != 334) {
+		return;
+	}
+
+	Cmd(yield, "WG8zSjJwMDQwTXVz\r\n", u32RetCode);
+ 	if (u32RetCode != 235) {
+		return;
+	}
+
+	m_bHadLogin = true;
+}
+
+void C_SendMail::SendCoro(boost::asio::yield_context yield) {
+	D_OutInfo();
+	boost::system::error_code ec; 
+	uint32_t u32RetCode;
+
+	if (!m_bHadLogin) {
+		return;
+	}
+
+	Cmd(yield, "mail from:<bsn_163@163.com>\r\n", u32RetCode);
+	if (u32RetCode != 250) {
+		return;
+	}
+
+	Cmd(yield, "rcpt to:<15914057651@139.com>\r\n", u32RetCode);
+ 	if (u32RetCode != 250) {
+		return;
+	}
+
+	Cmd(yield, "data\r\n", u32RetCode);
+ 	if (u32RetCode != 354) {
+		return;
+	}
+	
+	Cmd(yield, "From:bsn_16311@163.com\r\nTo:15914057651@139.com\r\nSubject:butao\r\n\r\n我来了\r\n.\r\n", u32RetCode);
+ 	if (u32RetCode != 250) {
+		return;
+	}
 }
 
 void C_SendMail::SendTestSyncImp() {

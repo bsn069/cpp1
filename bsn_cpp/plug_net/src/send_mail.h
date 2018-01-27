@@ -32,7 +32,15 @@ public:
 	void SpawnCoroutine();
 
 	void LoginCoro(boost::asio::yield_context yield);
+	void ConnectCoro(boost::asio::yield_context yield);
+	void SendCoro(boost::asio::yield_context yield);
+	void SendMailCoro(boost::asio::yield_context yield);
 
+	void Cmd(
+		boost::asio::yield_context yield
+		, std::string const& strSend
+		, uint32_t& u32RetCode
+	);
 
 public:
 	C_SendMail(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
@@ -43,8 +51,10 @@ public:
 	boost::asio::ip::tcp::socket m_Socket;
 	std::string m_strSmtpHost;
 	uint16_t m_u16Port;
-	std::string m_strUser;
-	std::string m_strPwd;
+	std::string m_strUserBase64;
+	std::string m_strPwdBase64;
+	bool m_bHadConnect;
+	bool m_bHadLogin;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

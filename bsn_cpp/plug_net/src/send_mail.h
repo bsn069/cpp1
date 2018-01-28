@@ -26,15 +26,13 @@ public:
 	static T_SPI_SendMail NewI_SendMail(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 
 	T_SPC_SendMail GetSPC_SendMail();
-	void CoroutineImp(boost::asio::yield_context yield); 
-	void SendTestCoroutineImp(boost::asio::yield_context yield); 
 	void SendTestSyncImp();
-	void SpawnCoroutine();
 
-	void LoginCoro(boost::asio::yield_context yield);
-	void ConnectCoro(boost::asio::yield_context yield);
-	void SendCoro(boost::asio::yield_context yield);
 	void SendMailCoro(boost::asio::yield_context yield);
+	
+	void ConnectCoro(boost::asio::yield_context yield);
+	void LoginCoro(boost::asio::yield_context yield);
+	void SendCoro(boost::asio::yield_context yield);
 
 	void Cmd(
 		boost::asio::yield_context yield
@@ -49,12 +47,21 @@ public:
 public:
 	C_PlugNet::T_SPC_PlugNet m_spC_PlugNet;
 	boost::asio::ip::tcp::socket m_Socket;
+
 	std::string m_strSmtpHost;
 	uint16_t m_u16Port;
+
 	std::string m_strUserBase64;
 	std::string m_strPwdBase64;
+
 	bool m_bHadConnect;
 	bool m_bHadLogin;
+
+	bool m_bSending;
+	std::string m_strMailFrom;
+	std::string m_strMailTo;
+	std::string m_strMailSubject;
+	std::string m_strMailContent;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

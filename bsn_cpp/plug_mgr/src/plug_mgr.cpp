@@ -94,6 +94,7 @@ bool C_PlugMgr::LoadAll() {
 	D_OutInfo();
 	
 	if (!LoadPlug("cmd")) { return false; };
+	if (!LoadPlug("base64")) { return false; };
 	if (!LoadPlug("net")) { return false; };
 
 	return true;

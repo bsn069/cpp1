@@ -175,7 +175,7 @@ bool C_PlugData::LoadPlug() {
 
 	if (m_pData == nullptr) {
 		D_OutInfo1("m_pData == nullptr");
-		return false;
+		// return false;
 	}
 
 	typedef I_Plug::T_SPI_Plug	(T_CreatePlug)(void*);

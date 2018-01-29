@@ -42,6 +42,18 @@ RUN ldconfig
 WORKDIR /bsn_cpp
 RUN yum -y install openssl-devel; yum clean all
 
+RUN cd /root && \ 
+	curl https://www.cryptopp.com/cryptopp600.zip -o cryptopp600.zip && \
+	unzip cryptopp600.zip -d cryptopp && \
+	cd cryptopp && \
+	autoreconf -f -i && \
+	./configure && \
+	make && \
+	make install && \
+	cd /root && \
+	rm -f sqlite-autoconf-3210000.tar.gz && \
+	rm -fr sqlite-autoconf-3210000
+
 
 
  

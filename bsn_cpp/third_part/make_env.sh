@@ -43,6 +43,12 @@ if [ ! -d "SQLiteCpp" ]; then
 	git clone https://github.com/bsn069/SQLiteCpp.git
 fi
 
+if [ ! -d "cryptopp" ]; then
+	if [ ! -f "cryptopp600.zip" ]; then
+		curl https://www.cryptopp.com/cryptopp600.zip -o cryptopp600.zip
+	fi
+    unzip cryptopp600.zip -d cryptopp
+fi
 
 # if [ ! -d "protobuf-cpp" ]; then
 # 	if [ ! -f "protobuf-cpp-3.4.1.tar.gz" ]; then

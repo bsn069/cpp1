@@ -46,13 +46,11 @@ RUN cd /root && \
 	curl https://www.cryptopp.com/cryptopp600.zip -o cryptopp600.zip && \
 	unzip cryptopp600.zip -d cryptopp && \
 	cd cryptopp && \
-	autoreconf -f -i && \
-	./configure && \
-	make && \
+	make dynamic cryptest.exe && \
 	make install && \
 	cd /root && \
-	rm -f sqlite-autoconf-3210000.tar.gz && \
-	rm -fr sqlite-autoconf-3210000
+	rm -f cryptopp600.zip && \
+	rm -fr cryptopp600
 
 
 

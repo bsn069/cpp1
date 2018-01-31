@@ -46,11 +46,11 @@ RUN cd /root && \
 	curl https://www.cryptopp.com/cryptopp600.zip -o cryptopp600.zip && \
 	unzip cryptopp600.zip -d cryptopp && \
 	cd cryptopp && \
-	make dynamic cryptest.exe && \
+	make libcryptopp.so && \
 	make install && \
 	cd /root && \
 	rm -f cryptopp600.zip && \
-	rm -fr cryptopp600
+	rm -fr cryptopp
 
 
 

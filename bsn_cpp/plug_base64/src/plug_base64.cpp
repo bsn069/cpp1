@@ -7,10 +7,7 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
-#include <boost/archive/iterators/base64_from_binary.hpp>  
-#include <boost/archive/iterators/binary_from_base64.hpp>  
-#include <boost/archive/iterators/transform_width.hpp>  
-#include <boost/bind.hpp>
+#include <cryptopp/base64.h>
 
 #include <iostream>  
 #include <string>  
@@ -32,39 +29,12 @@ C_PlugBase64::~C_PlugBase64() {
 
 bool C_PlugBase64::Decode(std::string const& strInput, std::string& strOut)  
 {  
-    typedef transform_width<binary_from_base64<string::const_iterator>,8,6> Base64DecodeIter;  
-  
-    stringstream result;  
-    try  
-    {  
-        copy(Base64DecodeIter(strInput.begin()),  
-            Base64DecodeIter(strInput.end()),  
-            ostream_iterator<char>(result));  
-    }  
-    catch (...)  
-    {  
-        return false;  
-    }  
-    strOut = result.str();  
-    return strOut.empty() == false;  
+   
 }  
 
 bool C_PlugBase64::Encode(std::string const& strInput, std::string& strOut)  
 {  
-    typedef base64_from_binary<transform_width<string::const_iterator,6,8>> Base64EncodeIter;  
-       
-    stringstream  result;  
-    copy(Base64EncodeIter(strInput.begin()),  
-        Base64EncodeIter(strInput.end()),  
-        ostream_iterator<char>(result));  
-      
-    size_t Num = (3 - strInput.length() % 3) % 3;  
-    for (size_t i = 0; i < Num; i++)  
-    {  
-        result.put('=');  
-    }  
-    strOut = result.str();  
-    return strOut.empty() == false;  
+    
 }  
 
 char const * const C_PlugBase64::GetName() const {

@@ -13,7 +13,8 @@ set(SRC_LIST ${SRC_LIST_H} ${SRC_LIST_C} ${SRC_LIST_CPP} ${SRC_LIST_HPP})
   
 # 头文件搜索路径 
 #INCLUDE_DIRECTORIES( Include )
-  
+INCLUDE_DIRECTORIES( ${ROOT_DIR}/third_part )
+
 # 添加定义
 add_definitions( -D${LIB_DEFINE_PREFIX}${PROJECT_NAME})
 add_definitions( -DD_OutInfoOpen)
@@ -27,7 +28,7 @@ ADD_LIBRARY(${OUT_NAME} SHARED ${SRC_LIST})
 # 链接库
 #target_link_libraries(${OUT_NAME} bsn_nedmalloc)
 #target_link_libraries(${OUT_NAME} ssl)
-#target_link_libraries(${OUT_NAME} boost_coroutine)
+target_link_libraries(${OUT_NAME} cryptopp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic")
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -fPIC -rdynamic")

@@ -63,7 +63,7 @@ void C_TCPServerClientSession::RunCoro(boost::asio::yield_context yield) {
 		if (ec) {  
 			D_OutInfo1(boost::system::system_error(ec).what());  
 			if (ec != boost::asio::error::operation_aborted) {
-				m_spC_TCPServer->Stop(GetSPC_TCPServerClientSession()); 
+				m_spC_TCPServer->StopSession(GetSPC_TCPServerClientSession()); 
 			}
 			break;
 		} 

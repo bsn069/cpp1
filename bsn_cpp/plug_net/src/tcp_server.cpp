@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-using namespace boost::asio::ip::tcp;
+using namespace boost::asio::ip;
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@ C_TCPServer::~C_TCPServer() {
 
 C_TCPServer::T_SPC_TCPServer C_TCPServer::GetSPC_TCPServer() {
 	D_OutInfo();
-	auto spI_TCPSC_TCPServer = GetSPI_TCPSC_TCPServer();
-	auto spC_TCPServer = std::dynamic_pointer_cast<C_TCPServer>(spI_TCPSC_TCPServer);
+	auto spI_TCPServer = GetSPI_TCPServer();
+	auto spC_TCPServer = std::dynamic_pointer_cast<C_TCPServer>(spI_TCPServer);
 	return spC_TCPServer;
 }
 
@@ -90,7 +90,7 @@ bool C_TCPServer::StopListen() {
 
 bool C_TCPServer::StopAllClient() {
 	for (auto& session : m_ClientSessions) {
-		session->StopSession();
+		session->Stop();
 	}
 	m_ClientSessions.clear();
 	return true;
@@ -131,10 +131,10 @@ void C_TCPServer::ListenCoro(boost::asio::yield_context yield) {
 	boost::system::error_code ec; 
 
 	{
-		resolver 	Resover(m_IOService);
-		resolver::query Query(
-			spI_Address->GetAddr()
-			, boost::lexical_cast<std::string>(spI_Address->GetPort())
+		tcp::resolver 	Resover(m_IOService);
+		tcp::resolver::query Query(
+			Address->GetAddr()
+			, boost::lexical_cast<std::string>(Address->GetPort())
 		);
 		auto EndPointItor = Resover.async_resolve(Query, yield[ec]);
 		if (ec) { 
@@ -145,7 +145,7 @@ void C_TCPServer::ListenCoro(boost::asio::yield_context yield) {
 
 		auto EndPoint = EndPointItor->endpoint();
 		m_Acceptor.open(EndPoint.protocol());
-		m_Acceptor.set_option(acceptor::reuse_address(true));
+		m_Acceptor.set_option(tcp::acceptor::reuse_address(true));
 		m_Acceptor.bind(EndPoint);
 		m_Acceptor.listen();
 	}
@@ -173,9 +173,9 @@ C_TCPServer* CreateC_TCPServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	return pC_TCPServer;
 }
 
-void ReleaseC_TCPServer(I_TCPSC_TCPServer* pI_TCPSC_TCPServer) {
+void ReleaseC_TCPServer(I_TCPServer* pI_TCPServer) {
 	D_OutInfo();
-	C_TCPServer* pC_TCPServer = static_cast<C_TCPServer*>(pI_TCPSC_TCPServer);
+	C_TCPServer* pC_TCPServer = static_cast<C_TCPServer*>(pI_TCPServer);
 	Delete(pC_TCPServer);
 }
 
@@ -186,11 +186,11 @@ C_TCPServer::T_SPC_TCPServer C_TCPServer::NewC_TCPServer(C_PlugNet::T_SPC_PlugNe
 	return spC_TCPServer;
 }
 
-C_TCPServer::T_SPI_TCPSC_TCPServer C_TCPServer::NewI_TCPSC_TCPServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_TCPServer::T_SPI_TCPServer C_TCPServer::NewI_TCPServer(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();
 	auto spC_TCPServer = C_TCPServer::NewC_TCPServer(spC_PlugNet);
-	auto spI_TCPSC_TCPServer = spC_TCPServer->GetSPI_TCPSC_TCPServer();
-	return spI_TCPSC_TCPServer;
+	auto spI_TCPServer = spC_TCPServer->GetSPI_TCPServer();
+	return spI_TCPServer;
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

@@ -7,6 +7,8 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
+#include <boost/bind.hpp>
+
 #include <cryptopp/base64.h>
 
 #include <iostream>  
@@ -14,7 +16,6 @@
 #include <sstream>  
 
 using namespace std;  
-using namespace boost::archive::iterators;  
 
 D_BsnNamespace1(plug_base64)
 //////////////////////////////////////////////////////////////////////
@@ -29,25 +30,25 @@ C_PlugBase64::~C_PlugBase64() {
 
 bool C_PlugBase64::Decode(std::string const& strInput, std::string& strOut) {  
     CryptoPP::Base64Decoder decoder; 
-    size_t puted = decoder.PutMessageEnd((const byte*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
+    decoder.PutMessageEnd((const uint8_t*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
     if (!decoder.AnyRetrievable()) {
         return false;
     }
     auto neededLength = decoder.MaxRetrievable();
     strOut.resize(neededLength);
-    decoder.Get((byte*)strOut.data(), neededLength); 
+    decoder.Get((uint8_t*)strOut.data(), neededLength); 
     return true;
 }  
 
 bool C_PlugBase64::Encode(std::string const& strInput, std::string& strOut) {  
     CryptoPP::Base64Encoder encoder; 
-    size_t puted = encoder.PutMessageEnd((const byte*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
+    encoder.PutMessageEnd((const uint8_t*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
     if (!encoder.AnyRetrievable()) {
         return false;
     }
     auto neededLength = encoder.MaxRetrievable();
     strOut.resize(neededLength);
-    encoder.Get((byte*)strOut.data(), neededLength); 
+    encoder.Get((uint8_t*)strOut.data(), neededLength); 
     return true;
 }  
 

@@ -39,7 +39,6 @@ public:
  
  	T_SPC_TCPServer GetSPC_TCPServer();
 
-	bool StartListen();
 	void ListenCoro(boost::asio::yield_context yield);
 
 	bool StartSession(T_SPC_TCPServerClientSession session);

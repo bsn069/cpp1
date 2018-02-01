@@ -27,14 +27,28 @@ C_PlugBase64::~C_PlugBase64() {
  
 }
 
-bool C_PlugBase64::Decode(std::string const& strInput, std::string& strOut)  
-{  
-   
+bool C_PlugBase64::Decode(std::string const& strInput, std::string& strOut) {  
+    CryptoPP::Base64Decoder decoder; 
+    size_t puted = decoder.PutMessageEnd((const byte*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
+    if (!decoder.AnyRetrievable()) {
+        return false;
+    }
+    auto neededLength = decoder.MaxRetrievable();
+    strOut.resize(neededLength);
+    decoder.Get((byte*)strOut.data(), neededLength); 
+    return true;
 }  
 
-bool C_PlugBase64::Encode(std::string const& strInput, std::string& strOut)  
-{  
-    
+bool C_PlugBase64::Encode(std::string const& strInput, std::string& strOut) {  
+    CryptoPP::Base64Encoder encoder; 
+    size_t puted = encoder.PutMessageEnd((const byte*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
+    if (!encoder.AnyRetrievable()) {
+        return false;
+    }
+    auto neededLength = encoder.MaxRetrievable();
+    strOut.resize(neededLength);
+    encoder.Get((byte*)strOut.data(), neededLength); 
+    return true;
 }  
 
 char const * const C_PlugBase64::GetName() const {
@@ -70,6 +84,8 @@ bool C_PlugBase64::RegAllCmd() {
 	}
 
 	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugBase64::CmdHelp, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "Encode", boost::bind(&C_PlugBase64::CmdEncode, this, _1, _2));
+	spI_PlugCmd->RegPlugCmd(GetName(), "Decode", boost::bind(&C_PlugBase64::CmdDecode, this, _1, _2));
 
 	return true;
 }
@@ -77,6 +93,20 @@ bool C_PlugBase64::RegAllCmd() {
 void C_PlugBase64::CmdHelp(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
  
+}
+
+void C_PlugBase64::CmdEncode(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+    std::string strOut;
+    Encode(strParam, strOut);
+    D_OutInfo2("encode=", strOut);
+}
+
+void C_PlugBase64::CmdDecode(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+    std::string strOut;
+    Decode(strParam, strOut);
+    D_OutInfo2("encode=", strOut);
 }
 
 bool C_PlugBase64::Update() {

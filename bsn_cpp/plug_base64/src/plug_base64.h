@@ -40,7 +40,8 @@ public:
 
 public:  
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
-
+    void CmdEncode(bool bShowHelp, std::string const& strParam);
+    void CmdDecode(bool bShowHelp, std::string const& strParam);
 public:
 	C_PlugBase64(void* pData);
 	virtual ~C_PlugBase64();

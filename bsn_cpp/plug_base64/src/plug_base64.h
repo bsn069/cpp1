@@ -22,7 +22,7 @@ public: // I_Plug
 	virtual bool Quit() override;
 	virtual bool UnInit() override;
 
-	virtual void ProcCmd(std::string const& strNet) {};
+	virtual void ProcCmd(std::string const& strNet) override {};
 
 	virtual void OnReloadPre(std::string const& strName) override;
 	virtual void OnReloadPost(std::string const& strName) override;

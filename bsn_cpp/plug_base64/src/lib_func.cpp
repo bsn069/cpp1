@@ -14,3 +14,5 @@ D_DllCExport D_N1(plug_mgr)::I_Plug::T_SPI_Plug	CreatePlug(void* pData) {
 }
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End
+
+ 

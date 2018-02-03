@@ -60,7 +60,7 @@ public:
 	virtual ~C_PlugNet();
 
 public:
-	T_SPI_PlugMgr 	m_spI_PlugMgr;
+	// T_SPI_PlugMgr 	m_spI_PlugMgr;
 	T_PlugData* 	m_pData;
 };
 //////////////////////////////////////////////////////////////////////

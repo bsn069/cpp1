@@ -50,7 +50,7 @@ void C_SendMail::SendTest() {
 
 	m_strSmtpHost = "smtp.163.com";
 
-	auto spI_PlugBase64 = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_base64)::I_PlugBase64>("base64");
+	auto spI_PlugBase64 = m_spC_PlugNet->GetSPI_PlugMgr()->GetPlugPtr<D_N1(plug_base64)::I_PlugBase64>("base64");
 	if (!spI_PlugBase64) {
 		return;
 	}

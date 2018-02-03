@@ -2,6 +2,8 @@
 #include <bsn_cpp/plug_net/src/dns.h>
 #include <bsn_cpp/plug_net/src/url.h>
  
+#include <bsn_cpp/plug_base64/include/i_plug_base64.h>
+
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
@@ -48,8 +50,12 @@ void C_SendMail::SendTest() {
 
 	m_strSmtpHost = "smtp.163.com";
 
-	m_strUserBase64 = "YnNuXzE2M0AxNjMuY29t";
-	m_strPwdBase64 = "WG8zSjJwMDQwTXVz";
+	auto spI_PlugBase64 = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_base64)::I_PlugBase64>("base64");
+	if (!spI_PlugBase64) {
+		return;
+	}
+	spI_PlugBase64->Encode("bsn_163@163.com", m_strUserBase64);
+	spI_PlugBase64->Encode("Xo3J2p040Mus", m_strPwdBase64);
 
 	m_strMailFrom = "bsn_163@163.com";
 	m_strMailTo = "15914057651@139.com";

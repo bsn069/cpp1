@@ -42,7 +42,7 @@ bool C_PlugBase64::Decode(std::string const& strInput, std::string& strOut) {
 
 bool C_PlugBase64::Encode(std::string const& strInput, std::string& strOut) {  
     CryptoPP::Base64Encoder encoder; 
-    encoder.PutMessageEnd((const uint8_t*)strInput.c_str(), strInput.size(), -1, false);  //如果base64中有\n请使用true
+    encoder.PutMessageEnd((const uint8_t*)strInput.c_str(), strInput.size(), -1, true);  //如果base64中有\n请使用true
     if (!encoder.AnyRetrievable()) {
         return false;
     }

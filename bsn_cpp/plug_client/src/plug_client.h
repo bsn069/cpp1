@@ -41,10 +41,13 @@ public:
 	static T_SPC_PlugClient NewC_PlugClient(void* pData);
 	static T_SPI_PlugClient NewI_PlugClient(void* pData);
 
-	T_SPC_PlugClient GetSPC_PlugClient();
-	bool RegAllCmd();
+	T_SPC_PlugClient 	GetSPC_PlugClient();
+	T_SPI_TCPConnect 	GetSPI_TCPConnect();
+	T_SPC_Gate			GetSPC_Gate();
 
-	T_SPI_TCPConnect GetSPI_TCPConnect();
+	bool RegAllCmd();
+	bool StartGate();
+
 
 public:  
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
@@ -54,7 +57,6 @@ public:
 	virtual ~C_PlugClient();
 
 public:
-	T_SPI_PlugMgr 	m_spI_PlugMgr;
 	T_SPI_TCPConnect m_spI_TCPConnect;
 	T_SPC_Gate m_spC_Gate;
 };

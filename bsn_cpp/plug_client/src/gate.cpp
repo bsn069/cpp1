@@ -37,6 +37,36 @@ C_Gate::T_SPC_Gate C_Gate::GetSPC_Gate() {
 	return shared_from_this();;
 }
 
+void C_Gate::OnConnect(T_SPI_TCPSession spI_TCPSession) {
+	D_OutInfo();
+}
+
+bool C_Gate::Start() {
+	D_OutInfo();
+
+	auto spI_PlugNet = m_spC_PlugClient->GetSPI_PlugMgr()->GetPlugPtr<D_N1(plug_net)::I_PlugNet>("net");
+	if (!spI_PlugNet) {
+		return false;
+	}
+
+	D_N1(plug_net)::I_TCPSession* pI_TCPSession = New<D_N1(plug_net)::I_TCPSession>(spI_PlugNet);
+	T_SPI_TCPSession spI_TCPSession(pI_TCPSession);
+	m_spI_TCPSession = spI_TCPSession;
+
+	auto spI_Address = spI_PlugNet->NewI_Address();
+	spI_Address->SetAddr("localhost");
+	spI_Address->SetPort(60001);
+
+	auto spI_TCPConnect = m_spC_PlugClient->GetSPI_TCPConnect();
+	spI_TCPConnect->Connect(
+		m_spI_TCPSession
+		, spI_Address
+		, boost::bind(&C_Gate::OnConnect, GetSPC_Gate(), _1)
+	);
+	
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////
 C_Gate* CreateC_Gate(C_PlugClient::T_SPC_PlugClient spC_PlugClient) {
 	D_OutInfo();
@@ -44,9 +74,8 @@ C_Gate* CreateC_Gate(C_PlugClient::T_SPC_PlugClient spC_PlugClient) {
 	return pC_Gate;
 }
 
-void ReleaseC_Gate(I_Gate* pI_Gate) {
+void ReleaseC_Gate(C_Gate* pC_Gate) {
 	D_OutInfo();
-	C_Gate* pC_Gate = static_cast<C_Gate*>(pI_Gate);
 	Delete(pC_Gate);
 }
 

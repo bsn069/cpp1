@@ -57,6 +57,8 @@ bool C_PlugClient::AllInitAfter() {
 	m_spC_Gate = C_Gate::NewC_Gate(GetSPC_PlugClient());
 
 	RegAllCmd();
+
+	StartGate();
 	
 	return true;
 }
@@ -71,6 +73,13 @@ bool C_PlugClient::RegAllCmd() {
 
 	spI_PlugCmd->RegPlugCmd(GetName(), "help", boost::bind(&C_PlugClient::CmdHelp, this, _1, _2));
 
+	return true;
+}
+
+bool C_PlugClient::StartGate() {
+	D_OutInfo();
+
+	GetSPC_Gate()->Start();
 	return true;
 }
 
@@ -117,6 +126,14 @@ C_PlugClient::T_SPC_PlugClient C_PlugClient::GetSPC_PlugClient() {
 	auto spI_Plug = GetSPI_Plug();
 	auto spC_PlugClient = std::dynamic_pointer_cast<C_PlugClient>(spI_Plug);
 	return spC_PlugClient;
+}
+
+C_PlugClient::T_SPC_Gate C_PlugClient::GetSPC_Gate() {
+	return m_spC_Gate;
+}
+
+C_PlugClient::T_SPI_TCPConnect C_PlugClient::GetSPI_TCPConnect() {
+	return m_spI_TCPConnect;
 }
 
 //////////////////////////////////////////////////////////////////////

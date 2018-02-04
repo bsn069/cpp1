@@ -20,6 +20,9 @@ public:
 
 	T_SPC_Gate GetSPC_Gate();
 
+	bool Start();
+	void OnConnect(T_SPI_TCPSession spI_TCPSession);
+
 public:
 	C_Gate(C_PlugClient::T_SPC_PlugClient spC_PlugClient);
 	~C_Gate();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <bsn_cpp/plug_client/include/i_plug_client.h>
-#include <bsn_cpp/plug_net/include/i_tcp_listen.h>
+#include <bsn_cpp/plug_net/include/i_tcp_connect.h>
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
 
 #include <boost/function.hpp>
@@ -10,12 +10,15 @@
 
 D_BsnNamespace1(plug_client)
 //////////////////////////////////////////////////////////////////////
+class C_Gate;
+
 class C_PlugClient : public I_PlugClient {
 public:
 	typedef std::shared_ptr<C_PlugClient> T_SPC_PlugClient;	
-	typedef D_N1(plug_net)::I_TCPListen::T_SPI_TCPListen T_SPI_TCPListen;
+	typedef D_N1(plug_net)::I_TCPConnect::T_SPI_TCPConnect T_SPI_TCPConnect;
 	typedef D_N1(plug_net)::I_TCPSession::T_SPI_TCPSession T_SPI_TCPSession;
-	typedef std::set<T_SPI_TCPSession> T_Sessions;
+	typedef std::shared_ptr<C_Gate> T_SPC_Gate;	
+
 
 public: // I_Plug
 	virtual char const * const GetName() const override;
@@ -40,10 +43,8 @@ public:
 
 	T_SPC_PlugClient GetSPC_PlugClient();
 	bool RegAllCmd();
-	bool StartGate();
 
-	T_SPI_TCPSession FuncNew();
-	void FuncOnAccept(T_SPI_TCPSession spI_TCPSession);
+	T_SPI_TCPConnect GetSPI_TCPConnect();
 
 public:  
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
@@ -54,8 +55,8 @@ public:
 
 public:
 	T_SPI_PlugMgr 	m_spI_PlugMgr;
-	T_SPI_TCPListen m_spI_TCPListen;
-	T_Sessions		m_clientSessions;
+	T_SPI_TCPConnect m_spI_TCPConnect;
+	T_SPC_Gate m_spC_Gate;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

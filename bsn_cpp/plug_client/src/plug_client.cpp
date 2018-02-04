@@ -1,4 +1,5 @@
 #include <bsn_cpp/plug_client/src/plug_client.h>
+#include <bsn_cpp/plug_client/src/gate.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_net/include/i_plug_net.h>
@@ -29,7 +30,7 @@ C_PlugClient::~C_PlugClient() {
 }
 
 char const * const C_PlugClient::GetName() const {
-	return "gate";
+	return "client";
 }
 
 bool C_PlugClient::Awake() {
@@ -47,51 +48,17 @@ bool C_PlugClient::Init(T_SPI_PlugMgr spI_PlugMgr) {
 bool C_PlugClient::AllInitAfter() {
 	D_OutInfo();
 
-	RegAllCmd();
-	
-	return true;
-}
-
-bool C_PlugClient::StartGate() {
-	D_OutInfo();
-
 	auto spI_PlugNet = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_net)::I_PlugNet>("net");
 	if (!spI_PlugNet) {
 		return false;
 	}
+	m_spI_TCPConnect = spI_PlugNet->NewI_TCPConnect();
 
-	auto spI_Address = spI_PlugNet->NewI_Address();
-	spI_Address->SetAddr("localhost");
-	spI_Address->SetPort(60001);
+	m_spC_Gate = C_Gate::NewC_Gate(GetSPC_PlugClient());
 
-	m_spI_TCPListen = spI_PlugNet->NewI_TCPListen();
-	m_spI_TCPListen->SetAddress(spI_Address);
-	m_spI_TCPListen->SetFuncNew(
-		boost::bind(&C_PlugClient::FuncNew, GetSPC_PlugClient())
-	);
-	m_spI_TCPListen->SetFuncOnAccept(
-		boost::bind(&C_PlugClient::FuncOnAccept, GetSPC_PlugClient(), _1)
-	);
-	m_spI_TCPListen->StartListen();
+	RegAllCmd();
 	
 	return true;
-}
-
-C_PlugClient::T_SPI_TCPSession C_PlugClient::FuncNew() {
-	D_OutInfo();
-	auto spI_PlugNet = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_net)::I_PlugNet>("net");
-	if (!spI_PlugNet) {
-		return nullptr;
-	}
-
-	D_N1(plug_net)::I_TCPSession* pI_TCPSession = New<D_N1(plug_net)::I_TCPSession>(spI_PlugNet);
-	T_SPI_TCPSession spI_TCPSession(pI_TCPSession);
-	return spI_TCPSession;
-}
-
-void C_PlugClient::FuncOnAccept(T_SPI_TCPSession spI_TCPSession) {
-	D_OutInfo();
-	m_clientSessions.insert(spI_TCPSession);
 }
 
 bool C_PlugClient::RegAllCmd() {
@@ -120,15 +87,14 @@ bool C_PlugClient::Update() {
 bool C_PlugClient::Quit() {
 	D_OutInfo();
 
-	m_spI_TCPListen->StopListen();
-	m_clientSessions.clear();
- 
+	m_spC_Gate = nullptr;
+	m_spI_TCPConnect = nullptr;
+
 	return true;
 }
 
 bool C_PlugClient::UnInit() {
 	D_OutInfo();
-	m_spI_TCPListen = nullptr;
 	m_spI_PlugMgr = nullptr;
 	return true;
 }

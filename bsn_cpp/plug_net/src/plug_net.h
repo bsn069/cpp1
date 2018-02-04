@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./../include/i_plug_net.h"
+#include <bsn_cpp/plug_net/include/i_plug_net.h>
 #include <bsn_cpp/plug_mgr/include/plug_data/plug_data_net.h>
 #include <bsn_cpp/plug_net/include/i_dns.h>
 
@@ -33,6 +33,7 @@ public: // I_Plug
 public: // I_PlugNet
  	virtual I_Dns::T_SPI_Dns 	NewI_Dns() override;
  	virtual T_SPI_TCPListen 	NewI_TCPListen() override;
+	virtual T_SPI_TCPConnect 	NewI_TCPConnect() override;
  	virtual T_SPI_Address 		NewI_Address() override;
 
 

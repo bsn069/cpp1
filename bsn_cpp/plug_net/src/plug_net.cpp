@@ -8,6 +8,7 @@
 #include <bsn_cpp/plug_net/src/url.h>
 #include <bsn_cpp/plug_net/src/tcp_listen.h>
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
+#include <bsn_cpp/plug_net/src/tcp_connect.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
@@ -195,6 +196,10 @@ I_Dns::T_SPI_Dns C_PlugNet::NewI_Dns() {
 
 C_PlugNet::T_SPI_TCPListen C_PlugNet::NewI_TCPListen() {
 	return C_TCPListen::NewI_TCPListen(GetSPC_PlugNet());
+}
+
+C_PlugNet::T_SPI_TCPConnect C_PlugNet::NewI_TCPConnect() {
+	return C_TCPConnect::NewI_TCPConnect(GetSPC_PlugNet());
 }
 
 C_PlugNet::T_SPI_Address C_PlugNet::NewI_Address() {

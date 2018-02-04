@@ -45,6 +45,8 @@ C_PlugMgr::C_PlugMgr()
 {
 	D_OutInfo();
 
+	m_bHadQuitAll = false;
+
 	C_PlugData::RegPlugData();
 }
 
@@ -96,6 +98,8 @@ bool C_PlugMgr::LoadAll() {
 	if (!LoadPlug("cmd")) { return false; };
 	if (!LoadPlug("base64")) { return false; };
 	if (!LoadPlug("net")) { return false; };
+	if (!LoadPlug("gate")) { return false; };
+	if (!LoadPlug("client")) { return false; };
 
 	return true;
 }
@@ -152,6 +156,13 @@ bool C_PlugMgr::AllInitAfter() {
 
 void C_PlugMgr::QuitAll() {
 	D_OutInfo();
+
+	if (m_bHadQuitAll) {
+		D_OutInfo1("had quit all");
+		return;
+	}
+	m_bHadQuitAll = true;
+	D_OutInfo1("begin quit all");
  
  	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
@@ -273,6 +284,7 @@ void C_PlugMgr::WaitUpdate() {
 
 	if (IsQuit()) {
 		D_OutInfo1("in quit");
+		QuitAll();
 		return;
 	}
 

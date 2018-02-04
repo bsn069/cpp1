@@ -31,7 +31,9 @@ public: // I_Plug
 	virtual void OnReloadPost(std::string const& strName) override;
 
 public: // I_PlugNet
- 	virtual I_Dns::T_SPI_Dns NewI_Dns() override;
+ 	virtual I_Dns::T_SPI_Dns 	NewI_Dns() override;
+ 	virtual T_SPI_TCPListen 	NewI_TCPListen() override;
+ 	virtual T_SPI_Address 		NewI_Address() override;
 
 
 public:

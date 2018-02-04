@@ -35,6 +35,7 @@ public:
  	T_SPC_TCPListen GetSPC_TCPListen();
 
 	void ListenCoro(boost::asio::yield_context yield);
+	bool CanListen();
 
 public:
 	C_TCPListen(C_PlugNet::T_SPC_PlugNet spC_PlugNet);

@@ -6,6 +6,8 @@
 #include <bsn_cpp/plug_net/src/send_mail.h>
 #include <bsn_cpp/plug_net/src/address.h>
 #include <bsn_cpp/plug_net/src/url.h>
+#include <bsn_cpp/plug_net/src/tcp_listen.h>
+#include <bsn_cpp/plug_net/include/i_tcp_session.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
@@ -49,7 +51,7 @@ bool C_PlugNet::AllInitAfter() {
 
 	RegAllCmd();
 	
-	CmdSendMail(false, "");
+	// CmdSendMail(false, "");
 	return true;
 }
 
@@ -191,6 +193,13 @@ I_Dns::T_SPI_Dns C_PlugNet::NewI_Dns() {
 	return C_Dns::NewI_Dns(GetSPC_PlugNet());
 }
 
+C_PlugNet::T_SPI_TCPListen C_PlugNet::NewI_TCPListen() {
+	return C_TCPListen::NewI_TCPListen(GetSPC_PlugNet());
+}
+
+C_PlugNet::T_SPI_Address C_PlugNet::NewI_Address() {
+	return C_Address::NewI_Address();
+}
 
 C_PlugNet::T_SPC_PlugNet C_PlugNet::GetSPC_PlugNet() {
 	D_OutInfo();
@@ -200,7 +209,7 @@ C_PlugNet::T_SPC_PlugNet C_PlugNet::GetSPC_PlugNet() {
 }
 
 boost::asio::io_service& C_PlugNet::GetIOService() {
-	return m_pData->m_ioService;
+	return GetSPI_PlugMgr()->GetIOService();
 }
 
 //////////////////////////////////////////////////////////////////////

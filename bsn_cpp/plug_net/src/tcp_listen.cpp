@@ -57,11 +57,25 @@ bool C_TCPListen::SetAddress(I_Address::T_SPI_Address spI_Address) {
 }
 
 void C_TCPListen::SetFuncNew(T_FuncNew func) {
+	D_OutInfo();
 
+	if (!func) {
+		D_OutInfo1("func is null");
+		return;
+	}
+
+	m_FuncNew = func;
 }
 
 void C_TCPListen::SetFuncOnAccept(T_FuncOnAccept func) {
+	D_OutInfo();
 
+	if (!func) {
+		D_OutInfo1("func is null");
+		return;
+	}
+
+	m_FuncOnAccept = func;
 }
 
 
@@ -85,29 +99,50 @@ bool C_TCPListen::StopListen() {
 	return true;
 }
 
-void C_TCPListen::ListenCoro(boost::asio::yield_context yield) {
+bool C_TCPListen::CanListen() {
 	D_OutInfo();
 
 	if (m_bListen) {
 		D_OutInfo1("listening");
-		return;
+		return false;
+	}
+
+	if (!m_FuncNew) {
+		D_OutInfo1("not set func New");
+		return false;
+	}
+
+	if (!m_FuncOnAccept) {
+		D_OutInfo1("not set func OnAccept");
+		return false;
 	}
 
 	auto Address = GetAddress();
 	if (!Address) {
 		D_OutInfo1("not set address");
-		return;
+		return false;
 	}
 	
 	if (m_Acceptor.is_open()) {
 		D_OutInfo1("had open");
+		return false;
+	}
+	
+	return true;
+}
+
+void C_TCPListen::ListenCoro(boost::asio::yield_context yield) {
+	D_OutInfo();
+
+	if (!CanListen()) {
+		D_OutInfo1("can listen return false");
 		return;
 	}
-
 	m_bListen = true;
 	boost::system::error_code ec; 
 
 	{
+		auto Address = GetAddress();
 		tcp::resolver 	Resover(m_IOService);
 		tcp::resolver::query Query(
 			Address->GetAddr()

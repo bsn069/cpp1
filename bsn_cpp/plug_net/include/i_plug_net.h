@@ -11,12 +11,19 @@
 
 D_BsnNamespace1(plug_net)
 //////////////////////////////////////////////////////////////////////
+class I_TCPListen;
+class I_Address;
+
 class I_PlugNet : public D_N1(plug_mgr)::I_Plug {
 public:
-	typedef std::shared_ptr<I_PlugNet> T_SPI_PlugNet;
-	
+	typedef std::shared_ptr<I_PlugNet> 		T_SPI_PlugNet;
+	typedef std::shared_ptr<I_TCPListen> 	T_SPI_TCPListen;
+	typedef std::shared_ptr<I_Address> 		T_SPI_Address;
+
 public:
- 	virtual I_Dns::T_SPI_Dns NewI_Dns() = 0;
+ 	virtual I_Dns::T_SPI_Dns 	NewI_Dns() = 0;
+ 	virtual T_SPI_TCPListen 	NewI_TCPListen() = 0;
+ 	virtual T_SPI_Address 		NewI_Address() = 0;
  
 
 public:

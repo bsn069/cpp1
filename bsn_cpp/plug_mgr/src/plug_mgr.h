@@ -56,6 +56,7 @@ public:
 	boost::asio::io_service 	m_ioService;
 	boost::asio::deadline_timer	m_updateTimer;
 	std::string 				m_waitReloadPlug;
+	bool m_bHadQuitAll;
 
 public:
 	C_PlugMgr();

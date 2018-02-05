@@ -22,6 +22,7 @@ public:
 
 	bool Start();
 	void OnConnect(T_SPI_TCPSession spI_TCPSession);
+	bool Send(uint8_t const* pData, uint16_t uLen);
 
 public:
 	C_Gate(C_PlugClient::T_SPC_PlugClient spC_PlugClient);

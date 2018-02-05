@@ -30,7 +30,8 @@ public: // I_TCPConnect
 		, I_Address::T_SPI_Address spI_Address
 		, T_FuncOnConnect func
 	) override;
-	
+	virtual bool CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) override;
+
 public:
 	static T_SPC_TCPConnect NewC_TCPConnect(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	static T_SPI_TCPConnect NewI_TCPConnect(C_PlugNet::T_SPC_PlugNet spC_PlugNet);

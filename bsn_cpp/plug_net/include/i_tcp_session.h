@@ -28,11 +28,20 @@ public:
 		E_State_Connecting, 
 		E_State_Connected,
 	};
+	enum E_Type {
+		E_Type_Null, 
+		E_Type_Connect,
+		E_Type_Accept,
+	};
 
 public:
 	T_Socket& GetSocket() { return m_Socket; }
+
 	void SetState(E_State eState) { m_eState = eState; }
 	E_State GetState() const { return m_eState; }
+
+	void SetType(E_Type eType) { m_eType = eType; }
+	E_Type GetType() const { return m_eType; }
 
 public:
 	T_SPI_TCPSession GetSPI_TCPSession() {
@@ -44,7 +53,8 @@ public:
 	I_TCPSession(I_PlugNet::T_SPI_PlugNet spI_PlugNet)
 		: m_spI_PlugNet(spI_PlugNet)
 		, m_Socket(spI_PlugNet->GetSPI_PlugMgr()->GetIOService())
-		, m_eState(E_State_Null) {
+		, m_eState(E_State_Null)
+		, m_eType(E_Type_Null) {
 
 	}
 	virtual ~I_TCPSession() = default;
@@ -53,6 +63,7 @@ protected:
 	I_PlugNet::T_SPI_PlugNet m_spI_PlugNet;
 	T_Socket 	m_Socket;
 	E_State 	m_eState;
+	E_Type 		m_eType;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

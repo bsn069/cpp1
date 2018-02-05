@@ -90,6 +90,7 @@ void C_PlugClient::CmdHelp(bool bShowHelp, std::string const& strParam) {
 
 bool C_PlugClient::Update() {
 	// D_OutInfo();
+	
 	return true;
 }
 

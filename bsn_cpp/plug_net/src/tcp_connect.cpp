@@ -34,12 +34,41 @@ C_TCPConnect::T_SPC_TCPConnect C_TCPConnect::GetSPC_TCPConnect() {
 	return spC_TCPConnect;
 }
 
+bool CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) {
+	D_OutInfo();
+
+	if (!spI_TCPSession) {
+		D_OutInfo1("!spI_TCPSession");
+		return false;
+	}
+
+	auto eType = spI_TCPSession->GetType();
+	if (eType != I_TCPSession::E_Type_Connect) {
+		D_OutInfo2("eType=%u must equal I_TCPSession::E_Type_Connect", eType);
+		return false;
+	}
+
+	auto eState = spI_TCPSession->GetState();
+	if (eState != I_TCPSession::E_State_Null) {
+		D_OutInfo2("eState=%u must equal I_TCPSession::E_State_Null", eState);
+		return false;
+	}
+
+	return true;
+}
+
 bool C_TCPConnect::Connect(
 	I_TCPSession::T_SPI_TCPSession spI_TCPSession
 	, I_Address::T_SPI_Address spI_Address
 	, T_FuncOnConnect func
 ) {
 	D_OutInfo();
+
+	if (!CanConnect(spI_TCPSession)) {
+		D_OutInfo1("can't connect");
+		return false;
+	}
+
     boost::asio::spawn(
 		m_IOService
 		, boost::bind(
@@ -62,8 +91,12 @@ void C_TCPConnect::ConnectCoro(
 ) {
 	D_OutInfo();
 
+	if (!CanConnect(spI_TCPSession)) {
+		D_OutInfo1("can't connect");
+		return;
+	}
+	
 	boost::system::error_code ec; 
-
 	spI_TCPSession->SetState(I_TCPSession::E_State_Connecting);
 
 	tcp::resolver 	Resover(m_IOService);

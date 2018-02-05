@@ -38,6 +38,7 @@ public:
 		, I_Address::T_SPI_Address spI_Address
 		, T_FuncOnConnect func
 	) = 0;
+	virtual bool CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) = 0;
 
 public:
 	T_SPI_TCPConnect GetSPI_TCPConnect() {

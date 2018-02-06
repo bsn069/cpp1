@@ -34,7 +34,7 @@ C_TCPConnect::T_SPC_TCPConnect C_TCPConnect::GetSPC_TCPConnect() {
 	return spC_TCPConnect;
 }
 
-bool CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) {
+bool C_TCPConnect::CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) {
 	D_OutInfo();
 
 	if (!spI_TCPSession) {
@@ -44,7 +44,7 @@ bool CanConnect(I_TCPSession::T_SPI_TCPSession spI_TCPSession) {
 
 	auto eType = spI_TCPSession->GetType();
 	if (eType != I_TCPSession::E_Type_Connect) {
-		D_OutInfo2("eType=%u must equal I_TCPSession::E_Type_Connect", eType);
+		D_OutInfo2("eType must equal I_TCPSession::E_Type_Connect", eType);
 		return false;
 	}
 

@@ -49,6 +49,7 @@ bool C_Gate::Start() {
 	}
 
 	m_spI_TCPSession = spI_PlugNet->NewI_TCPSession();
+	m_spI_TCPSession->SetType(D_N1(plug_net)::I_TCPSession::E_Type_Connect);
 
 	m_spI_Address = spI_PlugNet->NewI_Address();
 	m_spI_Address->SetAddr("localhost");

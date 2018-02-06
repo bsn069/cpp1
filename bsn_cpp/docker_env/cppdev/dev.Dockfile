@@ -52,6 +52,9 @@ RUN cd /root && \
 	rm -f cryptopp600.zip && \
 	rm -fr cryptopp
 
+RUN ldconfig
+	
+
 
 
  

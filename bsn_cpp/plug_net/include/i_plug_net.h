@@ -14,6 +14,7 @@ D_BsnNamespace1(plug_net)
 class I_TCPListen;
 class I_TCPConnect;
 class I_Address;
+class I_TCPSession;
 
 class I_PlugNet : public D_N1(plug_mgr)::I_Plug {
 public:
@@ -21,12 +22,14 @@ public:
 	typedef std::shared_ptr<I_TCPListen> 	T_SPI_TCPListen;
 	typedef std::shared_ptr<I_TCPConnect> 	T_SPI_TCPConnect;
 	typedef std::shared_ptr<I_Address> 		T_SPI_Address;
+	typedef std::shared_ptr<I_TCPSession> 		T_SPI_TCPSession;
 
 public:
  	virtual I_Dns::T_SPI_Dns 	NewI_Dns() = 0;
  	virtual T_SPI_TCPListen 	NewI_TCPListen() = 0;
  	virtual T_SPI_TCPConnect 	NewI_TCPConnect() = 0;
  	virtual T_SPI_Address 		NewI_Address() = 0;
+ 	virtual T_SPI_TCPSession 		NewI_TCPSession() = 0;
  
 
 public:

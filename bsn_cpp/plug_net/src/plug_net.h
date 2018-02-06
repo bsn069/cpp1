@@ -35,6 +35,7 @@ public: // I_PlugNet
  	virtual T_SPI_TCPListen 	NewI_TCPListen() override;
 	virtual T_SPI_TCPConnect 	NewI_TCPConnect() override;
  	virtual T_SPI_Address 		NewI_Address() override;
+ 	virtual T_SPI_TCPSession 	NewI_TCPSession() override;
 
 
 public:

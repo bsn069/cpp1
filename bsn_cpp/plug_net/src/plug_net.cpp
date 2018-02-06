@@ -9,6 +9,7 @@
 #include <bsn_cpp/plug_net/src/tcp_listen.h>
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
 #include <bsn_cpp/plug_net/src/tcp_connect.h>
+#include <bsn_cpp/plug_net/src/tcp_session.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
@@ -200,6 +201,10 @@ C_PlugNet::T_SPI_TCPListen C_PlugNet::NewI_TCPListen() {
 
 C_PlugNet::T_SPI_TCPConnect C_PlugNet::NewI_TCPConnect() {
 	return C_TCPConnect::NewI_TCPConnect(GetSPC_PlugNet());
+}
+
+C_PlugNet::T_SPI_TCPSession C_PlugNet::NewI_TCPSession() {
+	return C_TCPSession::NewI_TCPSession(GetSPC_PlugNet());
 }
 
 C_PlugNet::T_SPI_Address C_PlugNet::NewI_Address() {

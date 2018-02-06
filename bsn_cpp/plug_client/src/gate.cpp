@@ -4,7 +4,6 @@
 #include <bsn_cpp/plug_mgr/include/i_plug_mgr.h>
 #include <bsn_cpp/plug_net/include/i_plug_net.h>
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
-#include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -49,13 +48,11 @@ bool C_Gate::Start() {
 		return false;
 	}
 
-	D_N1(plug_net)::I_TCPSession* pI_TCPSession = New<D_N1(plug_net)::I_TCPSession>(spI_PlugNet);
-	T_SPI_TCPSession spI_TCPSession(pI_TCPSession);
-	m_spI_TCPSession = spI_TCPSession;
+	// m_spI_TCPSession = spI_PlugNet->NewI_TCPSession();
 
-	auto spI_Address = spI_PlugNet->NewI_Address();
-	spI_Address->SetAddr("localhost");
-	spI_Address->SetPort(60001);
+	m_spI_Address = spI_PlugNet->NewI_Address();
+	m_spI_Address->SetAddr("localhost");
+	m_spI_Address->SetPort(60001);
 
 	auto spI_TCPConnect = m_spC_PlugClient->GetSPI_TCPConnect();
 	spI_TCPConnect->Connect(

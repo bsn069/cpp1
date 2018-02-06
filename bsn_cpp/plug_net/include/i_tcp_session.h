@@ -35,13 +35,13 @@ public:
 	};
 
 public:
-	T_Socket& GetSocket() { return m_Socket; }
+	virtual I_TCPSession::T_Socket& GetSocket() = 0;
 
-	void SetState(E_State eState) { m_eState = eState; }
-	E_State GetState() const { return m_eState; }
+	virtual void SetState(I_TCPSession::E_State eState) = 0;
+	virtual I_TCPSession::E_State GetState() const = 0;
 
-	void SetType(E_Type eType) { m_eType = eType; }
-	E_Type GetType() const { return m_eType; }
+	virtual void SetType(I_TCPSession::E_Type eType) = 0;
+	virtual I_TCPSession::E_Type GetType() const = 0;
 
 public:
 	T_SPI_TCPSession GetSPI_TCPSession() {
@@ -50,20 +50,7 @@ public:
 	}
 
 public:
-	I_TCPSession(I_PlugNet::T_SPI_PlugNet spI_PlugNet)
-		: m_spI_PlugNet(spI_PlugNet)
-		, m_Socket(spI_PlugNet->GetSPI_PlugMgr()->GetIOService())
-		, m_eState(E_State_Null)
-		, m_eType(E_Type_Null) {
-
-	}
 	virtual ~I_TCPSession() = default;
-
-protected:
-	I_PlugNet::T_SPI_PlugNet m_spI_PlugNet;
-	T_Socket 	m_Socket;
-	E_State 	m_eState;
-	E_Type 		m_eType;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

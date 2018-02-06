@@ -48,16 +48,28 @@ bool C_Gate::Start() {
 		return false;
 	}
 
-	// m_spI_TCPSession = spI_PlugNet->NewI_TCPSession();
+	m_spI_TCPSession = spI_PlugNet->NewI_TCPSession();
 
 	m_spI_Address = spI_PlugNet->NewI_Address();
 	m_spI_Address->SetAddr("localhost");
 	m_spI_Address->SetPort(60001);
 
+	Connect();
+	return true;
+}
+
+bool C_Gate::Connect() {
+	D_OutInfo();
+
+	auto spI_PlugNet = m_spC_PlugClient->GetSPI_PlugMgr()->GetPlugPtr<D_N1(plug_net)::I_PlugNet>("net");
+	if (!spI_PlugNet) {
+		return false;
+	}
+
 	auto spI_TCPConnect = m_spC_PlugClient->GetSPI_TCPConnect();
 	spI_TCPConnect->Connect(
 		m_spI_TCPSession
-		, spI_Address
+		, m_spI_Address
 		, boost::bind(&C_Gate::OnConnect, GetSPC_Gate(), _1)
 	);
 	

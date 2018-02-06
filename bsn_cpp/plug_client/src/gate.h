@@ -22,6 +22,7 @@ public:
 	T_SPC_Gate GetSPC_Gate();
 
 	bool Start();
+	bool Connect();
 	void OnConnect(T_SPI_TCPSession spI_TCPSession);
 	bool Send(uint8_t const* pData, uint16_t uLen);
 

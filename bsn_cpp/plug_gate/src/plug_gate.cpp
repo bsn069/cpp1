@@ -85,8 +85,7 @@ C_PlugGate::T_SPI_TCPSession C_PlugGate::FuncNew() {
 		return nullptr;
 	}
 
-	D_N1(plug_net)::I_TCPSession* pI_TCPSession = New<D_N1(plug_net)::I_TCPSession>(spI_PlugNet);
-	T_SPI_TCPSession spI_TCPSession(pI_TCPSession);
+	auto spI_TCPSession = spI_PlugNet->NewI_TCPSession();
 	return spI_TCPSession;
 }
 

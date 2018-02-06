@@ -62,6 +62,10 @@ bool C_PlugBase64::Awake() {
 	return true;
 }
 
+void C_PlugBase64::ProcCmd(std::string const& strCmd) {
+	
+}
+
 bool C_PlugBase64::Init(T_SPI_PlugMgr spI_PlugMgr) {
 	D_OutInfo();
 	m_spI_PlugMgr = spI_PlugMgr;

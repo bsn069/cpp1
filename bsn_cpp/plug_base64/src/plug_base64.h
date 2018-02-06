@@ -22,7 +22,7 @@ public: // I_Plug
 	virtual bool Quit() override;
 	virtual bool UnInit() override;
 
-	virtual void ProcCmd(std::string const& strNet) override {};
+	virtual void ProcCmd(std::string const& strCmd) override;
 
 	virtual void OnReloadPre(std::string const& strName) override;
 	virtual void OnReloadPost(std::string const& strName) override;
@@ -42,12 +42,10 @@ public:
 	void CmdHelp(bool bShowHelp, std::string const& strParam);
     void CmdEncode(bool bShowHelp, std::string const& strParam);
     void CmdDecode(bool bShowHelp, std::string const& strParam);
+
 public:
 	C_PlugBase64(void* pData);
 	virtual ~C_PlugBase64();
-
-public:
-	T_SPI_PlugMgr 	m_spI_PlugMgr;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

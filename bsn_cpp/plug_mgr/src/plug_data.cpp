@@ -35,14 +35,14 @@ C_PlugData::~C_PlugData() {
 	Delete(m_pData);
 }
 
-bool C_PlugData::Awake() {
+bool C_PlugData::OnLoad(std::set<std::string>& needPlugNames) {
 	D_OutInfo1(m_strName);
 	if (m_spI_Plug == nullptr) {
 		D_OutInfo1("m_spI_Plug == nullptr");
 		return false;
 	}
 
-	return m_spI_Plug->Awake();
+	return m_spI_Plug->OnLoad(needPlugNames);
 }
 
 bool C_PlugData::Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) {
@@ -53,6 +53,17 @@ bool C_PlugData::Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr) {
 	}
 
 	return m_spI_Plug->Init(spI_PlugMgr);
+}
+
+bool C_PlugData::CanReload(std::string const& strName) {
+	D_OutInfo2(m_strName, strName);
+
+	if (m_spI_Plug == nullptr) {
+		D_OutInfo1("m_spI_Plug == nullptr");
+		return false;
+	}
+
+	return m_spI_Plug->CanReload(strName);
 }
 
 bool C_PlugData::AllInitAfter() {
@@ -165,7 +176,7 @@ bool C_PlugData::LoadPlug() {
 
 	if (m_spI_Plug) {
 		D_OutInfo1("had load plug");
-		return false;
+		return false;˜
 	}
 
 	if (!m_lib.is_loaded()) {

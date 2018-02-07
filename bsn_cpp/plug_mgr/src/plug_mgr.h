@@ -7,6 +7,7 @@
 #include <boost/asio.hpp>
 
 #include <map>
+#include <set>
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
@@ -17,6 +18,7 @@ public:
 
 public:
 	virtual void Run() override;
+
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) override;
 	virtual bool ReloadPlug(std::string const& strName) override;
 
@@ -33,7 +35,6 @@ public:
 	T_SPC_PlugMgr GetSPC_PlugMgr();
 
 	bool LoadAll();
-	bool AwakeAll();
 	bool InitAll();
 	bool AllInitAfter();
 	void Update(const boost::system::error_code& ec);

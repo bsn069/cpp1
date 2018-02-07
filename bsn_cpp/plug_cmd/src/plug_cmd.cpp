@@ -24,7 +24,7 @@ char const * const C_PlugCmd::GetName() const {
 	return "cmd";
 }
 
-bool C_PlugCmd::Awake() {
+bool C_PlugCmd::OnLoad(std::set<std::string>& needPlugNames) {
 	D_OutInfo();
 
 	return true;

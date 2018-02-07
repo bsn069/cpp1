@@ -36,8 +36,11 @@ char const * const C_PlugNet::GetName() const {
 	return "net";
 }
 
-bool C_PlugNet::Awake() {
+bool C_PlugNet::OnLoad(std::set<std::string>& needPlugNames) {
 	D_OutInfo();
+
+	needPlugNames.insert("cmd");
+	needPlugNames.insert("base64");
 
 	return true;
 }

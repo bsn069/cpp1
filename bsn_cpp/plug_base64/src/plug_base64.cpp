@@ -56,8 +56,10 @@ char const * const C_PlugBase64::GetName() const {
 	return "base64";
 }
 
-bool C_PlugBase64::Awake() {
+bool C_PlugBase64::OnLoad(std::set<std::string>& needPlugNames) {
 	D_OutInfo();
+
+	needPlugNames.insert("cmd");
 
 	return true;
 }

@@ -66,10 +66,6 @@ void C_PlugMgr::Run() {
 		D_OutInfo1("LoadAll fail");
 		return;
 	}
-	if (!AwakeAll()) {
-		D_OutInfo1("AwakeAll fail");
-		return;
-	}
 	if (!InitAll()) {
 		D_OutInfo1("InitAll fail");
 		return;
@@ -95,32 +91,33 @@ void C_PlugMgr::Run() {
 bool C_PlugMgr::LoadAll() {
 	D_OutInfo();
 	
-	if (!LoadPlug("cmd")) { return false; };
 	if (!LoadPlug("gate")) { return false; };
-	if (!LoadPlug("client")) { return false; };
-	if (!LoadPlug("base64")) { return false; };
-	if (!LoadPlug("net")) { return false; };
 
 	return true;
 }
 
 bool C_PlugMgr::LoadPlug(std::string const& strName) {
 	D_OutInfo1(strName);
+
 	auto spC_PlugData = LoadPlugData(strName);
-	if (spC_PlugData == nullptr) {
+	if (!spC_PlugData) {
 		D_OutInfo1("LoadPlugData fail");
 		return false;
 	}
 	m_Name2PlugData.insert(std::make_pair(strName, spC_PlugData));
-	return true;
-}
 
-bool C_PlugMgr::AwakeAll() {
-	D_OutInfo();
+	std::set<std::string> needPlugNames;
+	if (!spC_PlugData->OnLoad(needPlugNames)) {
+		return false;
+	}
 
- 	for (auto& itor : m_Name2PlugData) {
-		auto& spC_PlugData = itor.second;
-		if (!spC_PlugData->Awake()) {
+	for (auto strNeedPlugName : needPlugNames) {
+		auto spI_Plug = GetPlug(strNeedPlugName);
+		if (spI_Plug) {
+			continue;
+		}
+
+		if (!LoadPlug(strNeedPlugName)) {
 			return false;
 		}
 	}
@@ -194,6 +191,11 @@ bool C_PlugMgr::DoReloadPlug(std::string const& strName) {
 		return false;
 	}
 
+	if (!spC_PlugData->CanReload(strName)) {
+		D_OutInfo1("can't reload");
+		return false;
+	}
+
 	for (auto& itor : m_Name2PlugData) {
 		itor.second->OnReloadPre(strName);
 	}
@@ -216,7 +218,6 @@ bool C_PlugMgr::DoReloadPlug(std::string const& strName) {
 		return false;
 	}
 
-	spC_PlugData->Awake();
 	spC_PlugData->Init(GetSPC_PlugMgr());
 	spC_PlugData->AllInitAfter();
 

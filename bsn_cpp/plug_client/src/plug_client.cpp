@@ -33,8 +33,11 @@ char const * const C_PlugClient::GetName() const {
 	return "client";
 }
 
-bool C_PlugClient::Awake() {
+bool C_PlugClient::OnLoad(std::set<std::string>& needPlugNames) {
 	D_OutInfo();
+
+	needPlugNames.insert("net");
+	needPlugNames.insert("cmd");
 
 	return true;
 }
@@ -42,6 +45,7 @@ bool C_PlugClient::Awake() {
 bool C_PlugClient::Init(T_SPI_PlugMgr spI_PlugMgr) {
 	D_OutInfo();
 	m_spI_PlugMgr = spI_PlugMgr;
+
 	return true;
 }
 

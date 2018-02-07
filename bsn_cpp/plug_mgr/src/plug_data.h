@@ -28,13 +28,14 @@ public:
 	std::string const& GetName();
 	I_Plug::T_SPI_Plug GetPlug();
 
-	bool Awake();
+	bool OnLoad(std::set<std::string>& needPlugNames);
 	bool Init(I_PlugMgr::T_SPI_PlugMgr spI_PlugMgr);
 	bool AllInitAfter();
 	bool Update();
 	bool Quit();
 	bool UnInit();
 
+	bool CanReload(std::string const& strName);
 	void OnReloadPre(std::string const& strName);
 	void OnReloadPost(std::string const& strName);
 

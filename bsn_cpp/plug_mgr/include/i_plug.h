@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <memory>
 #include <string>
+#include <set>
 
 D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
@@ -18,13 +19,16 @@ public:
 public:
 	virtual char const * const GetName() const = 0;
 
-	virtual bool Awake() = 0;
+	// call on load after 
+	// not need any plug
+	virtual bool OnLoad(std::set<std::string>& needPlugNames) = 0;
 	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) = 0;
 	virtual bool AllInitAfter() = 0;
 	virtual bool Update() = 0;
 	virtual bool Quit() = 0;
 	virtual bool UnInit() = 0;
 
+	virtual bool CanReload(std::string const& strName) { return false; };
 	virtual void OnReloadPre(std::string const& strName) = 0;
 	virtual void OnReloadPost(std::string const& strName) = 0;
 

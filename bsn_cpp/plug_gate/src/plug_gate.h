@@ -20,7 +20,7 @@ public:
 public: // I_Plug
 	virtual char const * const GetName() const override;
 
-	virtual bool Awake() override;
+	virtual bool OnLoad(std::set<std::string>& needPlugNames) override;
 	virtual bool Init(T_SPI_PlugMgr spI_PlugMgr) override;
 	virtual bool AllInitAfter() override;
 	virtual bool Update() override;

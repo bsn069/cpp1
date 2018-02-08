@@ -54,7 +54,7 @@ public:
 	T_Name2PlugData m_Name2PlugData;
 
 	uint32_t 					m_u32FrameMS;
-	boost::asio::io_service 	m_ioService;
+	T_IOService 				m_IOService;
 	boost::asio::deadline_timer	m_updateTimer;
 	std::string 				m_waitReloadPlug;
 	bool m_bHadQuitAll;

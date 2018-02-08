@@ -11,10 +11,15 @@ D_BsnNamespace1(plug_mgr)
 //////////////////////////////////////////////////////////////////////
 class I_PlugMgr;
 
+/*
+dll must has symbol CreatePlug like T_CreatePlug
+*/
 class I_Plug : public std::enable_shared_from_this<I_Plug> {
 public:
 	typedef std::shared_ptr<I_Plug> T_SPI_Plug;
 	typedef std::shared_ptr<I_PlugMgr> T_SPI_PlugMgr;
+	typedef T_SPI_Plug	(T_CreatePlug)(void*);
+
 
 public:
 	virtual char const * const GetName() const = 0;

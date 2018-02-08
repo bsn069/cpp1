@@ -15,6 +15,7 @@ D_BsnNamespace1(plug_mgr)
 class I_PlugMgr : public std::enable_shared_from_this<I_PlugMgr> {
 public:
 	typedef std::shared_ptr<I_PlugMgr> T_SPI_PlugMgr;
+	typedef boost::asio::io_service T_IOService;
 
 public:
 	virtual void Run() = 0;
@@ -26,7 +27,7 @@ public:
 	virtual void Quit() = 0;
 	virtual bool IsQuit() = 0;
 
-	virtual boost::asio::io_service& GetIOService() = 0;
+	virtual T_IOService& GetIOService() = 0;
 
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {
@@ -35,7 +36,7 @@ public:
 
 	template<typename T>
 	std::shared_ptr<T> GetPlugPtr(std::string const& strPlugName) {
-		D_OutInfo();
+		D_OutInfo1(strPlugName);
 
 		auto spI_Plug = GetPlug(strPlugName);
 		if (!spI_Plug) {

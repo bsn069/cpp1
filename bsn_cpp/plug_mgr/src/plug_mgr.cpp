@@ -8,7 +8,6 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/atomic.hpp>
-#include <boost/atomic.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -41,7 +40,7 @@ void InputThread() {
 
 C_PlugMgr::C_PlugMgr() 
 	: m_u32FrameMS(1000)
-	, m_updateTimer(m_ioService, boost::posix_time::millisec(1))
+	, m_updateTimer(m_IOService, boost::posix_time::millisec(1))
 {
 	D_OutInfo();
 
@@ -55,8 +54,8 @@ C_PlugMgr::~C_PlugMgr() {
 
 }
 
-boost::asio::io_service& C_PlugMgr::GetIOService() {
-	return m_ioService;
+C_PlugMgr::T_IOService& C_PlugMgr::GetIOService() {
+	return m_IOService;
 }
 
 void C_PlugMgr::Run() {
@@ -82,7 +81,7 @@ void C_PlugMgr::Run() {
 	}
 
 	WaitUpdate();
-	m_ioService.run();
+	m_IOService.run();
 
 	QuitAll();
 	UnInitAll();
@@ -107,12 +106,13 @@ bool C_PlugMgr::LoadPlug(std::string const& strName) {
 	m_Name2PlugData.insert(std::make_pair(strName, spC_PlugData));
 
 	std::set<std::string> needPlugNames;
-	if (!spC_PlugData->OnLoad(needPlugNames)) {
+	auto spI_Plug = spC_PlugData->GetPlug();
+	if (!spI_Plug->OnLoad(needPlugNames)) {
 		return false;
 	}
 
 	for (auto strNeedPlugName : needPlugNames) {
-		auto spI_Plug = GetPlug(strNeedPlugName);
+		spI_Plug = GetPlug(strNeedPlugName);
 		if (spI_Plug) {
 			continue;
 		}
@@ -130,7 +130,8 @@ bool C_PlugMgr::InitAll() {
  
  	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
-		if (!spC_PlugData->Init(GetSPI_PlugMgr())) {
+		auto spI_Plug = spC_PlugData->GetPlug();
+		if (!spI_Plug->Init(GetSPI_PlugMgr())) {
 			return false;
 		}
 	}
@@ -143,7 +144,8 @@ bool C_PlugMgr::AllInitAfter() {
  
  	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
-		if (!spC_PlugData->AllInitAfter()) {
+		auto spI_Plug = spC_PlugData->GetPlug();
+		if (!spI_Plug->AllInitAfter()) {
 			return false;
 		}
 	}
@@ -163,7 +165,8 @@ void C_PlugMgr::QuitAll() {
  
  	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
-		spC_PlugData->Quit();
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->Quit();
 	}
 }
 
@@ -172,7 +175,8 @@ void C_PlugMgr::UnInitAll() {
  
  	for (auto& itor : m_Name2PlugData) {
 		auto& spC_PlugData = itor.second;
-		spC_PlugData->UnInit();
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->UnInit();
 	}
 }
 
@@ -191,13 +195,19 @@ bool C_PlugMgr::DoReloadPlug(std::string const& strName) {
 		return false;
 	}
 
-	if (!spC_PlugData->CanReload(strName)) {
-		D_OutInfo1("can't reload");
-		return false;
+	for (auto& itor : m_Name2PlugData) {
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		if (!spI_Plug->CanReload(strName)) {
+			D_OutInfo2("can't reload", strName);
+			return false;
+		}
 	}
 
 	for (auto& itor : m_Name2PlugData) {
-		itor.second->OnReloadPre(strName);
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->OnReloadPre(strName);
 	}
 
 	if (!spC_PlugData->UnLoadPlug()) {
@@ -218,11 +228,14 @@ bool C_PlugMgr::DoReloadPlug(std::string const& strName) {
 		return false;
 	}
 
-	spC_PlugData->Init(GetSPC_PlugMgr());
-	spC_PlugData->AllInitAfter();
+	auto spI_Plug = spC_PlugData->GetPlug();
+	spI_Plug->Init(GetSPC_PlugMgr());
+	spI_Plug->AllInitAfter();
 
 	for (auto& itor : m_Name2PlugData) {
-		itor.second->OnReloadPost(strName);
+		auto& spC_PlugData = itor.second;
+		auto spI_Plug = spC_PlugData->GetPlug();
+		spI_Plug->OnReloadPost(strName);
 	}
 	
 	return true;

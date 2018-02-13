@@ -27,6 +27,7 @@ public:
 	virtual bool IsQuit() override;
 
 	virtual boost::asio::io_service& GetIOService() override;
+	virtual lua_State* GetLuaState() const override;
 
 public:
 	static T_SPC_PlugMgr NewC_PlugMgr();
@@ -59,6 +60,7 @@ public:
 	std::string 				m_waitReloadPlug;
 	bool m_bHadQuitAll;
 	std::string 				m_strConfigFile;
+	lua_State* 					m_pLuaState;
 
 public:
 	C_PlugMgr();

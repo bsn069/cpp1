@@ -29,6 +29,7 @@ public:
 	virtual bool IsQuit() = 0;
 
 	virtual T_IOService& GetIOService() = 0;
+	virtual lua_State* GetLuaState() const = 0;
 
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {
@@ -49,9 +50,6 @@ public:
 
 public:
 	virtual ~I_PlugMgr() = default;
-
-protected:
-	lua_State* m_pLuaState;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

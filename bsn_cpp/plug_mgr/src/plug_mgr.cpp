@@ -46,12 +46,22 @@ C_PlugMgr::C_PlugMgr()
 
 	m_bHadQuitAll = false;
 
+	m_pLuaState = lua_open();
+	lua_gc(m_pLuaState, LUA_GCSTOP, 0);  /* stop collector during initialization */
+	luaL_openlibs(m_pLuaState);
+	lua_gc(m_pLuaState, LUA_GCRESTART, -1);
+
 	C_PlugData::RegPlugData();
 }
 
 C_PlugMgr::~C_PlugMgr() {
 	D_OutInfo();
 
+	lua_close(m_pLuaState);
+}
+
+lua_State* C_PlugMgr::GetLuaState() const {
+	return m_pLuaState;
 }
 
 C_PlugMgr::T_IOService& C_PlugMgr::GetIOService() {
@@ -61,7 +71,9 @@ C_PlugMgr::T_IOService& C_PlugMgr::GetIOService() {
 void C_PlugMgr::Run(char const * pszConfigFile) {
 	D_OutInfo2("pszConfigFile=", pszConfigFile);
 	m_strConfigFile = pszConfigFile;
-	
+
+	luaL_dofile(m_pLuaState, pszConfigFile);
+
 	if (!LoadAll()) {
 		D_OutInfo1("LoadAll fail");
 		return;

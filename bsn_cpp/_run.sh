@@ -1,6 +1,6 @@
 #!/bin/sh
 
 pushd out
-	./bsn_2_plug_mgr_loader_d
+	./bsn_2_plug_mgr_loader_d config.lua
 popd
 

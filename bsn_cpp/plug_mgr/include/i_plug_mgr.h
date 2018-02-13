@@ -6,6 +6,7 @@
 #include <bsn_cpp/include/d_out.h>
 
 #include <boost/asio.hpp>
+#include <bsn_cpp/third_part/LuaJIT/src/lua.hpp>
 
 #include <stdint.h>
 #include <memory>
@@ -18,7 +19,7 @@ public:
 	typedef boost::asio::io_service T_IOService;
 
 public:
-	virtual void Run() = 0;
+	virtual void Run(char const * pszConfigFile) = 0;
 	
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) = 0;
 	virtual bool ReloadPlug(std::string const& strName) = 0;
@@ -48,6 +49,9 @@ public:
 
 public:
 	virtual ~I_PlugMgr() = default;
+
+protected:
+	lua_State* m_pLuaState;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

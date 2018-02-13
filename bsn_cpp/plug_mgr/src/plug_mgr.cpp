@@ -58,9 +58,10 @@ C_PlugMgr::T_IOService& C_PlugMgr::GetIOService() {
 	return m_IOService;
 }
 
-void C_PlugMgr::Run() {
-	D_OutInfo();
-
+void C_PlugMgr::Run(char const * pszConfigFile) {
+	D_OutInfo2("pszConfigFile=", pszConfigFile);
+	m_strConfigFile = pszConfigFile;
+	
 	if (!LoadAll()) {
 		D_OutInfo1("LoadAll fail");
 		return;

@@ -17,7 +17,7 @@ public:
 	typedef std::map<std::string, C_PlugData::T_SPC_PlugData> T_Name2PlugData;
 
 public:
-	virtual void Run() override;
+	virtual void Run(char const * pszConfigFile) override;
 
 	virtual I_Plug::T_SPI_Plug GetPlug(std::string strName) override;
 	virtual bool ReloadPlug(std::string const& strName) override;
@@ -58,6 +58,7 @@ public:
 	boost::asio::deadline_timer	m_updateTimer;
 	std::string 				m_waitReloadPlug;
 	bool m_bHadQuitAll;
+	std::string 				m_strConfigFile;
 
 public:
 	C_PlugMgr();

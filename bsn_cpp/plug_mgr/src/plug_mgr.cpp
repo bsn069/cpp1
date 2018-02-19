@@ -5,6 +5,8 @@
 #include <bsn_cpp/include/new.hpp>
 #include <bsn_cpp/include/delete.hpp>
 
+#include <bsn_cpp/third_part/LuaBridge/Source/LuaBridge/LuaBridge.h>
+
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/atomic.hpp>
@@ -365,7 +367,14 @@ C_PlugMgr::T_SPC_PlugMgr C_PlugMgr::GetSPC_PlugMgr() {
 
 //////////////////////////////////////////////////////////////////////
 void C_PlugMgr::Reg2Lua(lua_State* pLuaState) {
-	
+	D_OutInfo();
+
+	using namespace luabridge;
+
+	getGlobalNamespace (pLuaState)
+	.beginNamespace("_G")
+		.addVariable("g_plug_mgr", this, false)
+	.endNamespace();
 }
 
 //////////////////////////////////////////////////////////////////////

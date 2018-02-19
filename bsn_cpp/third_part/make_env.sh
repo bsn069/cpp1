@@ -14,7 +14,7 @@ if [ ! -d "LuaJIT" ]; then
 fi
  
 if [ ! -d "LuaBridge" ]; then
-	git clone https://github.com/bsn069/LuaBridge.git
+	git clone https://github.com/vinniefalco/LuaBridge.git
 fi
 
 if [ ! -d "pbc" ]; then

@@ -364,6 +364,11 @@ C_PlugMgr::T_SPC_PlugMgr C_PlugMgr::GetSPC_PlugMgr() {
 }
 
 //////////////////////////////////////////////////////////////////////
+void C_PlugMgr::Reg2Lua(lua_State* pLuaState) {
+	
+}
+
+//////////////////////////////////////////////////////////////////////
 C_PlugMgr* CreateC_PlugMgr() {
 	D_OutInfo();
 	C_PlugMgr* pC_PlugMgr = New<C_PlugMgr>();

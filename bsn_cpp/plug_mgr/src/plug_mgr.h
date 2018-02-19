@@ -32,7 +32,7 @@ public:
 public:
 	static T_SPC_PlugMgr NewC_PlugMgr();
 	static T_SPI_PlugMgr NewI_PlugMgr();
-	static void Reg2Lua(lua_State* L);
+	static void Reg2Lua(lua_State* pLuaState);
 
 	T_SPC_PlugMgr GetSPC_PlugMgr();
 

@@ -48,6 +48,7 @@ bool C_PlugCmd::AllInitAfter() {
 	RegPlugCmd(GetName(), "pwd", boost::bind(&C_PlugCmd::CmdPWD, this, _1, _2));
 	RegPlugCmd(GetName(), "ReloadPlug", boost::bind(&C_PlugCmd::CmdReloadPlug, this, _1, _2));
 	RegPlugCmd(GetName(), "help", boost::bind(&C_PlugCmd::CmdHelp, this, _1, _2));
+	RegPlugCmd(GetName(), "l", boost::bind(&C_PlugCmd::CmdDoLuaString, this, _1, _2));
 	return true;
 }
 
@@ -73,6 +74,12 @@ void C_PlugCmd::CmdPWD(bool bShowHelp, std::string const& strParam) {
 	D_OutInfo2(bShowHelp, strParam);
 
 	D_OutInfo2("cur plug:", m_pData->m_strCurPlug);
+}
+
+void C_PlugCmd::CmdDoLuaString(bool bShowHelp, std::string const& strParam) {
+	D_OutInfo2(bShowHelp, strParam);
+
+	m_spI_PlugMgr->DoLuaString(strParam);
 }
 
 void C_PlugCmd::CmdCD(bool bShowHelp, std::string const& strParam) {

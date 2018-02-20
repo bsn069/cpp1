@@ -30,6 +30,7 @@ public:
 
 	virtual T_IOService& GetIOService() = 0;
 	virtual lua_State* GetLuaState() const = 0;
+	virtual void DoLuaString(std::string const& strLua) = 0;
 
 public:
 	T_SPI_PlugMgr GetSPI_PlugMgr() {

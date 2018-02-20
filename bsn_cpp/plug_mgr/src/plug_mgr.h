@@ -28,9 +28,11 @@ public:
 
 	virtual boost::asio::io_service& GetIOService() override;
 	virtual lua_State* GetLuaState() const override;
+	virtual void DoLuaString(std::string const& strLua) override;
 
 public:
-	uint32_t GetFrameMS() const;
+	uint32_t 	GetFrameMS() const;
+	
 
 public:
 	static T_SPC_PlugMgr NewC_PlugMgr();

@@ -18,5 +18,11 @@ void C_PlugMgr::Reg2Lua(lua_State* pLuaState) {
 		.addData("m_strConfigFile", &C_PlugMgr::m_strConfigFile)
 	.endClass();
 }
+
+void C_PlugMgr::DoLuaString(std::string const& strLua) {
+	D_OutInfo1(strLua);
+
+	luaL_dostring(m_pLuaState, strLua.c_str());
+}
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

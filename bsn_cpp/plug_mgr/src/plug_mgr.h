@@ -30,12 +30,16 @@ public:
 	virtual lua_State* GetLuaState() const override;
 
 public:
+	uint32_t GetFrameMS() const;
+
+public:
 	static T_SPC_PlugMgr NewC_PlugMgr();
 	static T_SPI_PlugMgr NewI_PlugMgr();
-	void Reg2Lua(lua_State* pLuaState);
+	static void Reg2Lua(lua_State* pLuaState);
 
 	T_SPC_PlugMgr GetSPC_PlugMgr();
 
+	void InitLua();
 	bool LoadAll();
 	bool InitAll();
 	bool AllInitAfter();
@@ -59,7 +63,7 @@ public:
 	T_IOService 				m_IOService;
 	boost::asio::deadline_timer	m_updateTimer;
 	std::string 				m_waitReloadPlug;
-	bool m_bHadQuitAll;
+	bool 						m_bHadQuitAll;
 	std::string 				m_strConfigFile;
 	lua_State* 					m_pLuaState;
 

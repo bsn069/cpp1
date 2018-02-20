@@ -48,10 +48,7 @@ C_PlugMgr::C_PlugMgr()
 
 	m_bHadQuitAll = false;
 
-	m_pLuaState = lua_open();
-	lua_gc(m_pLuaState, LUA_GCSTOP, 0);  /* stop collector during initialization */
-	luaL_openlibs(m_pLuaState);
-	lua_gc(m_pLuaState, LUA_GCRESTART, -1);
+	InitLua();
 
 	C_PlugData::RegPlugData();
 }
@@ -365,16 +362,22 @@ C_PlugMgr::T_SPC_PlugMgr C_PlugMgr::GetSPC_PlugMgr() {
 	return spC_PlugMgr;
 }
 
-//////////////////////////////////////////////////////////////////////
-void C_PlugMgr::Reg2Lua(lua_State* pLuaState) {
+uint32_t C_PlugMgr::GetFrameMS() const {
+	return m_u32FrameMS;
+}
+
+
+void C_PlugMgr::InitLua() {
 	D_OutInfo();
 
-	using namespace luabridge;
+	m_pLuaState = lua_open();
+	lua_gc(m_pLuaState, LUA_GCSTOP, 0);  /* stop collector during initialization */
+	luaL_openlibs(m_pLuaState);
 
-	getGlobalNamespace (pLuaState)
-	.beginNamespace("_G")
-		.addVariable("g_plug_mgr", this, false)
-	.endNamespace();
+	C_PlugMgr::Reg2Lua(m_pLuaState);
+	luabridge::setGlobal(m_pLuaState, this, "g_plug_mgr");
+
+	lua_gc(m_pLuaState, LUA_GCRESTART, -1);
 }
 
 //////////////////////////////////////////////////////////////////////

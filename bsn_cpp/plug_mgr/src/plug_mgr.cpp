@@ -102,7 +102,7 @@ void C_PlugMgr::Run(char const * pszConfigFile) {
 bool C_PlugMgr::LoadAll() {
 	D_OutInfo();
 	
-	if (!LoadPlug("gate")) { return false; };
+	if (!LoadPlug("node")) { return false; };
 
 	return true;
 }

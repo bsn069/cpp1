@@ -7,6 +7,8 @@
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
 #include <bsn_cpp/plug_net/include/i_address.h>
 
+#include <bsn_cpp/include/name_space.h>
+
 #include <memory>
 
 D_BsnNamespace1(plug_node)
@@ -16,6 +18,7 @@ class C_Plug;
 class C_Node : public std::enable_shared_from_this<C_Node> {
 public:
 	typedef std::shared_ptr<C_Node> T_SPC_Node;	
+	typedef std::shared_ptr<C_Plug> T_SPC_Plug;	
     typedef uint32_t T_Id;
     typedef std::map<C_Child::T_Id, C_Child::T_SPC_Child> T_Id2Child;
 	typedef D_N1(plug_net)::I_TCPListen::T_SPI_TCPListen T_SPI_TCPListen;
@@ -24,17 +27,17 @@ public:
 
 public:
     C_Node::T_Id GetId() const;
+    bool StartTCPListen();
+    bool SetParentAddr(C_Node::T_SPI_Address spI_AddressParent);
 
 public:
 	static C_Node::T_SPC_Node NewC_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id);
 
 	C_Node::T_SPC_Node GetSPC_Node();
 
-    bool StartTCPListen();
     C_Node::T_SPI_TCPSession FuncNew();
     void FuncOnAccept(C_Node::T_SPI_TCPSession spI_TCPSession);
 
-    bool SetParentAddr(C_Node::T_SPI_Address spI_AddressParent);
 
 public:
 	C_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id);

@@ -1,9 +1,13 @@
 #pragma once
+
+#include <bsn_cpp/plug_node/include/i_plug_node.h>
 #include <bsn_cpp/plug_node/src/node.h>
 
 #include <bsn_cpp/plug_mgr/include/i_plug.h>
 #include <bsn_cpp/plug_net/include/i_plug_net.h>
 #include <bsn_cpp/plug_cmd/include/i_plug_cmd.h>
+
+#include <bsn_cpp/include/name_space.h>
 
 D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////

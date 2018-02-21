@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-D_BsnNamespace1(plug_cmd)
+D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////
 class I_PlugNode : public D_N1(plug_mgr)::I_Plug {
 public:

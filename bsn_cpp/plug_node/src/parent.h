@@ -1,5 +1,7 @@
 #pragma once
 
+#include <bsn_cpp/include/name_space.h>
+
 #include <memory>
 
 D_BsnNamespace1(plug_node)

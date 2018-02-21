@@ -91,8 +91,8 @@ void C_Plug::CmdStartNode(bool bShowHelp, std::string const& strParam) {
     }
 
     std::vector<std::string> params;
-    boost::algorithm::split(SplitVec, strTmp1, is_any_of(" "), boost::token_compress_on);
-    if (SplitVec.size() != 5) {
+    boost::algorithm::split(params, strParam, boost::algorithm::is_any_of(" "), boost::token_compress_on);
+    if (params.size() != 5) {
         return CmdStartNode(true, strParam);
     }
 
@@ -121,7 +121,7 @@ int C_Plug::StartNode(
         return -1;
     }
 
-    auto spI_PlugNet = m_spC_Plug->GetSPI_PlugNet();
+    auto spI_PlugNet = GetSPI_PlugNet();
 	if (!spI_PlugNet) {
 		return -2;
 	}
@@ -146,17 +146,17 @@ int C_Plug::StartNode(
     return 0;
 }
 
-C_Node::T_SPC_Node C_Node::GetNode(C_Node::T_Id id) {
+C_Node::T_SPC_Node C_Plug::GetNode(C_Node::T_Id id) {
     D_OutInfo();
 
     auto itor = m_Id2Node.find(id);
     if (itor == m_Id2Node.end()) {
         return nullptr;
     }
-    return itor.second;
+    return itor->second;
 }
 
-int C_Node::AddNode(C_Node::T_SPC_Node spC_Node) {
+int C_Plug::AddNode(C_Node::T_SPC_Node spC_Node) {
     D_OutInfo();
 
     if (!spC_Node) {
@@ -168,7 +168,7 @@ int C_Node::AddNode(C_Node::T_SPC_Node spC_Node) {
         return -2;
     }
 
-    if (!GetNode(id)) {
+    if (GetNode(id)) {
         return -3;
     }
 
@@ -183,7 +183,7 @@ C_Plug* CreateC_Plug(void* pData) {
 	return pC_Plug;
 }
 
-void ReleaseC_Plug(I_Plug* pI_Plug) {
+void ReleaseC_Plug(D_N1(plug_mgr)::I_Plug* pI_Plug) {
 	D_OutInfo();
 	C_Plug* pC_Plug = static_cast<C_Plug*>(pI_Plug);
 	Delete(pC_Plug);
@@ -196,7 +196,7 @@ C_Plug::T_SPC_Plug C_Plug::NewC_Plug(void* pData) {
 	return spC_Plug;
 }
 
-I_Plug::T_SPI_Plug C_Plug::NewI_Plug(void* pData) {
+D_N1(plug_mgr)::I_Plug::T_SPI_Plug C_Plug::NewI_Plug(void* pData) {
 	D_OutInfo();
 	auto spC_Plug = C_Plug::NewC_Plug(pData);
 	auto spI_Plug = spC_Plug->GetSPI_Plug();

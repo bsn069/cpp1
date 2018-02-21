@@ -14,7 +14,14 @@ D_BsnNamespace1(plug_net)
 C_UDPSession::C_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet, I_Address::T_SPI_Address spI_Address)
 	: m_spC_PlugNet(spC_PlugNet)
     , m_spI_Address(spI_Address)
-	, m_Socket(spC_PlugNet->GetSPI_PlugMgr()->GetIOService(), udp::endpoint(address::from_string(spI_Address->GetAddr(), spI_Address->GetPort()), )) {
+	, m_Socket(
+		spC_PlugNet->GetSPI_PlugMgr()->GetIOService()
+		, udp::endpoint(
+			address::from_string(spI_Address->GetAddr())
+			, spI_Address->GetPort()
+		)
+	)
+{
 
 };
 
@@ -41,9 +48,9 @@ bool C_UDPSession::SendTo(I_Address::T_SPI_Address spI_Address, uint8_t* pData, 
 }
 
 //////////////////////////////////////////////////////////////////////
-C_UDPSession* CreateC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_UDPSession* CreateC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet,I_Address::T_SPI_Address spI_Address) {
 	D_OutInfo();
-	C_UDPSession* pC_UDPSession = New<C_UDPSession>(spC_PlugNet);
+	C_UDPSession* pC_UDPSession = New<C_UDPSession>(spC_PlugNet, spI_Address);
 	return pC_UDPSession;
 }
 
@@ -53,16 +60,16 @@ void ReleaseC_UDPSession(I_UDPSession* pI_UDPSession) {
 	Delete(pC_UDPSession);
 }
 
-C_UDPSession::T_SPC_UDPSession C_UDPSession::NewC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_UDPSession::T_SPC_UDPSession C_UDPSession::NewC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet, I_Address::T_SPI_Address spI_Address) {
 	D_OutInfo();
-	auto pC_UDPSession = CreateC_UDPSession(spC_PlugNet);
+	auto pC_UDPSession = CreateC_UDPSession(spC_PlugNet, spI_Address);
 	auto spC_UDPSession = C_UDPSession::T_SPC_UDPSession(pC_UDPSession, ReleaseC_UDPSession);
 	return spC_UDPSession;
 }
 
-C_UDPSession::T_SPI_UDPSession C_UDPSession::NewI_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
+C_UDPSession::T_SPI_UDPSession C_UDPSession::NewI_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet, I_Address::T_SPI_Address spI_Address) {
 	D_OutInfo();
-	auto spC_UDPSession = C_UDPSession::NewC_UDPSession(spC_PlugNet);
+	auto spC_UDPSession = C_UDPSession::NewC_UDPSession(spC_PlugNet, spI_Address);
 	auto spI_UDPSession = spC_UDPSession->GetSPI_UDPSession();
 	return spI_UDPSession;
 }

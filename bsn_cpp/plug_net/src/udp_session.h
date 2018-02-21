@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bsn_cpp/plug_net/include/i_tcp_listen.h>
+#include <bsn_cpp/plug_net/include/i_udp_session.h>
 #include <bsn_cpp/plug_net/src/plug_net.h>
 
 
@@ -24,8 +24,8 @@ public: // I_UDPSession
 	virtual bool    SendTo(I_Address::T_SPI_Address spI_Address, uint8_t* pData, uint32_t u32Len) override;
 
 public:
-	static T_SPC_UDPSession NewC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
-	static T_SPI_UDPSession NewI_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
+	static T_SPC_UDPSession NewC_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet, I_Address::T_SPI_Address spI_Address);
+	static T_SPI_UDPSession NewI_UDPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet, I_Address::T_SPI_Address spI_Address);
  
  	T_SPC_UDPSession    GetSPC_UDPSession();
 	T_Socket&           GetSocket();
@@ -37,7 +37,7 @@ public:
 public:
 	C_PlugNet::T_SPC_PlugNet        m_spC_PlugNet;
 	I_Address::T_SPI_Address        m_spI_Address;
-	I_UDPSession::T_Socket          m_Socket;
+	C_UDPSession::T_Socket          m_Socket;
     boost::asio::ip::udp::endpoint  m_remoteEndPoint;
 };
 //////////////////////////////////////////////////////////////////////

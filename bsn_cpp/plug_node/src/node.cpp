@@ -1,4 +1,5 @@
 #include <bsn_cpp/plug_node/src/node.h>
+#include <bsn_cpp/plug_node/src/plug.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -8,8 +9,8 @@ D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////
 C_Node::C_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id) 
     : m_spC_Plug(spC_Plug) 
-    , m_spI_AddressListen(spI_AddressListen) 
     , m_id(id)
+    , m_spI_AddressListen(spI_AddressListen) 
 {
 	D_OutInfo();
 }

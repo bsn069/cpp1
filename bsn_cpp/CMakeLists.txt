@@ -109,8 +109,9 @@ ADD_SUBDIRECTORY( plug_mgr )
 ADD_SUBDIRECTORY( plug_cmd )
 ADD_SUBDIRECTORY( plug_net )
 ADD_SUBDIRECTORY( plug_base64 )
-ADD_SUBDIRECTORY( plug_gate )
-ADD_SUBDIRECTORY( plug_client )
+#ADD_SUBDIRECTORY( plug_gate )
+#ADD_SUBDIRECTORY( plug_client )
+ADD_SUBDIRECTORY( plug_node )
 #ADD_SUBDIRECTORY( plug_log )
 #-------------------------------------------------------------------------------
 

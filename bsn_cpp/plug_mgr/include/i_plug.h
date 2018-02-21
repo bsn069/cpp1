@@ -3,6 +3,7 @@
 #include <bsn_cpp/include/name_space.h>
 
 #include <boost/function.hpp>
+#include <boost/bind.hpp>
 
 #include <stdint.h>
 #include <memory>
@@ -62,7 +63,7 @@ public:
     virtual bool InitNeedPlug() { return true; }
     virtual bool ClearNeedPlug() { return true; }
 
-    virtual void RegPlugCmd(std::string const& strCmd, T_FuncCmd funcCmd) = 0;
+    virtual void RegPlugCmd(std::string const& strCmd, T_FuncCmd funcCmd) {};
 	virtual bool RegAllCmd() { 
         RegPlugCmd("help", boost::bind(&I_Plug::CmdHelp, this, _1, _2));
         return true;

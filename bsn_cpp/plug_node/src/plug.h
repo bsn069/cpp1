@@ -36,6 +36,9 @@ public: // cmd
     void CmdCurNode(bool bShowHelp, std::string const& strParam);
     void CmdStartNode(bool bShowHelp, std::string const& strParam);
     void CmdStopNode(bool bShowHelp, std::string const& strParam);
+    void CmdSetParentNode(bool bShowHelp, std::string const& strParam);
+    void CmdConncetParentNode(bool bShowHelp, std::string const& strParam);
+    void CmdCloseParentNode(bool bShowHelp, std::string const& strParam);
 
 public: // get plug
 	static C_Plug::T_SPC_Plug NewC_Plug(void* pData);

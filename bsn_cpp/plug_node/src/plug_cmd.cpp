@@ -19,6 +19,9 @@ bool C_Plug::RegAllCmd() {
     RegPlugCmd("CurNode", boost::bind(&C_Plug::CmdCurNode, this, _1, _2));
     RegPlugCmd("StartNode", boost::bind(&C_Plug::CmdStartNode, this, _1, _2));
     RegPlugCmd("StopNode", boost::bind(&C_Plug::CmdStopNode, this, _1, _2));
+    RegPlugCmd("SetParentNode", boost::bind(&C_Plug::CmdSetParentNode, this, _1, _2));
+    RegPlugCmd("ConncetParentNode", boost::bind(&C_Plug::CmdConncetParentNode, this, _1, _2));
+    RegPlugCmd("CloseParentNode", boost::bind(&C_Plug::CmdCloseParentNode, this, _1, _2));
 
     return true;
 }
@@ -78,6 +81,81 @@ void C_Plug::CmdNewTestNode(bool bShowHelp, std::string const& strParam) {
     auto ret = NewNode(id, "localhost", listenPort, "localhost", parentListenPort);
     if (ret != 0) {
         D_OutInfo2("NewNode ret=", ret);
+    }
+}
+
+void C_Plug::CmdSetParentNode(bool bShowHelp, std::string const& strParam) {
+    D_OutInfo();
+
+    if (bShowHelp) {
+        D_OutInfo1("set cur cmd node's parent node addr");
+        D_OutInfo1("param: parentListAddr parentListenPort");
+        return;
+    }
+
+    std::vector<std::string> params;
+    boost::algorithm::split(params, strParam, boost::algorithm::is_any_of(" "), boost::token_compress_on);
+    if (params.size() != 2) {
+        return CmdNewNode(true, strParam);
+    }
+
+    auto spC_Node = GetNode(m_nodeIdForCmd);
+    if (!spC_Node) {
+        D_OutInfo1("not found cur cmd node");
+        return;
+    }
+
+    auto& parentListenAddr  = params[0];
+    auto parentListenPort   = boost::lexical_cast<uint16_t>(params[1]);
+ 
+    auto spI_PlugNet = GetSPI_PlugNet();
+    auto spI_AddressParent = spI_PlugNet->NewI_Address();
+	spI_AddressParent->SetAddr(parentListenAddr);
+	spI_AddressParent->SetPort(parentListenPort);
+    spC_Node->SetParentAddr(spI_AddressParent);
+}
+
+void C_Plug::CmdConncetParentNode(bool bShowHelp, std::string const& strParam) {
+    D_OutInfo();
+    int iRet = 0;
+
+    if (bShowHelp) {
+        D_OutInfo1("connect cur cmd node's parent node");
+        return;
+    }
+
+    auto spC_Node = GetNode(m_nodeIdForCmd);
+    if (!spC_Node) {
+        D_OutInfo1("not found cur cmd node");
+        return;
+    }
+
+    iRet = spC_Node->StartConnectParent();
+    if (iRet < 0) {
+        D_OutInfo2("start connect parent node fail, iRet=", iRet);
+        return;
+    }
+}
+
+void C_Plug::CmdCloseParentNode(bool bShowHelp, std::string const& strParam) {
+    D_OutInfo();
+    int iRet = 0;
+
+    if (bShowHelp) {
+        D_OutInfo1("close cur cmd node's parent node");
+        return;
+    }
+
+    auto spC_Node = GetNode(m_nodeIdForCmd);
+    if (!spC_Node) {
+        D_OutInfo1("not found cur cmd node");
+        return;
+    }
+
+    iRet = spC_Node->CloseParentConnect();
+    if (iRet < 0) {
+        D_OutInfo2("close parent connect fail, iRet=", iRet);
+        return;
     }
 }
 

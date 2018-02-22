@@ -176,7 +176,16 @@ int C_Node::StartConnectParent() {
 
     return 0;
 }
- 
+
+int C_Node::CloseParentConnect() {
+    D_OutInfo1(GetId());
+    int iRet = 0;
+
+    m_spI_TCPSessionParent->Close();
+
+    return 0;
+}
+
 void C_Node::OnConncetParent(C_Node::T_SPI_TCPSession spI_TCPSession) {
     D_OutInfo();
 }

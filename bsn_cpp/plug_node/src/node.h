@@ -34,9 +34,10 @@ public:
     int Start();
     int Stop();
     int UnInit();
-    
+
     int StartTCPListen();
     int StartConnectParent();
+    int CloseParentConnect();
 
 public:
 	static C_Node::T_SPC_Node NewC_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id);

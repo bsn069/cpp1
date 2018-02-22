@@ -3,6 +3,8 @@
 
 #include <bsn_cpp/include/d_out.h>
 
+#include <boost/bind.hpp>
+
 D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////
 C_Node::C_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id) 
@@ -21,7 +23,7 @@ C_Node::~C_Node() {
 
 int C_Node::Init() {
     D_OutInfo1(GetId());
-    int iRet = 0;
+    // int iRet = 0;
 
     auto spI_PlugNet = m_spC_Plug->GetSPI_PlugNet();
     if (!spI_PlugNet) {
@@ -47,7 +49,7 @@ int C_Node::Init() {
 
 int C_Node::UnInit() {
     D_OutInfo1(GetId());
-    int iRet = 0;
+    // int iRet = 0;
 
     m_spI_TCPSessionParent = nullptr;
     m_spI_TCPConnect = nullptr;
@@ -57,7 +59,7 @@ int C_Node::UnInit() {
 
 int C_Node::Stop() {
     D_OutInfo1(GetId());
-    int iRet = 0;
+    // int iRet = 0;
 
     if (m_spI_TCPListen) {
         D_OutInfo1("stop listen");
@@ -156,7 +158,7 @@ int C_Node::Start() {
 
 int C_Node::StartConnectParent() {
     D_OutInfo1(GetId());
-    int iRet = 0;
+    // int iRet = 0;
 
     if (!m_spI_TCPConnect->CanConnect(m_spI_TCPSessionParent)) {
         D_OutInfo1("can't connect");
@@ -179,7 +181,7 @@ int C_Node::StartConnectParent() {
 
 int C_Node::CloseParentConnect() {
     D_OutInfo1(GetId());
-    int iRet = 0;
+    // int iRet = 0;
 
     m_spI_TCPSessionParent->Close();
 

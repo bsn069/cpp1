@@ -71,7 +71,7 @@ void C_Plug::CmdNewTestNode(bool bShowHelp, std::string const& strParam) {
     std::vector<std::string> params;
     boost::algorithm::split(params, strParam, boost::algorithm::is_any_of(" "), boost::token_compress_on);
     if (params.size() != 3) {
-        return CmdNewNode(true, strParam);
+        return CmdNewTestNode(true, strParam);
     }
 
     auto id = boost::lexical_cast<C_Node::T_Id>(params[0]);
@@ -168,7 +168,7 @@ void C_Plug::CmdListNode(bool bShowHelp, std::string const& strParam) {
     }
  
     for (auto& pair : m_Id2Node) {
-        D_OutInfo2("id=", pair->first);
+        D_OutInfo2("id=", pair.first);
     }
 }
 

@@ -25,7 +25,9 @@ public: // I_Plug
     virtual bool ClearNeedPlug() override;
     virtual void RegPlugCmd(std::string const& strCmd, T_FuncCmd funcCmd) override;
 	virtual bool RegAllCmd() override;
-    
+	virtual bool Quit() override;
+	virtual bool UnInit() override;
+
 public: // I_PlugNode
 
 public: // cmd

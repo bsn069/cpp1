@@ -5,6 +5,7 @@
 
 #include <bsn_cpp/plug_net/include/i_tcp_listen.h>
 #include <bsn_cpp/plug_net/include/i_tcp_session.h>
+#include <bsn_cpp/plug_net/include/i_tcp_connect.h>
 #include <bsn_cpp/plug_net/include/i_address.h>
 
 #include <bsn_cpp/include/name_space.h>
@@ -38,6 +39,7 @@ public:
     int StartTCPListen();
     int StartConnectParent();
     int CloseParentConnect();
+	void OnConncetParent(C_Node::T_SPI_TCPSession spI_TCPSession);
 
 public:
 	static C_Node::T_SPC_Node NewC_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id);

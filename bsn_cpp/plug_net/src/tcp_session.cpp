@@ -50,6 +50,14 @@ void C_TCPSession::SetType(I_TCPSession::E_Type eType) {
 I_TCPSession::E_Type C_TCPSession::GetType() const {
 	return m_eType; 
 }
+
+int C_TCPSession::Close() {
+    D_OutInfo();
+
+    m_Socket.close();
+    SetState(I_TCPSession::E_State::E_State_Null);
+    return 0;
+}
 //////////////////////////////////////////////////////////////////////
 C_TCPSession* CreateC_TCPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet) {
 	D_OutInfo();

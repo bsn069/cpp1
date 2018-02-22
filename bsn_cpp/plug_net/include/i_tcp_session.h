@@ -43,6 +43,8 @@ public:
 	virtual void SetType(I_TCPSession::E_Type eType) = 0;
 	virtual I_TCPSession::E_Type GetType() const = 0;
 
+    virtual int Close() = 0;
+
 public:
 	T_SPI_TCPSession GetSPI_TCPSession() {
 		D_OutInfo();

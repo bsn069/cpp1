@@ -24,6 +24,7 @@ public: // I_TCPListen
 
 	virtual bool StartListen() override;
 	virtual bool StopListen() override;
+    virtual bool InListen() override;
 
 	virtual void SetFuncNew(T_FuncNew func) override;
 	virtual void SetFuncOnAccept(T_FuncOnAccept func) override;

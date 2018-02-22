@@ -20,6 +20,8 @@ public: // I_TCPSession
 	virtual void SetType(I_TCPSession::E_Type eType) override;
 	virtual I_TCPSession::E_Type GetType() const override;
 
+    virtual int Close() override;
+
 public:
 	static T_SPC_TCPSession NewC_TCPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet);
 	static T_SPI_TCPSession NewI_TCPSession(C_PlugNet::T_SPC_PlugNet spC_PlugNet);

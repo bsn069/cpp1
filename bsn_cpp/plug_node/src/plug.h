@@ -28,7 +28,16 @@ public: // I_Plug
     
 public: // I_PlugNode
 
-public:
+public: // cmd
+    void CmdNewNode(bool bShowHelp, std::string const& strParam);
+    void CmdNewTestNode(bool bShowHelp, std::string const& strParam);
+    void CmdListNode(bool bShowHelp, std::string const& strParam);
+    void CmdCDNode(bool bShowHelp, std::string const& strParam);
+    void CmdCurNode(bool bShowHelp, std::string const& strParam);
+    void CmdStartNode(bool bShowHelp, std::string const& strParam);
+    void CmdStopNode(bool bShowHelp, std::string const& strParam);
+
+public: // get plug
 	static C_Plug::T_SPC_Plug NewC_Plug(void* pData);
 	static I_Plug::T_SPI_Plug NewI_Plug(void* pData);
 
@@ -36,9 +45,8 @@ public:
     C_Plug::T_SPI_PlugNet   GetSPI_PlugNet();
     C_Plug::T_SPI_PlugCmd   GetSPI_PlugCmd();
 
-    void CmdStartNode(bool bShowHelp, std::string const& strParam);
-
-    int StartNode(
+public: // 
+    int NewNode(
         C_Node::T_Id id
         , std::string const& listenAddr
         , uint16_t listenPort
@@ -47,16 +55,20 @@ public:
     );
     C_Node::T_SPC_Node GetNode(C_Node::T_Id id);
     int AddNode(C_Node::T_SPC_Node spC_Node);
+    int StartNode(C_Node::T_Id id);
+    
 
 public:
 	C_Plug(void* pData);
 	virtual ~C_Plug();
 
-public:
+public: // dependent plug
     C_Plug::T_SPI_PlugNet m_spI_PlugNet;
     C_Plug::T_SPI_PlugCmd m_spI_PlugCmd;
 
+public:
     C_Plug::T_Id2Node m_Id2Node;
+    C_Node::T_Id m_nodeIdForCmd;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

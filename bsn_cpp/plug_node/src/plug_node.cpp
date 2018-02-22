@@ -9,67 +9,6 @@
 
 D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////
-C_Plug::C_Plug(void* pData) {
-	D_OutInfo();
-}
-
-C_Plug::~C_Plug() {
-	D_OutInfo();
- 
-}
-
-char const * const C_Plug::GetName() const {
-	return "node";
-}
-
-bool C_Plug::OnLoad(std::set<std::string>& needPlugNames) {
-	D_OutInfo();
-
-	needPlugNames.insert("net");
-	needPlugNames.insert("cmd");
-	return true;
-}
-
-bool C_Plug::InitNeedPlug() {
-    D_OutInfo();
-
-    m_spI_PlugNet = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_net)::I_PlugNet>("net");
-	if (!m_spI_PlugNet) {
-		return false;
-	}
-
-    m_spI_PlugCmd = m_spI_PlugMgr->GetPlugPtr<D_N1(plug_cmd)::I_PlugCmd>("cmd");
-	if (!m_spI_PlugCmd) {
-		return false;
-	}
-
-    return true;
-}
-
-bool C_Plug::ClearNeedPlug() {
-    D_OutInfo();
-
-    m_spI_PlugNet = nullptr;
-    m_spI_PlugCmd = nullptr;
-
-    return true;
-}
-
-C_Plug::T_SPC_Plug C_Plug::GetSPC_Plug() {
-    D_OutInfo();
-    auto spI_Plug = GetSPI_Plug();
-    auto spC_Plug = std::dynamic_pointer_cast<C_Plug>(spI_Plug);
-    return spC_Plug;
-}
-
-C_Plug::T_SPI_PlugNet C_Plug::GetSPI_PlugNet() {
-    return m_spI_PlugNet;
-}
-
-C_Plug::T_SPI_PlugCmd C_Plug::GetSPI_PlugCmd() {
-    return m_spI_PlugCmd;
-}
-
 int C_Plug::StartNode(C_Node::T_Id id) {
     D_OutInfo1(id);
 
@@ -110,11 +49,12 @@ int C_Plug::NewNode(
 	spI_AddressListen->SetAddr(listenAddr);
 	spI_AddressListen->SetPort(listenPort);
 
+    auto spC_Node = C_Node::NewC_Node(GetSPC_Plug(), spI_AddressListen, id);
+    spC_Node->Init();
+
 	auto spI_AddressParent = spI_PlugNet->NewI_Address();
 	spI_AddressParent->SetAddr(parentListenAddr);
 	spI_AddressParent->SetPort(parentListenPort);
-
-    auto spC_Node = C_Node::NewC_Node(GetSPC_Plug(), spI_AddressListen, id);
     spC_Node->SetParentAddr(spI_AddressParent);
 
     auto ret = AddNode(spC_Node);

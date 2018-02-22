@@ -131,6 +131,10 @@ bool C_TCPListen::CanListen() {
 	return true;
 }
 
+bool C_TCPListen::InListen() {
+    return m_bListen;
+}
+
 void C_TCPListen::ListenCoro(boost::asio::yield_context yield) {
 	D_OutInfo();
 
@@ -174,6 +178,8 @@ void C_TCPListen::ListenCoro(boost::asio::yield_context yield) {
 		D_OutInfo1("on client connect");
 		m_FuncOnAccept(spI_TCPSession);
 	}
+    m_FuncNew = nullptr;
+    m_FuncOnAccept = nullptr;
 	m_bListen = false;
 	D_OutInfo();
 }

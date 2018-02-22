@@ -23,12 +23,20 @@ public:
     typedef std::map<C_Child::T_Id, C_Child::T_SPC_Child> T_Id2Child;
 	typedef D_N1(plug_net)::I_TCPListen::T_SPI_TCPListen T_SPI_TCPListen;
 	typedef D_N1(plug_net)::I_TCPSession::T_SPI_TCPSession T_SPI_TCPSession;
+	typedef D_N1(plug_net)::I_TCPConnect::T_SPI_TCPConnect T_SPI_TCPConnect;
 	typedef D_N1(plug_net)::I_Address::T_SPI_Address T_SPI_Address;
 
 public:
     C_Node::T_Id GetId() const;
-    bool StartTCPListen();
     bool SetParentAddr(C_Node::T_SPI_Address spI_AddressParent);
+
+    int Init();
+    int Start();
+    int Stop();
+    int UnInit();
+    
+    int StartTCPListen();
+    int StartConnectParent();
 
 public:
 	static C_Node::T_SPC_Node NewC_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressListen, C_Node::T_Id id);
@@ -37,6 +45,7 @@ public:
 
     C_Node::T_SPI_TCPSession FuncNew();
     void FuncOnAccept(C_Node::T_SPI_TCPSession spI_TCPSession);
+
 
 
 public:
@@ -50,8 +59,11 @@ public:
     C_Node::T_Id2Child      m_Id2Child;
 
     C_Node::T_SPI_TCPListen m_spI_TCPListen;
-    C_Node::T_SPI_Address m_spI_AddressParent;
-    C_Node::T_SPI_Address m_spI_AddressListen;
+    C_Node::T_SPI_Address   m_spI_AddressListen;
+
+    C_Node::T_SPI_TCPConnect    m_spI_TCPConnect;
+    C_Node::T_SPI_Address       m_spI_AddressParent;
+    C_Node::T_SPI_TCPSession    m_spI_TCPSessionParent;
 };
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

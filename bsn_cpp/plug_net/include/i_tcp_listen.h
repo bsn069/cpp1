@@ -31,6 +31,7 @@ public:
 
 	virtual bool StartListen() = 0;
 	virtual bool StopListen() = 0;
+    virtual bool InListen() = 0;
 
 	virtual void SetFuncNew(T_FuncNew func) = 0;
 	virtual void SetFuncOnAccept(T_FuncOnAccept func) = 0;

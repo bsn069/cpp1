@@ -1,4 +1,6 @@
 #include <bsn_cpp/plug_node/src/plug.h>
+#include <bsn_cpp/plug_node/src/node.h>
+#include <bsn_cpp/plug_node/src/parent.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -112,7 +114,7 @@ void C_Plug::CmdSetParentNode(bool bShowHelp, std::string const& strParam) {
     auto spI_AddressParent = spI_PlugNet->NewI_Address();
 	spI_AddressParent->SetAddr(parentListenAddr);
 	spI_AddressParent->SetPort(parentListenPort);
-    spC_Node->SetParentAddr(spI_AddressParent);
+    spC_Node->GetSPC_Parent()->SetAddr(spI_AddressParent);
 }
 
 void C_Plug::CmdConncetParentNode(bool bShowHelp, std::string const& strParam) {
@@ -130,7 +132,7 @@ void C_Plug::CmdConncetParentNode(bool bShowHelp, std::string const& strParam) {
         return;
     }
 
-    iRet = spC_Node->StartConnectParent();
+    iRet = spC_Node->GetSPC_Parent()->StartConnect();
     if (iRet < 0) {
         D_OutInfo2("start connect parent node fail, iRet=", iRet);
         return;
@@ -152,7 +154,7 @@ void C_Plug::CmdCloseParentNode(bool bShowHelp, std::string const& strParam) {
         return;
     }
 
-    iRet = spC_Node->CloseParentConnect();
+    iRet = spC_Node->GetSPC_Parent()->CloseConnect();
     if (iRet < 0) {
         D_OutInfo2("close parent connect fail, iRet=", iRet);
         return;

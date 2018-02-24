@@ -1,4 +1,6 @@
 #include <bsn_cpp/plug_node/src/plug.h>
+#include <bsn_cpp/plug_node/src/parent.h>
+#include <bsn_cpp/plug_node/src/node.h>
 
 #include <bsn_cpp/include/d_out.h>
 #include <bsn_cpp/include/new.hpp>
@@ -55,7 +57,7 @@ int C_Plug::NewNode(
 	auto spI_AddressParent = spI_PlugNet->NewI_Address();
 	spI_AddressParent->SetAddr(parentListenAddr);
 	spI_AddressParent->SetPort(parentListenPort);
-    spC_Node->SetParentAddr(spI_AddressParent);
+    spC_Node->GetSPC_Parent()->SetAddr(spI_AddressParent);
 
     auto ret = AddNode(spC_Node);
     if (ret != 0) {

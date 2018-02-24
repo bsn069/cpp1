@@ -1,4 +1,6 @@
 #include <bsn_cpp/plug_node/src/node.h>
+#include <bsn_cpp/plug_node/src/parent.h>
+#include <bsn_cpp/plug_node/src/child.h>
 #include <bsn_cpp/plug_node/src/plug.h>
 
 #include <bsn_cpp/include/d_out.h>
@@ -13,6 +15,7 @@ C_Node::C_Node(C_Node::T_SPC_Plug spC_Plug, C_Node::T_SPI_Address spI_AddressLis
     , m_spI_AddressListen(spI_AddressListen) 
 {
 	D_OutInfo();
+
 }
 
 C_Node::~C_Node() {
@@ -23,38 +26,23 @@ C_Node::~C_Node() {
 
 int C_Node::Init() {
     D_OutInfo1(GetId());
-    // int iRet = 0;
+    int iRet = 0;
 
-    auto spI_PlugNet = m_spC_Plug->GetSPI_PlugNet();
-    if (!spI_PlugNet) {
-        D_OutInfo1("not found plug net");
+	m_spC_Parent = C_Parent::NewC_Parent(GetSPC_Node());
+
+	iRet = m_spC_Parent->Init();
+	if (iRet < 0) {
+		D_OutInfo2("parent init fail, iRet=", iRet);
 		return -1;
 	}
-
-	m_spI_TCPConnect    = spI_PlugNet->NewI_TCPConnect();
-    if (!m_spI_TCPConnect) {
-        D_OutInfo1("new tcp connect fail");
-		return -2;
-	}
-
-	m_spI_TCPSessionParent  = spI_PlugNet->NewI_TCPSession();
-    if (!m_spI_TCPSessionParent) {
-        D_OutInfo1("new tcp session for parent fail");
-		return -3;
-	}
-    m_spI_TCPSessionParent->SetType(D_N1(plug_net)::I_TCPSession::E_Type::E_Type_Connect);
 
     return 0;
 }
 
-int C_Node::UnInit() {
+void C_Node::UnInit() {
     D_OutInfo1(GetId());
-    // int iRet = 0;
 
-    m_spI_TCPSessionParent = nullptr;
-    m_spI_TCPConnect = nullptr;
-
-    return 0;
+    m_spC_Parent->UnInit();
 }
 
 int C_Node::Stop() {
@@ -66,10 +54,6 @@ int C_Node::Stop() {
         m_spI_TCPListen->StopListen();
     }
 
-    if (m_spI_TCPSessionParent) {
-        m_spI_TCPSessionParent->Close();
-    }
-
     return 0;
 }
 
@@ -77,6 +61,11 @@ C_Node::T_SPC_Node C_Node::GetSPC_Node() {
 	D_OutInfo();
     return shared_from_this();
 }
+
+C_Node::T_SPC_Parent C_Node::GetSPC_Parent() {
+	return m_spC_Parent;
+}
+
 
 int C_Node::StartTCPListen() {
 	D_OutInfo();
@@ -126,13 +115,6 @@ void C_Node::FuncOnAccept(C_Node::T_SPI_TCPSession spI_TCPSession) {
     D_OutInfo();
 }
 
-bool C_Node::SetParentAddr(C_Node::T_SPI_Address spI_AddressParent) {
-    D_OutInfo();
-
-    m_spI_AddressParent = spI_AddressParent;
-    return true;
-}
-
 C_Node::T_Id C_Node::GetId() const {
     return m_id;
 }
@@ -147,49 +129,14 @@ int C_Node::Start() {
         return -1;
     }
 
-    iRet = StartConnectParent();
+    iRet = m_spC_Parent->Start();
     if (iRet < 0) {
-        D_OutInfo2("start connect parent fail, iRet=", iRet);
+        D_OutInfo2("start parent fail, iRet=", iRet);
         return -2;
     }
 
     return 0;
 }
 
-int C_Node::StartConnectParent() {
-    D_OutInfo1(GetId());
-    // int iRet = 0;
-
-    if (!m_spI_TCPConnect->CanConnect(m_spI_TCPSessionParent)) {
-        D_OutInfo1("can't connect");
-        return -1;
-    }
-
-    if (m_spI_AddressParent->GetPort() == 0) {
-        D_OutInfo1("not set parent port");
-        return 1;
-    }
-
-	m_spI_TCPConnect->Connect(
-        m_spI_TCPSessionParent
-        , m_spI_AddressParent
-        , boost::bind(&C_Node::OnConncetParent, GetSPC_Node(), _1)
-    );
-
-    return 0;
-}
-
-int C_Node::CloseParentConnect() {
-    D_OutInfo1(GetId());
-    // int iRet = 0;
-
-    m_spI_TCPSessionParent->Close();
-
-    return 0;
-}
-
-void C_Node::OnConncetParent(C_Node::T_SPI_TCPSession spI_TCPSession) {
-    D_OutInfo();
-}
 //////////////////////////////////////////////////////////////////////
 D_BsnNamespace1End

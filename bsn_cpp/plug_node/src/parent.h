@@ -15,6 +15,7 @@ public:
 public:
     C_Node::T_Id GetId() const;
     int SetAddr(C_Node::T_SPI_Address spI_Address);
+	bool IsStart() const;
 
     int Init();
     int Start();
@@ -36,8 +37,10 @@ public:
 
 public:
     C_Node::T_SPC_Node m_spC_Node;
+	bool m_bStart;
     C_Node::T_Id m_id;
-
+	bool m_bInit;
+	
 	C_Node::T_SPI_TCPConnect    m_spI_TCPConnect;
     C_Node::T_SPI_Address       m_spI_Address;
     C_Node::T_SPI_TCPSession    m_spI_TCPSession;

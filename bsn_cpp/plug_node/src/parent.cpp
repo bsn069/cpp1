@@ -7,7 +7,12 @@
 
 D_BsnNamespace1(plug_node)
 //////////////////////////////////////////////////////////////////////
-C_Parent::C_Parent(C_Node::T_SPC_Node spC_Node) : m_spC_Node(spC_Node) {
+C_Parent::C_Parent(C_Node::T_SPC_Node spC_Node) 
+	: m_spC_Node(spC_Node) 
+	, m_bStart(false)
+	, m_id(0)
+	, m_bInit(false)
+{
 	D_OutInfo();
 }
 
@@ -28,16 +33,23 @@ C_Node::T_Id C_Parent::GetId() const {
 int C_Parent::Init() {
 	D_OutInfo1(GetId());
 
+	if (m_bInit) {
+		D_OutInfo1("had init");
+		return 1;
+	}
+
     auto spI_PlugNet = m_spC_Node->m_spC_Plug->GetSPI_PlugNet();
     if (!spI_PlugNet) {
         D_OutInfo1("not found plug net");
 		return -1;
 	}
 
-	m_spI_TCPConnect    = spI_PlugNet->NewI_TCPConnect();
-    if (!m_spI_TCPConnect) {
-        D_OutInfo1("new tcp connect fail");
-		return -2;
+	if (!m_spI_TCPConnect) {
+		m_spI_TCPConnect    = spI_PlugNet->NewI_TCPConnect();
+		if (!m_spI_TCPConnect) {
+			D_OutInfo1("new tcp connect fail");
+			return -2;
+		}
 	}
 
 	m_spI_TCPSession  = spI_PlugNet->NewI_TCPSession();
@@ -47,12 +59,22 @@ int C_Parent::Init() {
 	}
     m_spI_TCPSession->SetType(D_N1(plug_net)::I_TCPSession::E_Type::E_Type_Connect);
 
+	m_bInit = true;
 	return 0;
+}
+
+bool C_Parent::IsStart() const {
+	return m_bStart;
 }
 
 int C_Parent::Start() {
 	D_OutInfo1(GetId());
 	int iRet = 0;
+
+	if (m_bStart) {
+		D_OutInfo1("had start");
+		return 1;
+	}
 
 	iRet = StartConnect();
 	if (iRet < 0) {
@@ -60,14 +82,21 @@ int C_Parent::Start() {
 		return -1;
 	}
 
+	m_bStart = true;
 	return 0;
 }
 
 int C_Parent::Stop() {
 	D_OutInfo1(GetId());
 
+	if (!m_bStart) {
+		D_OutInfo1("not start");
+		return 1;
+	}
+	
 	CloseConnect();
 
+	m_bStart = false;
 	return 0;
 }
 
